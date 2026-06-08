@@ -43,6 +43,38 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-flipper { 
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); 
+            transform-style: preserve-3d; 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+        }
+        .card-flip-container.flipped .card-flipper { transform: rotateY(180deg); }
+        .card-front, .card-back { 
+            backface-visibility: hidden; 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+        .card-back { 
+            transform: rotateY(180deg); 
+            background-color: #f0fdfa; /* teal-50 */
+            border: 2px solid #14b8a6; /* teal-500 */
+        }
+        .card-front {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0; /* slate-200 */
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
@@ -52,9 +84,15 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
                     <span class="text-2xl">📊</span>
-                    <span class="font-bold text-xl tracking-tight">Estadística Interactiva</span>
+                    <span class="font-bold text-xl tracking-tight hidden sm:block">Estadística Interactiva</span>
                 </div>
-                <div class="flex space-x-4" id="unit-nav">
+                <div class="flex space-x-2 md:space-x-4 items-center" id="unit-nav">
+                    <!-- Unit buttons will be injected here -->
+                </div>
+                <div class="ml-4 pl-4 border-l border-blue-700">
+                    <button onclick="openTestMode()" class="bg-amber-500 hover:bg-amber-400 text-blue-900 font-bold py-2 px-4 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-sm md:text-base flex items-center gap-2">
+                        <span>🧠</span> <span class="hidden md:inline">Ponte a Prueba</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -167,11 +205,164 @@
 
                 </section>
 
+                <!-- Contenedor para el botón de completado -->
+                <div id="completion-btn-container" class="mt-8 border-t border-gray-200 pt-6">
+                </div>
+
+            </div>
+
+            <div id="test-screen" class="hidden flex-col max-w-5xl mx-auto w-full space-y-8 pb-20">
+                
+                <!-- Menú de Selección -->
+                <div id="test-menu" class="space-y-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl font-extrabold text-blue-900">Modo Repaso Activo</h1>
+                        <p class="text-lg text-gray-600 mt-3">Elige cómo quieres poner a prueba tus conocimientos hoy.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                        <!-- Tarjeta Quiz -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
+                            <span class="text-5xl mb-4">📝</span>
+                            <h2 class="text-2xl font-bold text-gray-800">Quiz: Múltiple Choice</h2>
+                            <p class="text-gray-500 mt-2 mb-6">Un simulacro rápido. Se elegirán 10 preguntas al azar del banco de preguntas para poner a prueba tu agilidad.</p>
+                            
+                            <div class="w-full mb-6 text-left">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad:</label>
+                                <select id="quiz-unit-select" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="all">Todas las unidades mezcladas</option>
+                                    <option value="u3">Unidad 3: Probabilidad</option>
+                                    <option value="u4">Unidad 4: Discreta</option>
+                                    <option value="u5">Unidad 5: Continua</option>
+                                </select>
+                            </div>
+                            <button onclick="startQuiz()" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Empezar Quiz</button>
+                        </div>
+
+                        <!-- Tarjeta Flashcards -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
+                            <span class="text-5xl mb-4">🗂️</span>
+                            <h2 class="text-2xl font-bold text-gray-800">Tarjetas Didácticas</h2>
+                            <p class="text-gray-500 mt-2 mb-6">Aparición de conceptos 1 a 1. Intenta recordarlo, voltea la tarjeta y clasifica si lo sabías o necesitas repaso.</p>
+                            
+                            <div class="w-full mb-6 text-left">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad:</label>
+                                <select id="flash-unit-select" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                    <option value="all">Todas las unidades mezcladas</option>
+                                    <option value="u3">Unidad 3: Probabilidad</option>
+                                    <option value="u4">Unidad 4: Discreta</option>
+                                    <option value="u5">Unidad 5: Continua</option>
+                                </select>
+                            </div>
+                            <button onclick="startFlashcards()" class="mt-auto w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Practicar con Tarjetas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interfaz del Quiz -->
+                <div id="quiz-ui" class="hidden flex-col items-center w-full max-w-3xl mx-auto">
+                    <div class="w-full flex justify-between items-center mb-6">
+                        <button onclick="openTestMode()" class="text-blue-600 hover:text-blue-800 font-medium">← Volver al Menú</button>
+                        <span id="quiz-progress" class="bg-blue-100 text-blue-800 font-bold py-1 px-3 rounded-full text-sm">Pregunta 1 de 10</span>
+                    </div>
+                    
+                    <div class="bg-white w-full p-8 rounded-2xl shadow-sm border border-gray-200 mb-6">
+                        <span id="quiz-unit-badge" class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded font-bold uppercase mb-4">UNIDAD X</span>
+                        <h3 id="quiz-question" class="text-2xl font-bold text-gray-800 mb-8 leading-snug">¿Cargando pregunta...?</h3>
+                        
+                        <div id="quiz-options" class="space-y-3">
+                            <!-- Opciones generadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Mensaje de Feedback Inmediato -->
+                    <div id="quiz-feedback" class="hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg"></div>
+
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">Siguiente Pregunta →</button>
+                </div>
+
+                <!-- Pantalla Final del Quiz -->
+                <div id="quiz-results" class="hidden flex-col items-center justify-center text-center bg-white p-10 rounded-3xl shadow-md border border-gray-100 max-w-2xl mx-auto w-full">
+                    <span id="quiz-result-emoji" class="text-7xl mb-4">🏆</span>
+                    <h2 class="text-3xl font-extrabold text-blue-900 mb-2">¡Quiz Completado!</h2>
+                    <p class="text-gray-600 mb-6" id="quiz-result-msg">Aquí tienes tu puntuación final.</p>
+                    <div class="text-6xl font-black text-amber-500 mb-8" id="quiz-score-display">8/10</div>
+                    <div class="flex gap-4">
+                        <button onclick="startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm">Jugar de Nuevo</button>
+                        <button onclick="openTestMode()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-colors">Volver al Menú</button>
+                    </div>
+                </div>
+
+                <!-- Interfaz de Flashcards -->
+                <div id="flash-ui" class="hidden flex-col items-center w-full max-w-2xl mx-auto">
+                    <div class="w-full flex justify-between items-center mb-6">
+                        <button onclick="openTestMode()" class="text-teal-600 hover:text-teal-800 font-medium">← Volver al Menú</button>
+                        <span id="flash-progress" class="bg-teal-100 text-teal-800 font-bold py-1 px-3 rounded-full text-sm">Tarjeta 1 de X</span>
+                    </div>
+
+                    <!-- La Tarjeta en sí -->
+                    <div class="perspective-1000 w-full h-80 md:h-96 mb-8 cursor-pointer card-flip-container" id="flashcard-container" onclick="flipCard()">
+                        <div class="card-flipper shadow-lg rounded-2xl">
+                            <!-- Frente -->
+                            <div class="card-front text-center">
+                                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Pregunta (Toca para voltear)</span>
+                                <h3 id="flash-front-text" class="text-2xl md:text-3xl font-bold text-blue-900 leading-tight">¿Cargando frente?</h3>
+                            </div>
+                            <!-- Dorso -->
+                            <div class="card-back text-center">
+                                <span class="text-sm font-bold text-teal-600 uppercase tracking-widest mb-4">Respuesta</span>
+                                <p id="flash-back-text" class="text-xl md:text-2xl font-medium text-gray-800 leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controles de Tarjeta (Ocultos hasta que se voltea) -->
+                    <div id="flash-controls" class="hidden w-full grid grid-cols-2 gap-4">
+                        <button onclick="markFlashcard(false)" class="flex flex-col items-center justify-center bg-red-50 hover:bg-red-100 border-2 border-red-200 text-red-700 font-bold py-4 rounded-xl transition-colors group">
+                            <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">❌</span>
+                            <span>Aún no la sé</span>
+                        </button>
+                        <button onclick="markFlashcard(true)" class="flex flex-col items-center justify-center bg-green-50 hover:bg-green-100 border-2 border-green-200 text-green-700 font-bold py-4 rounded-xl transition-colors group">
+                            <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">✅</span>
+                            <span>Ya lo dominé</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pantalla Final de Flashcards -->
+                <div id="flash-results" class="hidden flex-col items-center justify-center text-center bg-white p-10 rounded-3xl shadow-md border border-gray-100 max-w-2xl mx-auto w-full">
+                    <span id="flash-result-emoji" class="text-7xl mb-4">🧠</span>
+                    <h2 class="text-3xl font-extrabold text-teal-900 mb-2">¡Mazo Terminado!</h2>
+                    <p class="text-gray-600 mb-6" id="flash-result-text">Repasaste todas las tarjetas.</p>
+                    
+                    <div class="flex gap-4" id="flash-result-buttons">
+                        <!-- Botones inyectados por JS dependiendo de los errores -->
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
 
     <script>
+        // --- DATA & STATE ---
+        let userStats = {
+            learnedTopics: [],
+            quizGrades: {} 
+        };
+
+        let currentUnitId = null;
+        let currentTopicId = null;
+        let currentChart = null;
+        
+        let testState = {
+            mode: null,
+            activeItems: [], 
+            currentIndex: 0,
+            score: 0,
+            flashMistakes: [] 
+        };
+
         const appData = {
             units: [
                 {
@@ -387,20 +578,126 @@
             ]
         };
 
-        // State
-        let currentUnitId = null;
-        let currentTopicId = null;
-        let currentChart = null;
+        const testData = {
+            quizPool: [
+                { unit: "u3", q: "Imagina que sacas una pelota de una caja donde ya conoces que hay 3 rojas y 2 azules. ¿Qué método de asignación de probabilidad estás usando al decir que hay 3/5 de probabilidad de roja?", options: ["Método Empírico", "Método Clásico", "Método Subjetivo", "Teorema de Bayes"], ans: 1 },
+                { unit: "u3", q: "¿Cuál es la principal diferencia entre una Combinación y una Permutación?", options: ["En la combinación el orden importa, en la permutación no.", "En la permutación el orden importa, en la combinación no.", "Las permutaciones solo se usan para números enteros.", "No hay diferencia, son sinónimos estadísticos."], ans: 1 },
+                { unit: "u3", q: "Si la probabilidad de que llueva es 0.35, ¿cuál es la probabilidad del evento complemento?", options: ["0.35", "1.35", "0.65", "-0.35"], ans: 2 },
+                { unit: "u3", q: "Al lanzar una moneda al aire, el resultado del primer lanzamiento no afecta al segundo. Estos eventos se consideran:", options: ["Mutuamente excluyentes", "Eventos Complementarios", "Eventos Dependientes", "Eventos Independientes"], ans: 3 },
+                { unit: "u3", q: "¿Para qué sirve principalmente el Teorema de Bayes?", options: ["Para calcular combinaciones grandes.", "Para actualizar una probabilidad inicial tras recibir nueva información.", "Para sumar probabilidades excluyentes.", "Para graficar la curva normal."], ans: 1 },
+                { unit: "u3", q: "Si lanzo un dado, ¿cuál es la probabilidad de sacar un número mayor a 4?", options: ["1/3", "1/6", "1/2", "2/5"], ans: 0 },
+                { unit: "u3", q: "¿De cuántas formas se pueden sentar 3 personas en 3 sillas?", options: ["3", "6", "9", "1"], ans: 1 },
+                { unit: "u3", q: "Si un analista financiero dice 'creo que hay un 80% de probabilidad de que la bolsa suba hoy', está usando un método de asignación:", options: ["Empírico", "Clásico", "Subjetivo", "Teórico"], ans: 2 },
+                { unit: "u3", q: "Si los eventos A y B son mutuamente excluyentes, la regla de adición nos dice que la probabilidad de A o B es:", options: ["P(A) * P(B)", "P(A) + P(B)", "P(A) - P(B)", "P(A) / P(B)"], ans: 1 },
+                { unit: "u3", q: "El Teorema de Bayes calcula un tipo específico de probabilidad que ocurre cuando ya sabemos que sucedió un evento B. ¿Cómo se llama esta probabilidad?", options: ["Condicional", "Clásica", "Subjetiva", "Imposible"], ans: 0 },
 
-        // Init
+                { unit: "u4", q: "Una variable que registra el 'peso en kilogramos de un grupo de vacas' es:", options: ["Aleatoria Discreta", "Aleatoria Continua", "No es una variable", "Distribución Binomial"], ans: 1 },
+                { unit: "u4", q: "¿Qué condición es indispensable en una tabla de distribución de probabilidad discreta válida?", options: ["Que la suma de todas las probabilidades sea exactamente 1.", "Que todos los valores sean positivos y mayores a 1.", "Que el valor esperado sea cero.", "Que no tenga varianza."], ans: 0 },
+                { unit: "u4", q: "La distribución Binomial exige que los experimentos tengan:", options: ["Múltiples resultados posibles (más de 3).", "Resultados infinitos.", "Únicamente dos resultados posibles (Éxito o Fracaso).", "Una medida de tiempo o área."], ans: 2 },
+                { unit: "u4", q: "Si quieres calcular la probabilidad de que lleguen 5 clientes al banco en una hora (un evento en un intervalo de tiempo), ¿qué distribución usarías?", options: ["Distribución Uniforme", "Distribución Binomial", "Distribución de Poisson", "Curva Normal"], ans: 2 },
+                { unit: "u4", q: "En Excel, la fórmula '=POISSON.DIST(x, media, acumulado)' usa la palabra 'acumulado'. Si buscas la probabilidad de 'exactamente 3', debes poner:", options: ["VERDADERO", "FALSO", "0.5", "1"], ans: 1 },
+                { unit: "u4", q: "¿Cuál de las siguientes es un ejemplo claro de una variable aleatoria discreta?", options: ["El tiempo de vuelo de un avión.", "Litros de leche en una jarra.", "El número de quejas recibidas en un call center.", "La temperatura ambiente de una oficina."], ans: 2 },
+                { unit: "u4", q: "Si compras un boleto de lotería para jugar semana tras semana, el valor esperado estadístico de tu ganancia suele ser:", options: ["Positivo", "Negativo", "Cero", "Igual al premio mayor"], ans: 1 },
+                { unit: "u4", q: "En una distribución binomial con n=10 intentos y probabilidad de éxito p=0.5, ¿cuál es el valor esperado (o media de éxitos)?", options: ["5", "10", "0.5", "2.5"], ans: 0 },
+                { unit: "u4", q: "La distribución de Poisson es ideal para modelar problemas como:", options: ["Alturas de personas en una ciudad.", "Defectos por cada metro cuadrado de tela fabricada.", "Resultados de lanzar 50 monedas.", "El peso de manzanas en un huerto."], ans: 1 },
+                { unit: "u4", q: "¿Qué función de Excel usarías para calcular directamente probabilidades de una distribución de Poisson?", options: ["=DISTR.NORM()", "=POISSON.DIST()", "=DISTR.BINOM.N()", "=PROMEDIO()"], ans: 1 },
+
+                { unit: "u5", q: "En la distribución Uniforme, la forma de la gráfica de probabilidad es:", options: ["Una campana", "Un triángulo", "Un rectángulo", "Una curva en U"], ans: 2 },
+                { unit: "u5", q: "¿Cuál es el valor del área TOTAL debajo de una curva de distribución normal perfecta?", options: ["100", "50", "0", "1 (o 100%)"], ans: 3 },
+                { unit: "u5", q: "El valor 'Z' en la Normal Estándar nos indica:", options: ["Cuántas desviaciones estándar estamos alejados de la media.", "El tamaño de la muestra elegida.", "La probabilidad directa en porcentaje.", "El margen de error del instrumento."], ans: 0 },
+                { unit: "u5", q: "Si sabemos que la curva normal es simétrica, y el área a la derecha de la media es 0.5. ¿Cuánto vale el área a la izquierda?", options: ["1.0", "0.5", "0.25", "-0.5"], ans: 1 },
+                { unit: "u5", q: "Al aproximar una Binomial a la Normal (corrección por continuidad), si buscamos el valor discreto 'X=10', en la curva continua buscaremos el área entre:", options: ["10 y 11", "9 y 10", "9.5 y 10.5", "-10 y 10"], ans: 2 },
+                { unit: "u5", q: "En una distribución uniforme entre 10 y 20, la probabilidad de que X sea EXACTAMENTE 15 es:", options: ["0.1", "0.5", "0", "1"], ans: 2 },
+                { unit: "u5", q: "El centro exacto de la curva normal estándar tiene un valor Z igual a:", options: ["1", "-1", "0.5", "0"], ans: 3 },
+                { unit: "u5", q: "En la campana normal (Regla empírica), aproximadamente el 99.7% de los datos se encuentra a:", options: ["1 desviación estándar", "2 desviaciones estándar", "3 desviaciones estándar", "4 desviaciones estándar"], ans: 2 },
+                { unit: "u5", q: "Si buscas la probabilidad (área) entre Z=0 y Z=1 en una curva normal, el valor será:", options: ["Mayor al 50%", "Menor al 50%", "Exactamente 50%", "100%"], ans: 1 },
+                { unit: "u5", q: "Para que sea matemáticamente válido aplicar la aproximación normal a probabilidades binomiales, el valor de n*p (intentos x probabilidad) debe ser:", options: ["Menor a 0", "Igual a 1", "Mayor a 5", "Menor a 5"], ans: 2 }
+            ],
+            flashcardPool: [
+                { unit: "u3", topic: "Conceptos Básicos", f: "¿Qué es la probabilidad clásica?", b: "Es cuando conoces todos los resultados posibles de antemano. Casos favorables divididos entre el total de casos." },
+                { unit: "u3", topic: "Conteo", f: "Diferencia rápida entre Permutación y Combinación.", b: "Permutación = EL ORDEN IMPORTA (ej. contraseña). Combinación = EL ORDEN NO IMPORTA (ej. grupo de amigos)." },
+                { unit: "u3", topic: "Asignación", f: "¿Qué es el método empírico?", b: "Asignar probabilidades basándonos en observar la frecuencia con la que ocurrió algo en el pasado." },
+                { unit: "u3", topic: "Eventos", f: "¿Qué es el Complemento de un evento?", b: "Es el opuesto exacto. Lo que falta para llegar al 100% (o a 1). P(Complemento) = 1 - P(Evento)." },
+                { unit: "u3", topic: "Reglas Operativas", f: "¿Cuándo se usa la regla de la Multiplicación?", b: "Cuando se busca que sucedan dos eventos juntos (A 'Y' B). Si son independientes, simplemente se multiplican sus probabilidades." },
+                { unit: "u3", topic: "Conceptos Básicos", f: "¿Qué es el Espacio Muestral?", b: "Es el conjunto de TODOS los resultados posibles de un experimento estadístico (ej. lanzar un dado: {1, 2, 3, 4, 5, 6})." },
+                { unit: "u3", topic: "Conteo", f: "¿Cuál es la fórmula básica de una Permutación completa de 'n' elementos?", b: "n! (n factorial). Ejemplo: ordenar 3 cuadros es 3! = 3x2x1 = 6." },
+                { unit: "u3", topic: "Reglas Operativas", f: "¿Qué significa que dos eventos sean 'Mutuamente Excluyentes'?", b: "Que no pueden ocurrir al mismo tiempo bajo ninguna circunstancia (ej. que una moneda caiga en cara y cruz a la vez)." },
+                { unit: "u3", topic: "Teorema de Bayes", f: "¿Qué representa la 'probabilidad a priori' en Bayes?", b: "Es la probabilidad inicial que estimamos de un evento, ANTES de recibir la nueva información o pista." },
+                { unit: "u3", topic: "Eventos", f: "¿Cuál es la diferencia clave entre decir 'O' e 'Y' en estadística?", b: "La 'O' (Unión) significa SUMAR probabilidades. La 'Y' (Intersección) significa MULTIPLICAR probabilidades." },
+                
+                { unit: "u4", topic: "Variables", f: "¿Ejemplo clásico de variable discreta vs continua?", b: "Discreta (se cuenta): Número de hijos (1, 2, 3). Continua (se mide): Estatura (1.75m, 1.76m)." },
+                { unit: "u4", topic: "Valor Esperado", f: "¿Qué representa conceptualmente el 'Valor Esperado'?", b: "Es el promedio o resultado esperado que obtendrías a largo plazo si repitieras el experimento muchísimas veces." },
+                { unit: "u4", topic: "Binomial", f: "¿Cuáles son las condiciones clave de la Binomial?", b: "1. Solo dos resultados (Éxito/Fracaso). 2. Varios intentos (n). 3. La probabilidad de éxito (p) se mantiene constante." },
+                { unit: "u4", topic: "Poisson", f: "¿Para qué sirve la distribución de Poisson?", b: "Para calcular la probabilidad de que ocurran eventos (generalmente poco frecuentes) en un intervalo continuo fijo (tiempo, área, distancia)." },
+                { unit: "u4", topic: "Variables", f: "¿Puede una variable aleatoria discreta dar como resultado decimales?", b: "No, sus valores son saltos contables (generalmente enteros), como contar el número de automóviles o quejas." },
+                { unit: "u4", topic: "Varianza", f: "¿Qué significa que tus datos tengan una varianza muy alta?", b: "Significa que los resultados del experimento están muy dispersos, inestables o alejados del valor central (el promedio)." },
+                { unit: "u4", topic: "Binomial", f: "Si lanzo una moneda 10 veces, ¿qué distribución uso para calcular la probabilidad de sacar exactamente 4 caras?", b: "La Distribución Binomial, porque hay un número fijo de ensayos (n=10) y cada uno tiene solo dos finales (cara/cruz)." },
+                { unit: "u4", topic: "Poisson", f: "¿Qué parámetro es fundamental conocer para poder usar la fórmula de Poisson?", b: "El parámetro Lambda (λ), que representa la tasa promedio de ocurrencias en ese intervalo específico." },
+                
+                { unit: "u5", topic: "Uniforme", f: "¿Cómo se calcula la probabilidad en una distribución continua Uniforme?", b: "Como la gráfica es un rectángulo, se calcula sacando el Área: Base (rango de interés) por Altura (1/Base total)." },
+                { unit: "u5", topic: "Curva Normal", f: "Menciona 3 características de la Curva Normal.", b: "1. Forma de campana. 2. Perfectamente simétrica. 3. Media, Mediana y Moda están exactamente en el centro." },
+                { unit: "u5", topic: "Normal Estándar", f: "¿Cuál es la fórmula para calcular el valor Z?", b: "Z = (Dato - Media) / Desviación Estándar." },
+                { unit: "u5", topic: "Probabilidades Normal", f: "Si la probabilidad a la izquierda de Z es 0.80, ¿cómo encuentras la de la derecha?", b: "Restándolo de 1. (1 - 0.80 = 0.20 o 20%)." },
+                { unit: "u5", topic: "Aprox. Binomial", f: "¿Qué es la corrección por continuidad?", b: "Un ajuste al pasar de barras discretas a curva continua, sumando y restando 0.5 al número que buscamos." },
+                { unit: "u5", topic: "Uniforme", f: "¿Por qué la gráfica de una distribución continua uniforme es plana como un rectángulo?", b: "Porque se asume que TODOS los valores dentro de ese rango tienen exactamente la misma probabilidad (la altura no varía)." },
+                { unit: "u5", topic: "Curva Normal", f: "¿Qué le ocurre visualmente a la campana normal si aumentamos su desviación estándar?", b: "La campana se vuelve más ancha y más plana, lo que indica que los datos están más dispersos." },
+                { unit: "u5", topic: "Normal Estándar", f: "¿Cuáles son la media y la desviación estándar fijas de la distribución Normal Estándar?", b: "Tiene una Media centrada en cero (μ = 0) y una Desviación Estándar de uno (σ = 1)." },
+                { unit: "u5", topic: "Cálculo Z", f: "¿Qué significa estadísticamente si calculas un valor Z y el resultado te da un número negativo?", b: "Significa que ese dato particular se encuentra por debajo (a la izquierda) del promedio de toda la población." },
+                { unit: "u5", topic: "Distribución Continua", f: "En cualquier distribución continua, ¿cuál es la probabilidad exacta de que X sea exactamente igual a un número concreto (ej. P(X=5))?", b: "La probabilidad es SIEMPRE cero (0). En distribuciones continuas solo se pueden medir áreas (probabilidades) entre intervalos, no puntos exactos." }
+            ]
+        };
+
+        // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
             renderNav();
-            // Start at Unit 3
             selectUnit('u3');
         });
 
+        // --- PERSISTENCE ---
+        function loadUserData() {
+            const data = localStorage.getItem('stats_estadistica_v1');
+            if (data) {
+                userStats = JSON.parse(data);
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem('stats_estadistica_v1', JSON.stringify(userStats));
+        }
+
+        function toggleTopicLearned(topicId) {
+            const index = userStats.learnedTopics.indexOf(topicId);
+            if (index === -1) {
+                userStats.learnedTopics.push(topicId);
+            } else {
+                userStats.learnedTopics.splice(index, 1);
+            }
+            saveUserData();
+            
+            const btn = document.getElementById(`btn-topic-${topicId}`);
+            if (btn) {
+                // Find unit robustly to fix any undefined issues
+                const unit = appData.units.find(u => u.topics.some(t => t.id === topicId));
+                if(unit) {
+                    const topicTitle = unit.topics.find(t => t.id === topicId).title;
+                    const isLearned = userStats.learnedTopics.includes(topicId);
+                    btn.innerHTML = `<span>${topicTitle}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
+                }
+            }
+        }
+
+        function saveQuizGrade(unitId, score) {
+            if (!userStats.quizGrades[unitId] || score > userStats.quizGrades[unitId]) {
+                userStats.quizGrades[unitId] = score;
+                saveUserData();
+            }
+        }
+
+        // --- NAVIGATION & UI ---
         function renderNav() {
             const nav = document.getElementById('unit-nav');
+            nav.innerHTML = ''; // clear first to avoid duplicates
             appData.units.forEach(unit => {
                 const btn = document.createElement('button');
                 btn.className = `px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-800 ${currentUnitId === unit.id ? 'bg-blue-800 ring-2 ring-white' : ''}`;
@@ -427,43 +724,53 @@
             updateNavClasses();
             
             const unit = appData.units.find(u => u.id === unitId);
+            if(!unit) return;
             
-            // Update sidebar info
             document.getElementById('sidebar-unit-title').innerText = `${unit.title}: ${unit.subtitle}`;
             document.getElementById('sidebar-unit-desc').innerText = unit.desc;
 
-            // Render topics in sidebar
             const topicsList = document.getElementById('topics-list');
             topicsList.innerHTML = '';
             
-            unit.topics.forEach((topic, idx) => {
+            unit.topics.forEach((topic) => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors border hover:bg-teal-50 hover:border-teal-200 text-gray-700`;
-                btn.innerText = topic.title;
+                const isLearned = userStats.learnedTopics.includes(topic.id);
+                
+                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors border flex justify-between items-center hover:bg-teal-50 hover:border-teal-200 text-gray-700`;
                 btn.id = `btn-topic-${topic.id}`;
+                btn.innerHTML = `<span>${topic.title}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
                 btn.onclick = () => selectTopic(topic.id);
+                
                 topicsList.appendChild(btn);
             });
 
-            // Show welcome screen initially when unit changes
             document.getElementById('welcome-screen').classList.remove('hidden');
             document.getElementById('content-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('flex');
             
-            // Clear active topic highlights
             currentTopicId = null;
         }
 
         function selectTopic(topicId) {
+            // ROBUST FIND: Searches all units to find the topic. Fixes the "undefined" error.
+            const unit = appData.units.find(u => u.topics.some(t => t.id === topicId));
+            if(!unit) return;
+            
             currentTopicId = topicId;
-            const unit = appData.units.find(u => u.id === currentUnitId);
+            currentUnitId = unit.id; // Update currentUnitId just in case
             const topic = unit.topics.find(t => t.id === topicId);
 
-            // Hide welcome, show content
+            // Hide test screen & welcome, show content
             document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('flex');
+            
             document.getElementById('content-screen').classList.remove('hidden');
             document.getElementById('content-screen').classList.add('flex');
 
-            // Highlight sidebar button
+            updateNavClasses();
+
             const buttons = document.getElementById('topics-list').children;
             for(let b of buttons) {
                 b.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
@@ -473,12 +780,10 @@
                 activeBtn.classList.add('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
             }
 
-            // Populate Content
             document.getElementById('topic-badge').innerText = `${unit.title} - ${unit.subtitle}`;
             document.getElementById('topic-title').innerText = topic.title;
             document.getElementById('topic-explanation').innerText = topic.exp;
 
-            // Populate Videos
             const videoContainer = document.getElementById('topic-videos');
             videoContainer.innerHTML = '';
             topic.videos.forEach(vid => {
@@ -495,17 +800,30 @@
                 videoContainer.appendChild(a);
             });
 
-            // Populate Exercises
             document.getElementById('ex1-q').innerText = topic.ex1.q;
             document.getElementById('ex1-a').innerText = topic.ex1.a;
-            document.getElementById('ex1-a').classList.add('hidden'); // reset
+            document.getElementById('ex1-a').classList.add('hidden'); 
 
             document.getElementById('ex2-q').innerText = topic.ex2.q;
             document.getElementById('ex2-a').innerText = topic.ex2.a;
-            document.getElementById('ex2-a').classList.add('hidden'); // reset
+            document.getElementById('ex2-a').classList.add('hidden'); 
 
-            // Handle Viz
             renderVisualization(unit.id, topic.id);
+
+            const isLearned = userStats.learnedTopics.includes(topicId);
+            const container = document.getElementById('completion-btn-container');
+            container.innerHTML = ''; 
+            
+            const checkBtn = document.createElement('button');
+            checkBtn.className = `w-full py-4 rounded-xl font-bold transition-all shadow-sm ${
+                isLearned ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-gray-200 text-gray-700 hover:bg-teal-600 hover:text-white'
+            }`;
+            checkBtn.innerText = isLearned ? "✓ Tema Completado" : "Marcar tema como aprendido";
+            checkBtn.onclick = () => {
+                toggleTopicLearned(topicId);
+                selectTopic(topicId); 
+            };
+            container.appendChild(checkBtn);
         }
 
         function toggleAnswer(id) {
@@ -521,17 +839,14 @@
         function renderVisualization(unitId, topicId) {
             const vizSection = document.getElementById('viz-section');
             const vizControls = document.getElementById('viz-controls');
-            vizControls.innerHTML = ''; // clear controls
+            vizControls.innerHTML = '';
 
-            // Destroy existing chart if it exists
             if (currentChart) {
                 currentChart.destroy();
                 currentChart = null;
             }
 
-            // Determine if viz is needed based on unit/topic
             if (unitId === 'u4' && topicId === 'u4t4') {
-                // Binomial Chart
                 vizSection.classList.remove('hidden');
                 document.getElementById('viz-desc').innerText = "Observa cómo cambia la distribución binomial al modificar la probabilidad de éxito (p) o el número de intentos (n).";
                 
@@ -565,7 +880,6 @@
                 };
 
             } else if (unitId === 'u5' && (topicId === 'u5t2' || topicId === 'u5t3')) {
-                // Normal Curve Chart
                 vizSection.classList.remove('hidden');
                 document.getElementById('viz-desc').innerText = "Visualiza la Curva Normal Estándar. Ajusta la media para ver cómo la campana se desplaza manteniendo su simetría.";
                 
@@ -596,7 +910,6 @@
             }
         }
 
-        // Helper: Binomial Calculation
         function factorial(n) {
             if (n === 0 || n === 1) return 1;
             for (var i = n - 1; i >= 1; i--) { n *= i; }
@@ -633,11 +946,9 @@
             currentChart.update();
         }
 
-        // Helper: Normal Curve Calculation
         function getNormalData(mu, sigma) {
             const labels = [];
             const data = [];
-            // generate range -5 to 5
             for (let x = -5; x <= 5; x += 0.2) {
                 labels.push(x.toFixed(1));
                 let y = (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
@@ -687,13 +998,299 @@
                     y: {
                         title: { display: true, text: yTitle, font: { weight: 'bold' } },
                         beginAtZero: true,
-                        max: isLine ? 0.45 : null // Fixed max height for Normal curve to show shift nicely
+                        max: isLine ? 0.45 : null 
                     }
                 },
                 animation: { duration: 400 }
             };
         }
 
+        // --- TEST MODE (QUIZ & FLASHCARDS) ---
+        function updateQuizScoresUI() {
+            const select = document.getElementById('quiz-unit-select');
+            Array.from(select.options).forEach(opt => {
+                const unitId = opt.value;
+                if (unitId !== 'all' && userStats.quizGrades[unitId] !== undefined) {
+                    if(!opt.text.includes('🏆')) {
+                        opt.text = `${opt.text} (Mejor: ${userStats.quizGrades[unitId]}/10 🏆)`;
+                    } else {
+                        opt.text = opt.text.replace(/\(Mejor:.*\)/, `(Mejor: ${userStats.quizGrades[unitId]}/10 🏆)`);
+                    }
+                }
+            });
+        }
+
+        function openTestMode() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.add('hidden');
+            
+            const buttons = document.getElementById('topics-list').children;
+            for(let b of buttons) {
+                b.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
+            }
+            
+            const nav = document.getElementById('unit-nav');
+            Array.from(nav.children).forEach(btn => btn.classList.remove('bg-blue-800', 'ring-2', 'ring-white'));
+            
+            // Fix: No longer resetting currentUnitId to null. This prevents potential errors if user clicks sidebar again.
+            
+            updateQuizScoresUI();
+
+            document.getElementById('test-screen').classList.remove('hidden');
+            document.getElementById('test-screen').classList.add('flex');
+            
+            document.getElementById('test-menu').classList.remove('hidden');
+            document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('flash-ui').classList.add('hidden');
+            document.getElementById('flash-results').classList.add('hidden');
+        }
+
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            const unitFilter = document.getElementById('quiz-unit-select').value;
+            let pool = testData.quizPool;
+            
+            if (unitFilter !== 'all') {
+                pool = pool.filter(q => q.unit === unitFilter);
+            }
+
+            let shuffled = shuffleArray([...pool]);
+            testState.activeItems = shuffled.slice(0, Math.min(10, shuffled.length));
+            testState.currentIndex = 0;
+            testState.score = 0;
+            testState.mode = 'quiz';
+
+            if(testState.activeItems.length === 0) {
+                alert("No hay preguntas para esta selección."); return;
+            }
+
+            document.getElementById('test-menu').classList.add('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-ui').classList.remove('hidden');
+            document.getElementById('quiz-ui').classList.add('flex');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const item = testState.activeItems[testState.currentIndex];
+            const total = testState.activeItems.length;
+            
+            document.getElementById('quiz-progress').innerText = `Pregunta ${testState.currentIndex + 1} de ${total}`;
+            
+            let unitStr = item.unit === "u3" ? "UNIDAD 3: Probabilidad" : (item.unit === "u4" ? "UNIDAD 4: Discreta" : "UNIDAD 5: Continua");
+            document.getElementById('quiz-unit-badge').innerText = unitStr;
+            
+            document.getElementById('quiz-question').innerText = item.q;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.add('hidden');
+            feedback.className = 'hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg'; 
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            item.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 border-2 border-gray-200 rounded-xl hover:bg-blue-50 hover:border-blue-300 font-medium text-gray-700 transition-colors option-btn";
+                btn.innerText = optText;
+                btn.onclick = () => handleQuizAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedIndex, btnElement) {
+            const item = testState.activeItems[testState.currentIndex];
+            const isCorrect = selectedIndex === item.ans;
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            allButtons.forEach((btn, idx) => {
+                btn.onclick = null; 
+                btn.classList.remove('hover:bg-blue-50', 'hover:border-blue-300');
+                if (idx === item.ans) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800'); 
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800'); 
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            if (isCorrect) {
+                testState.score++;
+                feedback.innerText = "¡Correcto! Excelente trabajo. ✅";
+                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+            } else {
+                feedback.innerText = "Incorrecto. La respuesta correcta está marcada en verde. ❌";
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+            }
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.classList.remove('hidden');
+            if (testState.currentIndex === testState.activeItems.length - 1) {
+                nextBtn.innerText = "Ver Resultados Finales 🏆";
+            } else {
+                nextBtn.innerText = "Siguiente Pregunta →";
+            }
+        }
+
+        function nextQuizQuestion() {
+            testState.currentIndex++;
+            if (testState.currentIndex < testState.activeItems.length) {
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            document.getElementById('quiz-results').classList.add('flex');
+            
+            const total = testState.activeItems.length;
+            const score = testState.score;
+            document.getElementById('quiz-score-display').innerText = `${score} / ${total}`;
+            
+            const unitFilter = document.getElementById('quiz-unit-select').value;
+            let isNewRecord = false;
+
+            if(unitFilter !== 'all') {
+                if (!userStats.quizGrades[unitFilter] || score > userStats.quizGrades[unitFilter]) {
+                    isNewRecord = true;
+                    saveQuizGrade(unitFilter, score);
+                }
+            }
+
+            const resultMsg = document.getElementById('quiz-result-msg');
+            if (isNewRecord) {
+                resultMsg.innerHTML = `<span class="text-green-600 font-bold text-xl">¡Nuevo Récord en esta Unidad! 🌟</span>`;
+            } else {
+                resultMsg.innerText = "Aquí tienes tu puntuación final.";
+            }
+
+            const emoji = document.getElementById('quiz-result-emoji');
+            if(score === total) emoji.innerText = '🥇';
+            else if (score >= total * 0.7) emoji.innerText = '👍';
+            else emoji.innerText = '📚';
+        }
+
+        function startFlashcards(isRetry = false) {
+            if (!isRetry) {
+                const unitFilter = document.getElementById('flash-unit-select').value;
+                let pool = testData.flashcardPool;
+                
+                if (unitFilter !== 'all') {
+                    pool = pool.filter(f => f.unit === unitFilter);
+                }
+                testState.activeItems = shuffleArray([...pool]);
+                testState.flashMistakes = [];
+            } else {
+                testState.activeItems = shuffleArray([...testState.flashMistakes]);
+                testState.flashMistakes = []; 
+            }
+
+            testState.currentIndex = 0;
+            testState.mode = 'flash';
+
+            if(testState.activeItems.length === 0) {
+                alert("No hay tarjetas para repasar."); return;
+            }
+
+            document.getElementById('test-menu').classList.add('hidden');
+            document.getElementById('flash-results').classList.add('hidden');
+            document.getElementById('flash-ui').classList.remove('hidden');
+            document.getElementById('flash-ui').classList.add('flex');
+
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const item = testState.activeItems[testState.currentIndex];
+            const total = testState.activeItems.length;
+            
+            document.getElementById('flash-progress').innerText = `Tarjeta ${testState.currentIndex + 1} de ${total}`;
+            
+            const cardContainer = document.getElementById('flashcard-container');
+            cardContainer.classList.remove('flipped');
+            document.getElementById('flash-controls').classList.add('hidden');
+
+            document.getElementById('flash-front-text').innerText = item.f;
+            document.getElementById('flash-back-text').innerText = item.b;
+        }
+
+        function flipCard() {
+            const cardContainer = document.getElementById('flashcard-container');
+            if(!cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.add('flipped');
+                setTimeout(() => {
+                    document.getElementById('flash-controls').classList.remove('hidden');
+                }, 300);
+            }
+        }
+
+        function markFlashcard(knewIt) {
+            const currentItem = testState.activeItems[testState.currentIndex];
+            if (!knewIt) {
+                testState.flashMistakes.push(currentItem);
+            }
+
+            testState.currentIndex++;
+            if (testState.currentIndex < testState.activeItems.length) {
+                renderFlashcard();
+            } else {
+                showFlashResults();
+            }
+        }
+
+        function showFlashResults() {
+            document.getElementById('flash-ui').classList.add('hidden');
+            document.getElementById('flash-results').classList.remove('hidden');
+            document.getElementById('flash-results').classList.add('flex');
+            
+            const total = testState.activeItems.length;
+            const mistakes = testState.flashMistakes.length;
+            const known = total - mistakes;
+
+            const resText = document.getElementById('flash-result-text');
+            const resButtons = document.getElementById('flash-result-buttons');
+            resButtons.innerHTML = '';
+
+            if (mistakes === 0) {
+                resText.innerText = `¡Excelente! Dominaste todas las ${total} tarjetas.`;
+                document.getElementById('flash-result-emoji').innerText = '🎉';
+            } else {
+                resText.innerText = `Recordaste ${known} tarjetas, pero hay ${mistakes} que necesitan más repaso.`;
+                document.getElementById('flash-result-emoji').innerText = '💪';
+                
+                const retryBtn = document.createElement('button');
+                retryBtn.className = "bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm";
+                retryBtn.innerText = `Repasar las ${mistakes} que fallé`;
+                retryBtn.onclick = () => startFlashcards(true);
+                resButtons.appendChild(retryBtn);
+            }
+
+            const menuBtn = document.createElement('button');
+            menuBtn.className = "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-colors";
+            menuBtn.innerText = "Volver al Menú";
+            menuBtn.onclick = openTestMode;
+            resButtons.appendChild(menuBtn);
+        }
     </script>
 </body>
 </html>
