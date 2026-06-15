@@ -7,6 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- KaTeX CSS & JS para renderizar fórmulas matemáticas hermosas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
     <style>
         .chart-container {
             position: relative;
@@ -185,7 +190,7 @@
 
             </div>
 
-            <div id="test-screen" class="hidden flex-col max-w-5xl mx-auto w-full space-y-8 pb-20">
+            <div id="test-screen" class="hidden flex-col max-w-6xl mx-auto w-full space-y-8 pb-20">
                 
                 <div id="test-menu" class="space-y-8">
                     <div class="text-center">
@@ -193,14 +198,15 @@
                         <p class="text-lg text-gray-600 mt-3">Elige cómo quieres poner a prueba la teoría hoy.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <!-- Card 1: Quiz Teórico -->
                         <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
                             <span class="text-5xl mb-4">📝</span>
-                            <h2 class="text-2xl font-bold text-gray-800">Quiz: Múltiple Choice</h2>
-                            <p class="text-gray-500 mt-2 mb-6">Un simulacro rápido de teoría básica. Se elegirán 10 preguntas al azar para poner a prueba tu agilidad mental.</p>
+                            <h2 class="text-2xl font-bold text-gray-800">Quiz Teórico</h2>
+                            <p class="text-gray-500 mt-2 mb-6">Múltiple choice rápido de conceptos. Se elegirán 10 preguntas para poner a prueba tu base teórica.</p>
                             
                             <div class="w-full mb-6 text-left">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad teórica:</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad:</label>
                                 <select id="quiz-unit-select" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="all">Todas las unidades mezcladas</option>
                                     <option value="u3">Unidad 3: Probabilidad</option>
@@ -208,16 +214,17 @@
                                     <option value="u5">Unidad 5: Continua</option>
                                 </select>
                             </div>
-                            <button onclick="startQuiz()" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Empezar Quiz</button>
+                            <button onclick="startQuiz('theory')" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Empezar Quiz</button>
                         </div>
 
+                        <!-- Card 2: Flashcards -->
                         <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
                             <span class="text-5xl mb-4">🗂️</span>
                             <h2 class="text-2xl font-bold text-gray-800">Tarjetas Didácticas</h2>
-                            <p class="text-gray-500 mt-2 mb-6">Aparición de conceptos teóricos 1 a 1. Intenta recordarlo, voltea la tarjeta y clasifica si lo sabías o necesitas repaso.</p>
+                            <p class="text-gray-500 mt-2 mb-6">Aparición de conceptos 1 a 1. Intenta recordarlo, voltea la tarjeta y clasifica si necesitas repaso.</p>
                             
                             <div class="w-full mb-6 text-left">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad teórica:</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por unidad:</label>
                                 <select id="flash-unit-select" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500">
                                     <option value="all">Todas las unidades mezcladas</option>
                                     <option value="u3">Unidad 3: Probabilidad</option>
@@ -225,29 +232,46 @@
                                     <option value="u5">Unidad 5: Continua</option>
                                 </select>
                             </div>
-                            <button onclick="startFlashcards()" class="mt-auto w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Practicar con Tarjetas</button>
+                            <button onclick="startFlashcards()" class="mt-auto w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Practicar Tarjetas</button>
+                        </div>
+
+                        <!-- Card 3: Identifica el Problema -->
+                        <div class="bg-gradient-to-b from-amber-50 to-white p-8 rounded-2xl shadow-md border border-amber-200 flex flex-col items-center text-center relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">¡NUEVO!</div>
+                            <span class="text-5xl mb-4">🕵️‍♂️</span>
+                            <h2 class="text-2xl font-bold text-amber-900">Identifica el Problema</h2>
+                            <p class="text-gray-600 mt-2 mb-6">Lee el enunciado y selecciona qué distribución o fórmula debes usar. Ideal para prepararte para el examen a libro abierto.</p>
+                            
+                            <div class="w-full mb-6 text-left flex-1 flex flex-col justify-center">
+                                <div class="bg-white/60 p-3 rounded border border-amber-100 text-sm text-amber-800">
+                                    <b>Dinámica:</b> 10 ejercicios al azar donde tu único trabajo es saber <em>qué fórmula aplicar</em> y por qué.
+                                </div>
+                                <p class="text-center text-sm font-bold text-gray-500 mt-4" id="identify-score-badge">Mejor Nota: --/10 🏆</p>
+                            </div>
+                            <button onclick="startQuiz('identify')" class="mt-auto w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow">Entrenar Ojo Clínico</button>
                         </div>
                     </div>
                 </div>
 
-                <div id="quiz-ui" class="hidden flex-col items-center w-full max-w-3xl mx-auto">
+                <div id="quiz-ui" class="hidden flex-col items-center w-full max-w-4xl mx-auto">
                     <div class="w-full flex justify-between items-center mb-6">
                         <button onclick="openTestMode()" class="text-blue-600 hover:text-blue-800 font-medium">← Volver al Menú</button>
                         <span id="quiz-progress" class="bg-blue-100 text-blue-800 font-bold py-1 px-3 rounded-full text-sm">Pregunta 1 de 10</span>
                     </div>
                     
-                    <div class="bg-white w-full p-8 rounded-2xl shadow-sm border border-gray-200 mb-6">
+                    <div class="bg-white w-full p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200 mb-6">
                         <span id="quiz-unit-badge" class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded font-bold uppercase mb-4">UNIDAD X</span>
-                        <h3 id="quiz-question" class="text-2xl font-bold text-gray-800 mb-8 leading-snug">¿Cargando pregunta...?</h3>
+                        <h3 id="quiz-question" class="text-xl md:text-2xl font-bold text-gray-800 mb-8 leading-relaxed">¿Cargando pregunta...?</h3>
                         
                         <div id="quiz-z-chart-container" class="hidden w-full flex justify-center mb-8">
                             <canvas id="quiz-z-canvas" class="w-full max-w-md"></canvas>
                         </div>
                         
-                        <div id="quiz-options" class="space-y-3">
+                        <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         </div>
                     </div>
 
+                    <!-- El contenedor de feedback donde se inyectará KaTeX -->
                     <div id="quiz-feedback" class="hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg"></div>
 
                     <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">Siguiente Pregunta →</button>
@@ -255,11 +279,11 @@
 
                 <div id="quiz-results" class="hidden flex-col items-center justify-center text-center bg-white p-10 rounded-3xl shadow-md border border-gray-100 max-w-2xl mx-auto w-full">
                     <span id="quiz-result-emoji" class="text-7xl mb-4">🏆</span>
-                    <h2 class="text-3xl font-extrabold text-blue-900 mb-2">¡Quiz Completado!</h2>
+                    <h2 class="text-3xl font-extrabold text-blue-900 mb-2">¡Completado!</h2>
                     <p class="text-gray-600 mb-6" id="quiz-result-msg">Aquí tienes tu puntuación final.</p>
                     <div class="text-6xl font-black text-amber-500 mb-8" id="quiz-score-display">8/10</div>
                     <div class="flex gap-4">
-                        <button onclick="startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm">Jugar de Nuevo</button>
+                        <button onclick="startQuiz(testState.submode)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm">Jugar de Nuevo</button>
                         <button onclick="openTestMode()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-colors">Volver al Menú</button>
                     </div>
                 </div>
@@ -309,12 +333,12 @@
     </div>
 
     <script>
-        // --- DATA & STATE ---
+        // Mba'ekuaa ha Tembikuaa (Data & State)
         let userStats = { learnedTopics: [], quizGrades: {} };
         let currentUnitId = null;
         let currentTopicId = null;
         let currentChart = null;
-        let testState = { mode: null, activeItems: [], currentIndex: 0, score: 0, flashMistakes: [] };
+        let testState = { mode: null, submode: null, activeItems: [], currentIndex: 0, score: 0, flashMistakes: [] };
 
         const appData = {
             units: [
@@ -351,8 +375,8 @@
                             <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
                                 <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: ¿Qué fórmula usar?</h4>
                                 <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
-                                    <li><b>Permutación (Fórmula con $N!/(N-n)!$):</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
-                                    <li><b>Combinación (Fórmula con la n! extra abajo):</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
+                                    <li><b>Permutación:</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
+                                    <li><b>Combinación:</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
                                     <li><b>Factorial simple (N!):</b> Si vas a ordenar a TODOS los elementos en su totalidad (ej. 5 personas en 5 sillas).</li>
                                 </ul>
                             </div>`,
@@ -484,8 +508,8 @@
                             <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
                                 <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
                                 <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
-                                    <li>La fórmula es $E(x) = \\Sigma (x \\cdot P(x))$.</li>
-                                    <li><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar el Valor Esperado, multiplica cada columna (X por P) y suma todos los resultados.</li>
+                                    <li>La fórmula de la media es $E(x) = \\Sigma (x \\cdot f(x))$.</li>
+                                    <li><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "f(X)". Para sacar el Valor Esperado, multiplica cada columna (X por P) y suma todos los resultados.</li>
                                 </ul>
                             </div>`,
                             videos: [{ title: "Cálculo del Valor Esperado", url: "https://www.youtube.com/watch?v=ErIcLjw6aFY" }],
@@ -517,12 +541,12 @@
                                 <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
                                 <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
                                     <li><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).</li>
-                                    <li><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\mu$ debe ser 10. ¡Escala el promedio siempre!</li>
+                                    <li><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</li>
                                 </ul>
                             </div>`,
                             videos: [{ title: "Ejercicios Poisson", url: "https://www.youtube.com/watch?v=LUqSFexCIcs" }],
                             exercises: [
-                                { level: "Fácil", q: "Promedio de urgencias = 3 por hora. ¿Probabilidad de 0 urgencias en la próxima hora?", a: "μ = 3, x = 0. Fórmula o tabla: (e⁻³ * 3⁰) / 0! = 0.0498 (4.98%)." }
+                                { level: "Fácil", q: "Promedio de urgencias = 3 por hora. ¿Probabilidad de 0 urgencias en la próxima hora?", a: "λ = 3, x = 0. Fórmula o tabla: (e⁻³ * 3⁰) / 0! = 0.0498 (4.98%)." }
                             ]
                         },
                         {
@@ -558,7 +582,7 @@
                                 <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
                                 <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
                                     <li><b>Gráfica:</b> Es un rectángulo plano. La probabilidad se calcula sacando el Área del rectángulo (Base x Altura).</li>
-                                    <li><b>Fórmula:</b> La altura es SIEMPRE constante: $1 / (Máximo - Mínimo)$.</li>
+                                    <li><b>Fórmula:</b> La altura es SIEMPRE constante: $1 / (b - a)$.</li>
                                 </ul>
                             </div>`,
                             videos: [{ title: "Distribución Uniforme", url: "https://www.youtube.com/watch?v=ErIcLjw6aFY" }],
@@ -875,26 +899,58 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 { unit: "u4", topic: "Poisson", f: "¿Cuál es la palabra clave en un examen para saber que es distribución de Poisson?", b: "Cuando mencionan un PROMEDIO (μ o λ) que ocurre en un intervalo fijo de TIEMPO o ESPACIO (ej. 5 baches por milla)." },
                 { unit: "u5", topic: "Cálculo Z", f: "La tabla Normal de tu examen te da el área a la IZQUIERDA. ¿Qué haces si el problema te pide la probabilidad 'Mayor que' o a la DERECHA?", b: "Debes hacer la resta: 1 - (el número que encontraste en la tabla)." },
                 { unit: "u5", topic: "Cálculo Z", f: "El problema te pide usar la fórmula Z = (X - μ) / σ, pero te dan el dato de la 'Varianza'. ¿Qué debes hacer?", b: "Debes sacar la raíz cuadrada de la Varianza para obtener la Desviación Estándar (σ) ANTES de ponerla en la fórmula." }
+            ],
+            identifyPool: [
+                { q: "Una fábrica tiene 3 líneas de ensamblaje. La línea A produce el 50%, B el 30% y C el 20%. Las tasas de defectos son 1%, 2% y 3%. Si se elige un artículo defectuoso al azar, ¿cuál es la probabilidad de que provenga de la línea B?", options: ["Distribución Binomial", "Probabilidad Condicional Simple", "Teorema de Bayes", "Regla de Adición"], ans: 2, exp: "<strong>Por qué:</strong> Te dan la probabilidad de defectos por máquina, pero la pregunta 'viaja al pasado': sabiendo el final (es defectuoso), te pide la probabilidad del origen (línea B).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{P(A_1)P(B | A_1) + \\dots + P(A_n)P(B | A_n)} $$</span></div>" },
+                { q: "En una central de atención al cliente entran en promedio 12 llamadas por minuto. ¿Cuál es la probabilidad de recibir exactamente 5 llamadas en los próximos 30 segundos?", options: ["Distribución Normal", "Distribución de Poisson", "Valor Esperado", "Distribución Binomial"], ans: 1, exp: "<strong>Por qué:</strong> Menciona un 'promedio' de ocurrencias dentro de un intervalo específico de tiempo continuo (minutos/segundos). ¡Ojo con ajustar la media a 30 segundos!<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x) = \\frac{\\lambda^x e^{-\\lambda}}{x!} $$ y $$ E(X) = \\lambda $$</span></div>" },
+                { q: "Un examen de opción múltiple tiene 15 preguntas, cada una con 4 opciones. Si un estudiante responde todas al azar, ¿cuál es la probabilidad de que acierte a exactamente 8 preguntas?", options: ["Distribución Binomial", "Permutación", "Aproximación Normal", "Probabilidad Uniforme"], ans: 0, exp: "<strong>Por qué:</strong> Hay un número fijo de intentos (n=15), una probabilidad de éxito constante (1/4 o 0.25) y solo hay dos resultados (acertar o fallar).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x) = \\binom{n}{x} p^x q^{n-x} $$ y $$ E(X) = n p $$</span></div>" },
+                { q: "El peso de los paquetes de harina empacados por una máquina se distribuye con una media de 500g y una varianza de 25g. ¿Cuál es la probabilidad de que un paquete elegido al azar pese más de 510g?", options: ["Teorema de Bayes", "Distribución Uniforme", "Valor Esperado", "Distribución Normal"], ans: 3, exp: "<strong>Por qué:</strong> Trata con una variable continua (peso) y te proporciona la media y la varianza para estandarizar los datos.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Normal Estándar (Z)</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$</span></div>" },
+                { q: "Un gerente debe seleccionar a 4 empleados de un equipo de 12 para asistir a una conferencia en otra ciudad. ¿De cuántas formas distintas puede armar el grupo?", options: ["Permutación", "Combinación", "Valor Esperado", "Ley de Multiplicación"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo de un total, pero el ORDEN en que son elegidos NO importa (el grupo de 4 personas es el mismo sin importar quién fue nombrado primero).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Combinaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ C_n^N = \\binom{N}{n} = \\frac{N!}{n!(N-n)!} $$</span></div>" },
+                { q: "En una carrera ecuestre compiten 8 caballos. ¿De cuántas formas diferentes pueden quedar asignados los 3 primeros lugares (oro, plata y bronce)?", options: ["Combinación", "Permutación", "Probabilidad Condicional", "Ley de Adición"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo, pero el ORDEN SÍ IMPORTA debido a que los premios son diferentes para cada posición.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" },
+                { q: "Un juego de feria cuesta $5. Tienes 10% de probabilidad de ganar $20, 30% de ganar $5 y 60% de no ganar nada. ¿Cuál es el beneficio promedio por jugada a largo plazo?", options: ["Valor Esperado E(X)", "Teorema de Bayes", "Distribución de Poisson", "Probabilidad Clásica"], ans: 0, exp: "<strong>Por qué:</strong> Tienes una variable discreta con resultados monetarios y te piden el promedio o ganancia media a largo plazo.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Valor Esperado Discreto</span><br><span class='text-lg font-serif text-gray-900'>$$ E(x) = \\mu = \\Sigma x f(x) $$</span></div>" },
+                { q: "El tiempo de espera de un autobús varía entre 5 y 15 minutos, con igual probabilidad para cualquier instante en ese lapso. ¿Cuál es la probabilidad de esperar menos de 8 minutos?", options: ["Distribución Binomial", "Distribución Poisson", "Distribución Uniforme Continua", "Distribución Normal"], ans: 2, exp: "<strong>Por qué:</strong> Todos los valores dentro de un rango específico continuo tienen exactamente la misma probabilidad de ocurrir (área plana).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Uniforme</span><br><span class='text-lg font-serif text-gray-900'>$$ f(x) = \\frac{1}{b - a} $$ y $$ E(x) = \\frac{a+b}{2} $$</span></div>" },
+                { q: "En una ciudad el 40% tiene perro, el 30% tiene gato y el 15% tiene ambos. Si sabemos que una persona tiene perro, ¿cuál es la probabilidad de que también tenga gato?", options: ["Teorema de Bayes", "Probabilidad Condicional", "Ley de la Adición", "Eventos Mutuamente Excluyentes"], ans: 1, exp: "<strong>Por qué:</strong> Pide la probabilidad de un evento SABIENDO que otro ya es un hecho (restringe el universo solo a los que tienen perro).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Probabilidad Condicional</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A | B) = \\frac{P(A \\cap B)}{P(B)} $$</span></div>" },
+                { q: "Al extraer una sola carta de un mazo francés estándar de 52 cartas, ¿cuál es la probabilidad de sacar un corazón o un rey?", options: ["Ley de la Multiplicación", "Combinatoria", "Probabilidad Condicional", "Ley de la Adición"], ans: 3, exp: "<strong>Por qué:</strong> La palabra clave es 'O'. Ocurre un evento o el otro. Se suman sus probabilidades individuales y se resta la intersección (el Rey de corazones).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Ley de la Adición</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) - P(A \\cap B) $$</span></div>" },
+                { q: "Una aerolínea sabe que el 5% de los pasajeros con boleto no se presentan al vuelo. Si venden 400 boletos, ¿cuál es la probabilidad de que más de 25 personas no se presenten? (utilizando una curva continua).", options: ["Teorema de Bayes", "Aproximación de Poisson a Binomial", "Aproximación de Normal a Binomial", "Valor Esperado"], ans: 2, exp: "<strong>Por qué:</strong> Tienes un tamaño de muestra muy grande (400) y probabilidad constante. Para no hacer la fórmula binomial, estandarizamos a la curva Z.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Conversión a Variable Z</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$ (donde $ \\mu = np $)</span></div>" },
+                { q: "Lanzas un dado normal y sacas una carta de una baraja. ¿Cuál es la probabilidad de sacar un número 6 en el dado y un As en la baraja?", options: ["Ley de Adición", "Ley de Multiplicación (Independientes)", "Probabilidad Condicional", "Teorema de Bayes"], ans: 1, exp: "<strong>Por qué:</strong> Pide la ocurrencia de ambos eventos a la vez (palabra 'Y'). Además, lo que saca el dado no afecta a la carta, son independientes.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Multiplicación (Independientes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cap B) = P(A)P(B) $$</span></div>" },
+                { q: "En un bolillero hay bolas numeradas del 1 al 20. ¿Cuál es la probabilidad de sacar un número que sea múltiplo de 3?", options: ["Valor Esperado", "Regla de Bayes", "Probabilidad Clásica", "Combinación"], ans: 2, exp: "<strong>Por qué:</strong> Solo debes contar cuántos casos favorables hay y dividirlo entre el total de bolas (20). Todos los resultados son equiprobables.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Requerimientos Básicos</span><br><span class='text-lg font-serif text-gray-900'>$$ 0 \\le P(E_i) \\le 1 \\quad \\text{y} \\quad \\Sigma P(E_i) = 1 $$</span></div>" },
+                { q: "Una tela producida en un telar tiene en promedio 0.5 defectos por cada metro cuadrado. ¿Cuál es la probabilidad de encontrar 2 defectos en un corte de 3 metros cuadrados?", options: ["Distribución Uniforme", "Distribución Normal", "Distribución Binomial", "Distribución de Poisson"], ans: 3, exp: "<strong>Por qué:</strong> Se menciona una tasa promedio de ocurrencias en un intervalo espacial (área). ¡Asegúrate de escalar el promedio a 3 metros!<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución de Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = \\lambda \\quad \\text{y} \\quad V(X) = \\lambda $$</span></div>" },
+                { q: "La efectividad de una vacuna es del 90%. Si se aplica a un grupo de 20 voluntarios, ¿cuál es la probabilidad de que al menos 18 desarrollen inmunidad?", options: ["Aproximación Normal", "Distribución de Poisson", "Distribución Binomial", "Valor Esperado"], ans: 2, exp: "<strong>Por qué:</strong> Son intentos contables y limitados (n=20), con un éxito (inmunidad) de probabilidad constante (p=0.9).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = n p \\quad \\text{y} \\quad V(X) = n p q $$</span></div>" },
+                { q: "Las notas de un examen tienen media 75 y desvío 8. El 15% superior de los alumnos recibirá una beca. ¿Cuál es la nota mínima para obtener la beca?", options: ["Regla de Bayes", "Probabilidad de Poisson", "Z Inverso (Curva Normal)", "Variable Discreta"], ans: 2, exp: "<strong>Por qué:</strong> Te dan el porcentaje (área bajo la curva normal) y te piden encontrar el valor de la variable original, despejando la fórmula de Z.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Variable Normal Estándar</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} \\implies x = z\\sigma + \\mu $$</span></div>" },
+                { q: "Un test acierta el 95% si estás enfermo, y da 10% de falsos positivos si estás sano. Si el 2% de la población está enferma y tu test dio positivo, ¿qué probabilidad hay de que realmente estés enfermo?", options: ["Teorema de Bayes", "Ley de la Multiplicación", "Aproximación Binomial", "Probabilidad Clásica"], ans: 0, exp: "<strong>Por qué:</strong> Tienes múltiples caminos (sano/enfermo) que llevan a un mismo resultado (test positivo). Sabiendo el final (positivo), te preguntan por la probabilidad del inicio.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{\\Sigma P(A_j)P(B | A_j)} $$</span></div>" },
+                { q: "En una caja hay 5 bolas rojas y 3 azules. Extraes dos bolas una tras otra sin devolver la primera. ¿Probabilidad de que ambas sean rojas?", options: ["Permutación", "Ley de Multiplicación (Dependientes)", "Ley de la Adición", "Probabilidad Binomial"], ans: 1, exp: "<strong>Por qué:</strong> Eventos conjuntos (palabra 'Y') pero la primera extracción cambia las probabilidades de la segunda (porque es sin reemplazo).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Multiplicación (Dependientes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cap B) = P(A)P(B | A) $$</span></div>" },
+                { q: "Una empresa vende pólizas a $500. El riesgo de accidente es 1% pagando $10,000, y 5% pagando $2,000. ¿Cuál es la ganancia esperada por póliza para la empresa?", options: ["Valor Esperado E(X)", "Distribución Normal", "Combinatoria", "Poisson"], ans: 0, exp: "<strong>Por qué:</strong> Involucra resultados monetarios, decesos y sus probabilidades asociadas para hallar el beneficio medio a largo plazo.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Valor Esperado</span><br><span class='text-lg font-serif text-gray-900'>$$ E(x) = \\mu = \\Sigma x f(x) $$</span></div>" },
+                { q: "Un restaurante ofrece 10 ingredientes para armar una ensalada. Si puedes elegir exactamente 5, ¿cuántas ensaladas distintas hay?", options: ["Combinación", "Permutación", "Regla de Bayes", "Probabilidad Condicional"], ans: 0, exp: "<strong>Por qué:</strong> El orden en que le pongas el tomate o la lechuga a la ensalada no importa, sigue siendo el mismo plato.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Combinaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ C_n^N = \\binom{N}{n} = \\frac{N!}{n!(N-n)!} $$</span></div>" },
+                { q: "Un club tiene 15 miembros y deben elegir un presidente, un vicepresidente y un secretario. ¿De cuántas formas se puede conformar la directiva?", options: ["Valor Esperado", "Probabilidad Condicional", "Combinación", "Permutación"], ans: 3, exp: "<strong>Por qué:</strong> Puestos jerárquicos o específicos significan que elegir al grupo (Ana, Juan, Pedro) cambia dependiendo de quién sea el presidente.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" },
+                { q: "El número de baches en un camino sigue una tasa constante de 1.5 cada 10 km. ¿Cuál es la probabilidad de que en los próximos 20 km no haya ninguno?", options: ["Distribución Binomial", "Distribución Normal", "Distribución de Poisson", "Uniforme Continua"], ans: 2, exp: "<strong>Por qué:</strong> Tasa promedio de ocurrencia de eventos abstractos en un intervalo fijo de distancia (espacio).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = \\lambda \\quad \\text{y} \\quad V(X) = \\lambda $$</span></div>" },
+                { q: "Si la probabilidad de lluvia es 0.40, ¿qué fórmula uso para calcular la probabilidad de que no llueva hoy?", options: ["Complemento de un evento", "Teorema de Bayes", "Ley de la Multiplicación", "Valor Esperado"], ans: 0, exp: "<strong>Por qué:</strong> Para calcular la probabilidad de que NO ocurra un evento, se usa la fórmula del complemento porque ambos escenarios suman 1 (o 100%).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Cálculo usando Complemento</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A) = 1 - P(A^c) $$</span></div>" },
+                { q: "La vida útil de una lámpara es de 2000 horas con una desviación estándar de 150. ¿Cuál es la probabilidad de que una lámpara dure entre 1900 y 2100 horas?", options: ["Distribución de Poisson", "Ley de Adición Excluyente", "Distribución Uniforme", "Distribución Normal Z"], ans: 3, exp: "<strong>Por qué:</strong> Se da la Media, la Desviación y la variable de medición (tiempo de vida) es continua, por lo tanto genera una curva en campana.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Normal Estándar (Z)</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$</span></div>" },
+                { q: "En un grupo, P(A)=0.6 y P(B)=0.5, mientras que P(A y B)=0.2. Se sabe que el evento B ya ocurrió, ¿cuál es la probabilidad de que A ocurra?", options: ["Ley de Adición", "Teorema de Bayes", "Probabilidad Condicional", "Eventos Independientes"], ans: 2, exp: "<strong>Por qué:</strong> La ocurrencia confirmada de B reduce el universo de posibilidades totales y es el nuevo denominador.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Probabilidad Condicional</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A | B) = \\frac{P(A \\cap B)}{P(B)} $$</span></div>" },
+                { q: "La probabilidad de que un cliente compre leche es 0.5, pan 0.4 y ambas 0.1. ¿Cuál es la probabilidad de que compre leche O pan?", options: ["Ley de Multiplicación", "Teorema de Bayes", "Distribución Uniforme", "Ley de la Adición"], ans: 3, exp: "<strong>Por qué:</strong> La conjunción 'O' indica la unión de conjuntos. Debes sumar las probabilidades de cada evento y restarle los que compraron ambos para no contarlos doble.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Ley de la Adición</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) - P(A \\cap B) $$</span></div>" },
+                { q: "Dos proveedores entregan piezas. P1 entrega el 70% y P2 el 30%. El 3% de P1 es defectuoso y el 5% de P2 es defectuoso. Si la pieza extraída es BUENA, ¿probabilidad de venir de P1?", options: ["Teorema de Bayes", "Valor Esperado", "Probabilidad Binomial", "Permutación"], ans: 0, exp: "<strong>Por qué:</strong> Problema clásico de rutas inversas. Pide la causa (Proveedor 1) partiendo del análisis del final (la pieza resultó Buena).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{\\Sigma P(A_j)P(B | A_j)} $$</span></div>" },
+                { q: "Tienes una distribución de ventas que da como Valor Esperado (Media) 500 y Valor Esperado del cuadrado E(X²) igual a 260000. Te piden calcular la dispersión de las ventas diarias.", options: ["Aproximación Normal", "Varianza de Variable Discreta", "Valor Esperado", "Regla de Bayes"], ans: 1, exp: "<strong>Por qué:</strong> Te piden medir la dispersión y te proporcionan el insumo clave para sacar la Varianza (el E(X²) ).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Varianza Discreta</span><br><span class='text-lg font-serif text-gray-900'>$$ V(x) = E(X^2) - [E(X)]^2 $$</span></div>" },
+                { q: "¿Probabilidad de sacar un rey de corazones (hay 1) O el as de espadas (hay 1) de una baraja, sabiendo que no puedes sacar ambos a la vez en un tiro?", options: ["Probabilidad Condicional", "Valor Esperado", "Ley de la Adición (Eventos Mutuamente Excluyentes)", "Regla de la Multiplicación"], ans: 2, exp: "<strong>Por qué:</strong> Se conectan con la letra 'O' y al no poder ocurrir al mismo tiempo su intersección P(A ∩ B) es cero. Por lo tanto, no hay nada que restar.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Adición (Mutuamente Excluyentes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) $$</span></div>" },
+                { q: "Para acceder a un sistema de un solo uso, se debe generar una clave de 4 dígitos usando los números del 0 al 9 sin repetir ninguno. ¿De cuántas formas posibles se puede crear dicha clave?", options: ["Permutación", "Combinación", "Valor Esperado", "Poisson"], ans: 0, exp: "<strong>Por qué:</strong> Extraes un subgrupo específico (4) del total disponible (10), y el ORDEN de los dígitos cambia completamente la clave (1234 no es la misma que 4321).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" }
             ]
         };
 
-        // --- INIT ---
+        // Ñepyrũ (Init)
         document.addEventListener('DOMContentLoaded', () => {
             loadUserData();
             renderNav();
             selectUnit('u3');
         });
 
-        // --- PERSISTENCE ---
+        // Ñongatu (Persistence)
         function loadUserData() {
-            const data = localStorage.getItem('stats_estadistica_v5'); // forced version update
+            const data = localStorage.getItem('stats_estadistica_v7'); 
             if (data) {
                 userStats = JSON.parse(data);
             }
         }
 
         function saveUserData() {
-            localStorage.setItem('stats_estadistica_v5', JSON.stringify(userStats));
+            localStorage.setItem('stats_estadistica_v7', JSON.stringify(userStats));
         }
 
         function toggleTopicLearned(topicId) {
@@ -924,7 +980,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             }
         }
 
-        // --- NAVIGATION & UI ---
+        // Ñembohape (Navigation & UI)
         function renderNav() {
             const nav = document.getElementById('unit-nav');
             nav.innerHTML = ''; 
@@ -1026,7 +1082,20 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
 
             document.getElementById('topic-badge').innerText = `${unit.title} - ${unit.subtitle}`;
             document.getElementById('topic-title').innerText = topic.title;
-            document.getElementById('topic-explanation').innerHTML = topic.exp;
+            
+            const expDiv = document.getElementById('topic-explanation');
+            expDiv.innerHTML = topic.exp;
+            
+            // Render Math inside Explanation if present
+            if (window.renderMathInElement) {
+                renderMathInElement(expDiv, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
 
             const videoContainer = document.getElementById('topic-videos');
             const videoSection = document.getElementById('videos-section');
@@ -1088,18 +1157,31 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 if (ex.hint) {
                     html += `<div id="${exId}-hint" class="hidden p-6 bg-amber-50 border-t border-amber-100 text-amber-900 border-l-4 border-l-amber-500">
                         <span class="font-bold uppercase text-xs tracking-wider text-amber-600 block mb-2">Pista Estratégica:</span> 
-                        <div class="whitespace-pre-line">${ex.hint}</div>
+                        <div class="whitespace-pre-line format-math">${ex.hint}</div>
                     </div>`;
                 }
 
                 html += `<div id="${exId}-a" class="hidden p-6 bg-blue-50 border-t border-blue-100 text-blue-900 border-l-4 border-l-blue-500">
                         <span class="font-bold uppercase text-xs tracking-wider text-blue-600 block mb-2">Resolución Paso a Paso:</span> 
-                        <div class="whitespace-pre-line">${ex.a}</div>
+                        <div class="whitespace-pre-line format-math">${ex.a}</div>
                     </div>
                 </div>`;
 
                 exContainer.insertAdjacentHTML('beforeend', html);
             });
+
+            // Render math inside exercises
+            if (window.renderMathInElement) {
+                document.querySelectorAll('.format-math').forEach(el => {
+                    renderMathInElement(el, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                });
+            }
 
             renderVisualization(unit.id, topic.id);
 
@@ -1134,7 +1216,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             }
         }
 
-        // --- VISUALIZATIONS ---
+        // Ta'ãnga (Visualizations)
         function renderVisualization(unitId, topicId) {
             const vizSection = document.getElementById('viz-section');
             const vizControls = document.getElementById('viz-controls');
@@ -1304,7 +1386,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             };
         }
 
-        // --- CUSTOM CANVAS DRAWING ---
         function drawZProblemCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -1393,7 +1474,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             ctx.fillText('35%', getX((z1+2)/2), getY(0.08));
         }
 
-        // --- TEST MODE (QUIZ & FLASHCARDS) ---
+        // Ñeha'ã (Test Mode)
         function updateQuizScoresUI() {
             const select = document.getElementById('quiz-unit-select');
             Array.from(select.options).forEach(opt => {
@@ -1406,6 +1487,11 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     }
                 }
             });
+
+            const idScoreBadge = document.getElementById('identify-score-badge');
+            if(userStats.quizGrades['identify'] !== undefined) {
+                idScoreBadge.innerText = `Mejor Nota: ${userStats.quizGrades['identify']}/10 🏆`;
+            }
         }
 
         function openTestMode() {
@@ -1432,6 +1518,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             document.getElementById('flash-results').classList.add('hidden');
         }
 
+        // Mbohapýha (Shuffle Array)
         function shuffleArray(array) {
             let curId = array.length;
             while (0 !== curId) {
@@ -1444,12 +1531,18 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             return array;
         }
 
-        function startQuiz() {
-            const unitFilter = document.getElementById('quiz-unit-select').value;
-            let pool = testData.quizPool;
-            
-            if (unitFilter !== 'all') {
-                pool = pool.filter(q => q.unit === unitFilter);
+        function startQuiz(modeStr = 'theory') {
+            testState.submode = modeStr;
+            let pool = [];
+
+            if (modeStr === 'identify') {
+                pool = testData.identifyPool;
+            } else {
+                const unitFilter = document.getElementById('quiz-unit-select').value;
+                pool = testData.quizPool;
+                if (unitFilter !== 'all') {
+                    pool = pool.filter(q => q.unit === unitFilter);
+                }
             }
 
             let shuffled = shuffleArray([...pool]);
@@ -1477,12 +1570,15 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             document.getElementById('quiz-progress').innerText = `Pregunta ${testState.currentIndex + 1} de ${total}`;
             
             let unitStr = "ESTADÍSTICA GENERAL";
-            if (item.unit === "u3") unitStr = "UNIDAD 3: Probabilidad";
-            if (item.unit === "u4") unitStr = "UNIDAD 4: Discreta";
-            if (item.unit === "u5") unitStr = "UNIDAD 5: Continua";
+            if (testState.submode === 'identify') {
+                unitStr = "IDENTIFICA EL PROBLEMA 🔍";
+            } else {
+                if (item.unit === "u3") unitStr = "UNIDAD 3: Probabilidad";
+                if (item.unit === "u4") unitStr = "UNIDAD 4: Discreta";
+                if (item.unit === "u5") unitStr = "UNIDAD 5: Continua";
+            }
             
             document.getElementById('quiz-unit-badge').innerText = unitStr;
-            
             document.getElementById('quiz-question').innerText = item.q;
             
             const optionsContainer = document.getElementById('quiz-options');
@@ -1521,13 +1617,26 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
 
             const feedback = document.getElementById('quiz-feedback');
             feedback.classList.remove('hidden');
-            if (isCorrect) {
-                testState.score++;
-                feedback.innerText = "¡Correcto! Excelente trabajo. ✅";
-                feedback.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
-            } else {
-                feedback.innerText = "Incorrecto. La respuesta correcta está marcada en verde. ❌";
-                feedback.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+            
+            let feedbackText = isCorrect ? "¡Correcto! Excelente trabajo. ✅" : "Incorrecto. La respuesta correcta está en verde. ❌";
+            let colorClasses = isCorrect ? ['bg-green-50', 'text-green-700', 'border', 'border-green-200'] : ['bg-red-50', 'text-red-700', 'border', 'border-red-200'];
+            
+            if (item.exp) {
+                feedbackText += `<div class="mt-4 p-4 bg-white/60 rounded-lg text-left text-sm text-gray-800 border border-gray-200">${item.exp}</div>`;
+            }
+
+            feedback.innerHTML = feedbackText;
+            feedback.classList.add(...colorClasses);
+
+            // Renderizar KaTeX en el feedback (Render Math)
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
             }
 
             const nextBtn = document.getElementById('quiz-next-btn');
@@ -1535,7 +1644,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             if (testState.currentIndex === testState.activeItems.length - 1) {
                 nextBtn.innerText = "Ver Resultados Finales 🏆";
             } else {
-                nextBtn.innerText = "Siguiente Pregunta →";
+                nextBtn.innerText = "Siguiente Ejercicio →";
             }
         }
 
@@ -1557,19 +1666,26 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             const score = testState.score;
             document.getElementById('quiz-score-display').innerText = `${score} / ${total}`;
             
-            const unitFilter = document.getElementById('quiz-unit-select').value;
             let isNewRecord = false;
 
-            if(unitFilter !== 'all') {
-                if (!userStats.quizGrades[unitFilter] || score > userStats.quizGrades[unitFilter]) {
+            if (testState.submode === 'identify') {
+                if (!userStats.quizGrades['identify'] || score > userStats.quizGrades['identify']) {
                     isNewRecord = true;
-                    saveQuizGrade(unitFilter, score);
+                    saveQuizGrade('identify', score);
+                }
+            } else {
+                const unitFilter = document.getElementById('quiz-unit-select').value;
+                if(unitFilter !== 'all') {
+                    if (!userStats.quizGrades[unitFilter] || score > userStats.quizGrades[unitFilter]) {
+                        isNewRecord = true;
+                        saveQuizGrade(unitFilter, score);
+                    }
                 }
             }
 
             const resultMsg = document.getElementById('quiz-result-msg');
             if (isNewRecord) {
-                resultMsg.innerHTML = `<span class="text-green-600 font-bold text-xl">¡Nuevo Récord en esta sección! 🌟</span>`;
+                resultMsg.innerHTML = `<span class="text-green-600 font-bold text-xl">¡Nuevo Récord en este modo! 🌟</span>`;
             } else {
                 resultMsg.innerText = "Aquí tienes tu puntuación final.";
             }
