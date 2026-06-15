@@ -1618,6 +1618,10 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             const feedback = document.getElementById('quiz-feedback');
             feedback.classList.remove('hidden');
             
+            if (isCorrect) {
+                testState.score++;
+            }
+            
             let feedbackText = isCorrect ? "¡Correcto! Excelente trabajo. ✅" : "Incorrecto. La respuesta correcta está en verde. ❌";
             let colorClasses = isCorrect ? ['bg-green-50', 'text-green-700', 'border', 'border-green-200'] : ['bg-red-50', 'text-red-700', 'border', 'border-red-200'];
             
