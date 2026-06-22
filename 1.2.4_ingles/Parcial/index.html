@@ -74,7 +74,7 @@
             border: 2px solid #4f46e5;
         }
 
-        /* Etiquetas fijas en los bordes de la tarjeta para no interferir con el centro */
+        /* Etiquetas fijas en los bordes de la tarjeta */
         .flash-label-top {
             position: absolute;
             top: 1.2rem;
@@ -108,7 +108,8 @@
         .feedback-anim { animation: slideUpFade 0.3s ease-out forwards; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-slate-800">
+<!-- Usamos h-[100dvh] (dynamic viewport height) para evitar que los navegadores móviles tapen el contenido -->
+<body class="flex h-[100dvh] overflow-hidden text-slate-800">
 
     <!-- Sidebar (Desktop) / Drawer (Mobile) -->
     <aside id="sidebar" class="bg-slate-900 text-slate-300 w-64 h-full flex flex-col transition-transform duration-300 fixed md:relative z-50 transform -translate-x-full md:translate-x-0 shrink-0 shadow-xl md:shadow-none">
@@ -145,19 +146,19 @@
     <!-- Área Principal -->
     <div class="flex-1 flex flex-col h-full overflow-hidden relative">
         
-        <!-- Header Móvil -->
-        <header class="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center shrink-0 shadow-md">
+        <!-- Header Móvil: Botón Menú a la izquierda -->
+        <header class="md:hidden bg-slate-900 text-white p-4 flex items-center gap-4 shrink-0 shadow-md">
+            <button onclick="toggleMobileMenu()" class="p-1 hover:bg-slate-800 rounded">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
             <div class="flex items-center gap-2">
                 <i data-lucide="graduation-cap" class="text-indigo-400"></i>
                 <h1 class="font-bold">TechEnglish</h1>
             </div>
-            <button onclick="toggleMobileMenu()" class="p-1 hover:bg-slate-800 rounded">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
         </header>
 
-        <!-- Contenedor con Scroll de Vistas -->
-        <main id="main-content" class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+        <!-- Contenedor con Scroll de Vistas: Agregado pb-24 (padding inferior extra) para navegadores móviles -->
+        <main id="main-content" class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 relative">
             
             <!-- ==========================================
                  WELCOME SCREEN
@@ -325,7 +326,7 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">Ponte a Prueba</h2>
                 </header>
 
-                <!-- Menú de Tabs (Alineado firmemente a la izquierda) -->
+                <!-- Menú de Tabs -->
                 <div class="flex gap-2 overflow-x-auto border-b border-slate-200 mb-6 w-full justify-start pb-2">
                     <button onclick="switchTestTab('mc')" id="tab-mc" class="tab-btn px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap">Multiple Choice (20)</button>
                     <button onclick="switchTestTab('flash')" id="tab-flash" class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors whitespace-nowrap">Flashcards (20)</button>
@@ -333,7 +334,7 @@
                 </div>
 
                 <!-- Tab Content: Multiple Choice -->
-                <div id="test-mc" class="test-tab-content flex-col items-center w-full pb-10" style="display: none;">
+                <div id="test-mc" class="test-tab-content flex-col items-center w-full" style="display: none;">
                     <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 p-5 md:p-8">
                         <div class="mb-4 flex justify-between items-center text-xs md:text-sm font-semibold text-slate-500">
                             <span id="mc-counter">Pregunta 1 de 20</span>
@@ -402,7 +403,7 @@
 
                 <!-- Tab Content: Spot the Tense -->
                 <div id="test-spot" class="test-tab-content flex-col items-center w-full" style="display: none;">
-                    <div class="w-full max-w-3xl bg-slate-900 text-white rounded-2xl shadow-xl overflow-hidden mb-10">
+                    <div class="w-full max-w-3xl bg-slate-900 text-white rounded-2xl shadow-xl overflow-hidden">
                         <div class="bg-indigo-600 px-4 md:px-6 py-4 flex justify-between items-center">
                             <h3 class="font-bold flex items-center gap-2 text-sm md:text-base"><i data-lucide="zap" class="w-4 h-4 md:w-5 md:h-5"></i> Spot the Tense</h3>
                             <div class="flex gap-3 items-center">
@@ -470,21 +471,16 @@
             }
         }
 
-        // Navegación aprueba de fallos: Manipula style.display directamente
         function navigate(viewId) {
-            // Ocultar todas las pantallas a la fuerza
             document.querySelectorAll('.view-section').forEach(view => {
                 view.style.display = 'none';
-                view.classList.remove('active'); // Opcional, para limpiar
             });
             
-            // Restablecer estilos de botones del menú
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-slate-800', 'text-white');
                 btn.classList.add('text-slate-300');
             });
 
-            // Mostrar solo la pantalla solicitada
             const targetView = document.getElementById(`view-${viewId}`);
             if (viewId === 'welcome' || viewId === 'test') {
                 targetView.style.display = 'flex';
@@ -492,17 +488,14 @@
                 targetView.style.display = 'block';
             }
 
-            // Marcar botón activo
             const activeBtn = document.getElementById(`nav-${viewId}`);
             activeBtn.classList.add('bg-slate-800', 'text-white');
             activeBtn.classList.remove('text-slate-300');
             
-            // Cerrar menú móvil automáticamente si se presionó algo
             if(window.innerWidth < 768 && isMenuOpen) {
                 toggleMobileMenu();
             }
             
-            // Reiniciar scroll del contenedor principal al tope
             document.getElementById('main-content').scrollTop = 0;
         }
 
@@ -542,7 +535,6 @@
         // TEST MODE: TABS CONTROL
         // ==========================================
         function switchTestTab(tabId) {
-            // Estilos de las pestañas
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('border-indigo-600', 'text-indigo-600', 'active');
                 btn.classList.add('border-transparent', 'text-slate-500');
@@ -552,7 +544,6 @@
             activeTabBtn.classList.remove('border-transparent', 'text-slate-500');
             activeTabBtn.classList.add('border-indigo-600', 'text-indigo-600', 'active');
 
-            // Mostrar contenido estricto con display
             document.querySelectorAll('.test-tab-content').forEach(content => {
                 content.style.display = 'none';
             });
@@ -564,10 +555,9 @@
         }
 
         // ==========================================
-        // DATOS PARA LOS JUEGOS (20 preguntas/tarjetas c/u)
+        // DATOS PARA LOS JUEGOS (20 items c/u)
         // ==========================================
         
-        // 1. Multiple Choice (20 items)
         const rawMCData = [
             { q: "We ___ deploy the new update tomorrow. (Recommendation)", options: ["must to", "should", "can", "should to"], correct: 1, explanation: "Para recomendaciones se usa 'should' seguido del verbo base sin 'to'." },
             { q: "Python is generally considered ___ to read than C++.", options: ["more easy", "easier", "the easiest", "easyer"], correct: 1, explanation: "'Easy' termina en Y, se cambia a 'ier' para el comparativo." },
@@ -591,7 +581,6 @@
             { q: "I ___ a critical error yesterday.", options: ["find", "found", "have found", "finding"], correct: 1, explanation: "'Yesterday' especifica cuándo terminó la acción -> Past Simple ('found')." }
         ];
 
-        // 2. Flashcards (20 items)
         const allFlashcards = [
             { front: "Present Simple", back: "Habits, routines or facts.<br><br><b>Ex:</b> The system runs daily." },
             { front: "Present Continuous", back: "Ongoing actions OR future arrangements.<br><br><b>Ex:</b> We are launching tomorrow." },
@@ -615,7 +604,6 @@
             { front: "Irregular Comparatives", back: "Good -> Better<br>Bad -> Worse<br>Far -> Further" }
         ];
 
-        // 3. Spot the Tense (20 items)
         const rawSpotData = [
             { sent: "The new server is processing requests.", options: ["Present Simple", "Present Continuous"], correct: 1, explanation: "Present Continuous: Acción ocurriendo ahora mismo ('is processing')." },
             { sent: "We tested the logic yesterday.", options: ["Past Simple", "Present Perfect"], correct: 0, explanation: "Past Simple: Acción anclada a un tiempo específico del pasado ('yesterday')." },
@@ -882,11 +870,11 @@
         }
 
         // ==========================================
-        // INIT AL CARGAR LA PÁGINA (Previene conflictos)
+        // INIT AL CARGAR LA PÁGINA
         // ==========================================
         document.addEventListener("DOMContentLoaded", () => {
-            navigate('welcome'); // Solo muestra la pantalla de inicio al cargar
-            switchTestTab('mc'); // Prepara la primera pestaña de los tests
+            navigate('welcome'); 
+            switchTestTab('mc'); 
         });
 
     </script>
