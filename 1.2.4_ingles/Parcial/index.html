@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Technical English Study App</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -12,18 +14,34 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
+            overflow-x: hidden;
         }
 
-        /* Ocultar scrollbar visualmente pero mantener función */
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+        /* View transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flashcard CSS - PERFECT CENTERING */
         .flashcard-container {
             perspective: 1000px;
             width: 100%;
-            height: 350px; /* Altura ampliada para mayor comodidad */
+            height: 320px;
         }
         .flashcard-inner {
             position: relative;
@@ -36,21 +54,18 @@
         .flashcard-container.flipped .flashcard-inner {
             transform: rotateY(180deg);
         }
-        
-        /* Contenedores Frontal y Trasero: Centrado Matemático Puro */
         .flashcard-front, .flashcard-back {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
             display: flex;
-            flex-direction: column;
-            align-items: center;    /* Centrado Horizontal Absoluto */
-            justify-content: center;/* Centrado Vertical Absoluto */
-            padding: 1.5rem;
+            align-items: center; /* Centrado vertical */
+            justify-content: center; /* Centrado horizontal */
+            padding: 3rem 1.5rem; /* Espacio para los labels absolutos */
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            overflow: hidden; /* Evita cualquier scroll interno */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         .flashcard-front {
             background-color: white;
@@ -61,112 +76,168 @@
             background-color: #4f46e5;
             color: white;
             transform: rotateY(180deg);
+            border: 2px solid #4f46e5;
         }
+
+        /* Etiquetas absolutas para las tarjetas */
+        .flash-label-top {
+            position: absolute;
+            top: 1.2rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .flashcard-front .flash-label-top { color: #94a3b8; }
+        .flashcard-back .flash-label-top { color: #a5b4fc; }
+
+        .flash-label-bottom {
+            position: absolute;
+            bottom: 1.2rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+        .flashcard-front .flash-label-bottom { color: #94a3b8; }
+        .flashcard-back .flash-label-bottom { color: #a5b4fc; }
 
         .tab-btn.active {
             border-bottom: 2px solid #4f46e5;
             color: #4f46e5;
             font-weight: 600;
         }
+
+        /* Animación para Spot the Tense feedback */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feedback-anim { animation: slideUpFade 0.3s ease-out forwards; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-slate-800 bg-slate-50 relative">
+<body class="flex flex-col md:flex-row h-screen overflow-hidden text-slate-800">
 
-    <!-- Botón Menú Móvil -->
-    <button onclick="toggleSidebar()" class="md:hidden absolute top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-md shadow-lg">
-        <i data-lucide="menu" class="w-6 h-6"></i>
-    </button>
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-slate-900 text-white flex items-center justify-between p-4 z-20 shrink-0 shadow-md">
+        <div class="flex items-center gap-2">
+            <i data-lucide="graduation-cap" class="text-indigo-400"></i>
+            <h1 class="font-bold">TechEnglish App</h1>
+        </div>
+        <button onclick="toggleMobileMenu()" class="p-1 hover:bg-slate-800 rounded">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </header>
 
-    <!-- Overlay para móvil -->
-    <div id="mobile-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-30 hidden md:hidden transition-opacity"></div>
+    <!-- Overlay for mobile menu -->
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-900/50 z-30 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
 
     <!-- Sidebar Menu -->
-    <aside id="sidebar" class="absolute md:relative w-64 h-full bg-slate-900 text-slate-300 flex flex-col z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-2xl md:shadow-none">
-        <div class="p-6 border-b border-slate-800 mt-12 md:mt-0">
+    <aside id="sidebar" class="fixed md:relative top-0 left-0 h-full w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 z-40 transform -translate-x-full md:translate-x-0 shrink-0">
+        <div class="p-6 border-b border-slate-800 hidden md:flex items-center justify-between">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
                 <i data-lucide="graduation-cap" class="text-indigo-400"></i>
                 TechEnglish App
             </h1>
         </div>
+        <div class="md:hidden flex items-center justify-between p-4 border-b border-slate-800">
+            <span class="font-bold text-white">Menú</span>
+            <button onclick="toggleMobileMenu()" class="p-1 hover:bg-slate-800 rounded text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <button onclick="navigate('welcome')" id="nav-welcome" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-slate-800 hover:text-white transition-colors bg-slate-800 text-white">
+            <button onclick="navigate('welcome')" id="nav-welcome" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors bg-slate-800 text-white">
                 <i data-lucide="home" class="w-5 h-5"></i> Inicio
             </button>
-            <button onclick="navigate('unit1')" id="nav-unit1" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-slate-800 hover:text-white transition-colors">
-                <i data-lucide="book-open" class="w-5 h-5"></i> U1: Reading
+            <button onclick="navigate('unit1')" id="nav-unit1" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-slate-800">
+                <i data-lucide="book-open" class="w-5 h-5"></i> Unidad 1: Reading
             </button>
-            <button onclick="navigate('unit2')" id="nav-unit2" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-slate-800 hover:text-white transition-colors">
-                <i data-lucide="pen-tool" class="w-5 h-5"></i> U2: Grammar
+            <button onclick="navigate('unit2')" id="nav-unit2" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-slate-800">
+                <i data-lucide="pen-tool" class="w-5 h-5"></i> Unidad 2: Grammar
             </button>
-            <button onclick="navigate('test')" id="nav-test" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-slate-800 hover:text-white transition-colors">
+            <button onclick="navigate('test')" id="nav-test" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-slate-800">
                 <i data-lucide="brain-circuit" class="w-5 h-5"></i> Ponte a Prueba
             </button>
         </nav>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 overflow-y-auto w-full relative">
+    <main id="main-content" class="flex-1 bg-slate-50 overflow-y-auto overflow-x-hidden relative w-full">
         
-        <!-- WELCOME SCREEN -->
-        <section id="view-welcome" class="view-section flex flex-col items-center justify-center min-h-full p-8 md:p-12">
+        <!-- ==========================================
+             WELCOME SCREEN
+        =========================================== -->
+        <section id="view-welcome" class="view-section active h-full flex flex-col items-center justify-center p-6 md:p-8">
             <div class="max-w-2xl text-center">
-                <div class="bg-indigo-100 text-indigo-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 mt-8 md:mt-0">
+                <div class="bg-indigo-100 text-indigo-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                     <i data-lucide="code-2" class="w-10 h-10"></i>
                 </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Entorno de Práctica</h2>
-                <p class="text-base md:text-lg text-slate-600 mb-8">Esta plataforma está diseñada para reforzar tu comprensión lectora y gramática técnica aplicada al desarrollo de software.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Bienvenido al Entorno de Práctica</h2>
+                <p class="text-base md:text-lg text-slate-600 mb-8">Esta plataforma interactiva está diseñada para reforzar tu comprensión lectora y gramática técnica en inglés aplicada al desarrollo de software.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <i data-lucide="book-open" class="w-8 h-8 text-indigo-500 mx-auto mb-3"></i>
                         <h3 class="font-semibold mb-2">Lectura Técnica</h3>
-                        <p class="text-sm text-slate-500">Textos reales sobre programación.</p>
+                        <p class="text-xs md:text-sm text-slate-500">Textos reales sobre lenguajes de programación.</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <i data-lucide="pen-tool" class="w-8 h-8 text-indigo-500 mx-auto mb-3"></i>
                         <h3 class="font-semibold mb-2">Foco Gramatical</h3>
-                        <p class="text-sm text-slate-500">Tiempos verbales, modales y más.</p>
+                        <p class="text-xs md:text-sm text-slate-500">Tiempos verbales, modales y estructuras clave.</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-500 mx-auto mb-3"></i>
                         <h3 class="font-semibold mb-2">Ponte a Prueba</h3>
-                        <p class="text-sm text-slate-500">Simulador de examen aleatorio.</p>
+                        <p class="text-xs md:text-sm text-slate-500">Ejercicios interactivos y flashcards 3D.</p>
                     </div>
                 </div>
-                <button onclick="navigate('test')" class="mt-8 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all">
-                    Ir al Test
+                <button onclick="navigate('unit1')" class="mt-8 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                    Comenzar Práctica
                 </button>
             </div>
         </section>
 
-        <!-- UNIT 1: READING COMPREHENSION -->
-        <section id="view-unit1" class="view-section hidden p-8 md:p-12 max-w-5xl mx-auto mt-10 md:mt-0">
-            <header class="mb-8">
-                <span class="text-indigo-600 font-semibold tracking-wider text-sm uppercase">Unidad 1</span>
-                <h2 class="text-3xl font-bold text-slate-900">Reading Comprehension</h2>
-                <p class="text-slate-500 mt-2">Lee el texto (sin negritas ni ayudas) y completa el análisis.</p>
+        <!-- ==========================================
+             UNIT 1: READING COMPREHENSION
+        =========================================== -->
+        <section id="view-unit1" class="view-section p-4 md:p-8 max-w-6xl mx-auto">
+            <header class="mb-6 md:mb-8">
+                <span class="text-indigo-600 font-semibold tracking-wider text-xs md:text-sm uppercase">Unidad 1</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">Reading Comprehension</h2>
+                <p class="text-sm md:text-base text-slate-500 mt-2">Lee cuidadosamente el texto (sin formatos visuales de ayuda) y completa los ejercicios de análisis estructural.</p>
             </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 leading-relaxed text-slate-700 space-y-4 text-justify">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                <!-- Text Container -->
+                <div class="bg-white p-5 md:p-8 rounded-2xl shadow-sm border border-slate-200 text-sm md:text-base leading-relaxed text-slate-700 space-y-4 text-justify w-full overflow-hidden">
                     <p>Programming languages are the foundational tools required for modern software development. They provide a structured syntax for developers to communicate instructions to computing machines. The choice of a programming language often dictates the efficiency, scalability, and maintainability of an application.</p>
                     <p>Python is a high-level programming language widely recognized for its clean readability and straightforward syntax. It is heavily utilized in fields such as artificial intelligence, data science, and web backend development. On the other hand, Java is an object-oriented language that strictly follows the write once, run anywhere principle. This cross-platform capability makes it a standard choice for large-scale enterprise applications and Android mobile development.</p>
                     <p>C++ is considered an extension of the C language and provides developers with low-level memory manipulation capabilities alongside object-oriented features. Because of its high performance and tight control over hardware resources, it remains the dominant language for system programming, embedded systems, and demanding game engine development.</p>
                 </div>
 
-                <div class="bg-indigo-50 p-6 md:p-8 rounded-2xl border border-indigo-100 flex flex-col gap-6">
+                <!-- Interactive Analysis -->
+                <div class="bg-indigo-50 p-5 md:p-8 rounded-2xl border border-indigo-100 flex flex-col gap-6 w-full">
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2"><i data-lucide="search" class="w-5 h-5 text-indigo-600"></i> Análisis</h3>
+                        <h3 class="text-lg md:text-xl font-bold text-slate-900 mb-1 flex items-center gap-2">
+                            <i data-lucide="search" class="w-5 h-5 text-indigo-600"></i> Análisis Estructural
+                        </h3>
+                        <p class="text-xs md:text-sm text-slate-600">Encuentra los elementos clave del texto.</p>
                     </div>
+
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">1. Escribe un "Title" (en inglés):</label>
-                            <input type="text" id="u1-title" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">1. Escribe un "Title" apropiado en inglés:</label>
+                            <input type="text" id="u1-title" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm" placeholder="Ej. The history of computers...">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">2. Copia la "Topic sentence" del primer párrafo:</label>
-                            <textarea id="u1-topic" rows="3" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none resize-none"></textarea>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">2. Copia y pega la "Topic sentence" del primer párrafo:</label>
+                            <textarea id="u1-topic" rows="3" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none text-sm" placeholder="Escribe aquí la oración completa..."></textarea>
                         </div>
-                        <button onclick="validateReading()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2">
+                        <button onclick="validateReading()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                             <i data-lucide="check-circle" class="w-5 h-5"></i> Validar Respuestas
                         </button>
                         <div id="u1-feedback" class="hidden p-4 rounded-lg mt-4 text-sm font-medium"></div>
@@ -175,210 +246,232 @@
             </div>
         </section>
 
-        <!-- UNIT 2: GRAMMAR FOCUS -->
-        <section id="view-unit2" class="view-section hidden p-8 md:p-12 max-w-5xl mx-auto mt-10 md:mt-0">
-            <header class="mb-8">
-                <span class="text-indigo-600 font-semibold tracking-wider text-sm uppercase">Unidad 2</span>
-                <h2 class="text-3xl font-bold text-slate-900">Foco Gramatical</h2>
+        <!-- ==========================================
+             UNIT 2: GRAMMAR FOCUS
+        =========================================== -->
+        <section id="view-unit2" class="view-section p-4 md:p-8 max-w-6xl mx-auto w-full">
+            <header class="mb-6 md:mb-8">
+                <span class="text-indigo-600 font-semibold tracking-wider text-xs md:text-sm uppercase">Unidad 2</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">Foco Gramatical</h2>
+                <p class="text-sm md:text-base text-slate-500 mt-2">Repaso de estructuras clave. (Asegúrate de no tener cortes en móvil).</p>
             </header>
 
-            <div class="space-y-6">
-                <!-- Tenses Theory -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-slate-800 px-6 py-4 border-b border-slate-200">
-                        <h3 class="font-bold text-lg text-white flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-indigo-400"></i> Verb Tenses</h3>
+            <div class="space-y-6 w-full">
+                <!-- Tenses -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden w-full">
+                    <div class="bg-slate-800 px-4 md:px-6 py-4 border-b border-slate-200">
+                        <h3 class="font-bold text-base md:text-lg text-white flex items-center gap-2">
+                            <i data-lucide="clock" class="w-5 h-5 text-indigo-400"></i> Verb Tenses
+                        </h3>
                     </div>
-                    <div class="p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <ul class="space-y-3 text-sm text-slate-700">
-                                <li><span class="font-bold text-indigo-600">Present Simple:</span> Rutinas, hechos. <br><em class="text-slate-500">"The system stores data."</em></li>
-                                <li><span class="font-bold text-indigo-600">Present Continuous:</span> Acciones en proceso. <br><em class="text-slate-500">"The server is loading."</em></li>
-                                <li><span class="font-bold text-indigo-600">Past Simple:</span> Acciones finalizadas. <br><em class="text-slate-500">"We updated it yesterday."</em></li>
+                    <div class="p-4 md:p-6 w-full">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+                            <ul class="space-y-4 text-xs md:text-sm text-slate-700 break-words">
+                                <li class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="font-bold text-indigo-600 block mb-1">Present Simple:</span> Rutinas, hechos.<br>
+                                    <em class="text-slate-500">"The system stores data."</em>
+                                </li>
+                                <li class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="font-bold text-indigo-600 block mb-1">Present Continuous:</span> Acciones en proceso o arreglos futuros (agenda).<br>
+                                    <em class="text-slate-500">"The server is loading." / "We are meeting at 10 AM."</em>
+                                </li>
+                                <li class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="font-bold text-indigo-600 block mb-1">Past Simple:</span> Acciones finalizadas en el pasado.<br>
+                                    <em class="text-slate-500">"They updated the software yesterday."</em>
+                                </li>
                             </ul>
-                            <ul class="space-y-3 text-sm text-slate-700">
-                                <li><span class="font-bold text-indigo-600">Present Perfect:</span> Acción pasada con impacto presente. <br><em class="text-slate-500">"We have fixed the bug."</em></li>
-                                <li><span class="font-bold text-indigo-600">Going to vs Pres. Cont. (Future):</span> Intenciones vs Acuerdos (Agenda). <br><em class="text-slate-500">"We are going to launch" / "We are meeting at 10 AM"</em></li>
+                            <ul class="space-y-4 text-xs md:text-sm text-slate-700 break-words">
+                                <li class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="font-bold text-indigo-600 block mb-1">Present Perfect:</span> Acción pasada con relevancia en el presente (no importa cuándo).<br>
+                                    <em class="text-slate-500">"We have fixed the main bug."</em>
+                                </li>
+                                <li class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="font-bold text-indigo-600 block mb-1">Going to (Future):</span> Intenciones y planes (sin estar agendados estrictamente).<br>
+                                    <em class="text-slate-500">"We are going to launch it soon."</em>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-lg text-slate-800 mb-4 border-b pb-2">Modals & Comparatives</h3>
-                        <p class="text-sm text-slate-600 mb-2"><strong class="text-indigo-600">Should:</strong> Recomendación. <em class="text-slate-500">"You should test it."</em></p>
-                        <p class="text-sm text-slate-600 mb-2"><strong class="text-indigo-600">Can:</strong> Habilidad/Posibilidad. <em class="text-slate-500">"It can process data."</em></p>
-                        <p class="text-sm text-slate-600 mb-2"><strong class="text-indigo-600">Comparative:</strong> <em class="text-slate-500">"Faster than..."</em></p>
-                        <p class="text-sm text-slate-600"><strong class="text-indigo-600">Superlative:</strong> <em class="text-slate-500">"The most secure..."</em></p>
+                <!-- Modals & Comparatives -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 w-full break-words">
+                        <h3 class="font-bold text-base md:text-lg text-slate-800 flex items-center gap-2 mb-4 border-b pb-2">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-indigo-500"></i> Modals & Comparatives
+                        </h3>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <p><strong class="text-indigo-600">Should:</strong> Recomendación/Consejo.<br><em class="text-slate-500">"You should test the code."</em></p>
+                            <p><strong class="text-indigo-600">Can:</strong> Habilidad/Posibilidad.<br><em class="text-slate-500">"It can process data fast."</em></p>
+                            <hr class="my-2 border-slate-100">
+                            <p><strong class="text-indigo-600">Comparative:</strong> <em class="text-slate-500">"C++ is faster than Python."</em> (Compara 2 cosas).</p>
+                            <p><strong class="text-indigo-600">Superlative:</strong> <em class="text-slate-500">"It is the most secure language."</em> (Destaca 1 sobre el resto).</p>
+                        </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-lg text-slate-800 mb-4 border-b pb-2">Articles & Prepositions</h3>
-                        <p class="text-sm text-slate-600 mb-2"><strong class="text-indigo-600">A / An:</strong> Basado en el sonido (A user, An hour).</p>
-                        <p class="text-sm text-slate-600 mb-2"><strong class="text-indigo-600">In/On/At:</strong> <em class="text-slate-500">In a folder, On a server, At an IP.</em></p>
-                        <p class="text-sm text-slate-600"><strong class="text-indigo-600">Any:</strong> Preguntas o negaciones. <em class="text-slate-500">"Are there any bugs?"</em></p>
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 w-full break-words">
+                        <h3 class="font-bold text-base md:text-lg text-slate-800 flex items-center gap-2 mb-4 border-b pb-2">
+                            <i data-lucide="paperclip" class="w-5 h-5 text-indigo-500"></i> Articles, Prepositions & Any
+                        </h3>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <p><strong class="text-indigo-600">A / An:</strong> Depende del SONIDO, no de la letra.<br>
+                            - <em class="text-slate-500">A user</em> (Suena iúser, consonante).<br>
+                            - <em class="text-slate-500">An hour</em> (Suena áur, vocal).</p>
+                            <p><strong class="text-indigo-600">In/On/At:</strong> <em class="text-slate-500">In a folder, On a server, At an IP.</em></p>
+                            <p><strong class="text-indigo-600">Any:</strong> Usado en preguntas o negaciones.<br><em class="text-slate-500">"Do you have any errors?"</em></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- TEST MODE (PONTE A PRUEBA) -->
-        <section id="view-test" class="view-section hidden p-4 md:p-8 max-w-5xl mx-auto h-full mt-10 md:mt-0 flex flex-col">
-            <header class="mb-6 shrink-0 text-center md:text-left">
-                <span class="text-red-500 font-semibold tracking-wider text-sm uppercase">Modo de Evaluación Aleatorio</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Ponte a Prueba</h2>
+        <!-- ==========================================
+             TEST MODE (PONTE A PRUEBA)
+        =========================================== -->
+        <section id="view-test" class="view-section p-4 md:p-8 max-w-6xl mx-auto flex flex-col min-h-screen md:min-h-[calc(100vh-4rem)]">
+            <header class="mb-4 shrink-0">
+                <span class="text-red-500 font-semibold tracking-wider text-xs md:text-sm uppercase">Modo de Evaluación</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mt-1">Ponte a Prueba</h2>
             </header>
 
-            <div class="flex overflow-x-auto gap-1 border-b border-slate-200 mb-6 shrink-0 pb-1">
-                <button onclick="switchTestTab('mc')" id="tab-mc" class="tab-btn active px-4 py-2 text-sm text-slate-500 whitespace-nowrap">Multiple Choice (20)</button>
-                <button onclick="switchTestTab('flash')" id="tab-flash" class="tab-btn px-4 py-2 text-sm text-slate-500 whitespace-nowrap">Flashcards 3D (20)</button>
-                <button onclick="switchTestTab('spot')" id="tab-spot" class="tab-btn px-4 py-2 text-sm text-slate-500 whitespace-nowrap">Spot the Tense (20)</button>
+            <!-- Test Mode Tabs (Scrollable on small phones) -->
+            <div class="flex gap-2 overflow-x-auto border-b border-slate-200 mb-6 shrink-0 pb-1 scrollbar-hide">
+                <button onclick="switchTestTab('mc')" id="tab-mc" class="tab-btn active px-3 md:px-4 py-2 text-xs md:text-sm text-slate-500 whitespace-nowrap transition-colors">Multiple Choice (20)</button>
+                <button onclick="switchTestTab('flash')" id="tab-flash" class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm text-slate-500 whitespace-nowrap transition-colors">Flashcards (20)</button>
+                <button onclick="switchTestTab('spot')" id="tab-spot" class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm text-slate-500 whitespace-nowrap transition-colors">Spot the Tense (20)</button>
             </div>
 
             <!-- Tab Content: Multiple Choice -->
-            <div id="test-mc" class="test-tab-content flex flex-col items-center justify-center py-4">
-                <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-                    <div class="mb-6 flex justify-between items-center text-xs md:text-sm font-semibold text-slate-500">
+            <div id="test-mc" class="test-tab-content flex-1 flex flex-col items-center">
+                <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 p-5 md:p-8">
+                    <div class="mb-4 flex justify-between items-center text-xs md:text-sm font-semibold text-slate-500">
                         <span id="mc-counter">Pregunta 1 de 20</span>
-                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Grammar Focus</span>
+                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Test General</span>
                     </div>
-                    <h3 id="mc-question" class="text-lg md:text-xl font-bold text-slate-800 mb-6 font-serif leading-relaxed"></h3>
-                    <div id="mc-options" class="space-y-3"></div>
-                    
-                    <div id="mc-feedback" class="mt-6 hidden p-4 rounded-lg">
+                    <h3 id="mc-question" class="text-lg md:text-xl font-bold text-slate-800 mb-6 font-serif leading-snug"></h3>
+                    <div id="mc-options" class="space-y-2 md:space-y-3">
+                        <!-- Options generated by JS -->
+                    </div>
+                    <!-- Feedback container -->
+                    <div id="mc-feedback" class="mt-6 hidden p-4 rounded-lg bg-slate-50 border">
                         <div class="flex items-start gap-3">
-                            <i id="mc-feedback-icon" data-lucide="info" class="w-6 h-6 shrink-0 mt-0.5"></i>
+                            <i id="mc-feedback-icon" data-lucide="info" class="w-5 h-5 md:w-6 md:h-6 shrink-0 mt-0.5"></i>
                             <div>
-                                <h4 id="mc-feedback-title" class="font-bold text-lg mb-1"></h4>
-                                <p id="mc-feedback-text" class="text-sm text-slate-700"></p>
+                                <h4 id="mc-feedback-title" class="font-bold text-sm md:text-base mb-1"></h4>
+                                <p id="mc-feedback-text" class="text-xs md:text-sm text-slate-700"></p>
                             </div>
                         </div>
-                        <button id="mc-next-btn" onclick="nextMCQuestion()" class="mt-4 bg-slate-800 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 w-full md:w-auto">Siguiente Pregunta</button>
+                        <button id="mc-next-btn" onclick="nextMCQuestion()" class="mt-4 w-full md:w-auto bg-slate-800 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors hidden">Siguiente Pregunta</button>
                     </div>
                 </div>
             </div>
 
             <!-- Tab Content: Flashcards -->
-            <div id="test-flash" class="test-tab-content hidden flex-col items-center py-4 w-full max-w-lg mx-auto">
-                <div class="w-full text-center mb-4">
-                    <p class="text-slate-500 text-sm">Toca la tarjeta para voltearla.</p>
-                    <p class="text-xs text-indigo-500 font-semibold mt-1">Tarjetas restantes: <span id="flash-counter">20</span></p>
+            <div id="test-flash" class="test-tab-content hidden flex-1 flex flex-col items-center justify-center">
+                <div class="w-full max-w-xl text-center mb-6">
+                    <p class="text-slate-500 text-sm">Haz clic en la tarjeta para voltearla. Evalúa tu conocimiento.</p>
+                    <p class="text-xs text-indigo-500 font-semibold mt-1 bg-indigo-50 inline-block px-3 py-1 rounded-full border border-indigo-100">Tarjetas restantes: <span id="flash-counter">20</span></p>
                 </div>
                 
-                <div class="w-full relative px-4 md:px-0">
+                <div class="w-full max-w-sm md:max-w-md relative">
                     <div id="flashcard" class="flashcard-container" onclick="flipFlashcard()">
                         <div class="flashcard-inner">
-                            <!-- FRENTE DE LA TARJETA -->
                             <div class="flashcard-front">
-                                <!-- Elementos Posicionamiento Absoluto (No estorban el centro) -->
-                                <span class="absolute top-6 left-0 w-full text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Concepto</span>
-                                <!-- Título: Centrado matemáticamente por el flex del padre -->
-                                <h3 id="flash-front" class="text-2xl md:text-3xl font-bold text-slate-800 text-center w-full px-4"></h3>
-                                <!-- Elementos Posicionamiento Absoluto -->
-                                <p class="absolute bottom-6 left-0 w-full text-center text-xs text-slate-400"><i data-lucide="rotate-cw" class="w-4 h-4 inline mr-1"></i>Clic para voltear</p>
+                                <span class="flash-label-top">Concept</span>
+                                <h3 id="flash-front" class="text-2xl md:text-3xl font-bold text-slate-800 leading-tight"></h3>
+                                <span class="flash-label-bottom"><i data-lucide="rotate-cw" class="w-3 h-3 inline mr-1"></i>Clic para voltear</span>
                             </div>
-                            
-                            <!-- TRASERA DE LA TARJETA -->
                             <div class="flashcard-back">
-                                <!-- El texto se centra automática y perfectamente gracias al flex col justify-center -->
-                                <div id="flash-back" class="text-base md:text-lg font-medium leading-relaxed text-white text-center w-full"></div>
+                                <span class="flash-label-top">Definition</span>
+                                <p id="flash-back" class="text-base md:text-lg font-medium leading-relaxed"></p>
                             </div>
                         </div>
                     </div>
                     
-                    <div id="flash-controls" class="flex justify-between gap-4 mt-8 opacity-0 transition-opacity duration-300 pointer-events-none">
-                        <button onclick="handleFlashcard(false)" class="flex-1 bg-white border-2 border-red-200 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-xl flex justify-center gap-2">
+                    <div id="flash-controls" class="flex justify-between gap-3 md:gap-4 mt-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+                        <button onclick="handleFlashcard(false)" class="flex-1 bg-white border-2 border-red-200 text-red-600 hover:bg-red-50 font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
                             <i data-lucide="x" class="w-5 h-5"></i> Repasar
                         </button>
-                        <button onclick="handleFlashcard(true)" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl flex justify-center gap-2 shadow-lg shadow-indigo-200">
+                        <button onclick="handleFlashcard(true)" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 text-sm md:text-base">
                             <i data-lucide="check" class="w-5 h-5"></i> Lo sé
                         </button>
                     </div>
 
                     <!-- End state -->
-                    <div id="flash-end" class="hidden absolute inset-0 bg-white border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-center p-6 mx-4 md:mx-0">
-                        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4"><i data-lucide="award" class="w-8 h-8"></i></div>
+                    <div id="flash-end" class="hidden absolute inset-0 bg-white border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-center p-6">
+                        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
                         <h3 class="text-2xl font-bold text-slate-800 mb-2">¡Excelente!</h3>
                         <p class="text-slate-500 mb-6">Has repasado todos los conceptos.</p>
-                        <button onclick="startFlashcardsGame()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">Reiniciar mazo aleatorio</button>
+                        <button onclick="resetFlashcards()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">Reiniciar mazo</button>
                     </div>
                 </div>
             </div>
 
             <!-- Tab Content: Spot the Tense -->
-            <div id="test-spot" class="test-tab-content hidden flex-col items-center justify-center py-4">
+            <div id="test-spot" class="test-tab-content hidden flex-1 flex flex-col items-center justify-start pt-4">
                 <div class="w-full max-w-3xl bg-slate-900 text-white rounded-2xl shadow-xl overflow-hidden">
                     <div class="bg-indigo-600 px-4 md:px-6 py-4 flex justify-between items-center">
-                        <h3 class="font-bold flex items-center gap-2 text-sm md:text-base"><i data-lucide="zap" class="w-5 h-5"></i> Spot the Tense</h3>
-                        <span id="spot-score" class="font-mono bg-indigo-800 px-3 py-1 rounded-full text-xs md:text-sm">Pts: 0 | Pregunta: 1/20</span>
-                    </div>
-                    
-                    <div id="spot-game-area" class="p-6 md:p-8 text-center min-h-[300px] flex flex-col justify-center transition-colors duration-300">
-                        <p id="spot-sentence" class="text-xl md:text-2xl font-serif mb-8 text-indigo-100 font-medium leading-relaxed"></p>
-                        <div id="spot-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto w-full"></div>
-                        
-                        <!-- Panel de Retroalimentación de Spot The Tense -->
-                        <div id="spot-feedback" class="hidden mt-8 p-6 rounded-xl text-left bg-slate-800 border-l-4">
-                            <h4 id="spot-feedback-title" class="font-bold text-lg mb-2"></h4>
-                            <p id="spot-feedback-exp" class="text-slate-300 text-sm leading-relaxed"></p>
-                            <button onclick="nextSpotQuestion()" class="mt-6 w-full bg-white text-slate-900 px-6 py-3 rounded-lg font-bold hover:bg-slate-200 transition">Continuar</button>
+                        <h3 class="font-bold flex items-center gap-2 text-sm md:text-base"><i data-lucide="zap" class="w-4 h-4 md:w-5 md:h-5"></i> Spot the Tense (20)</h3>
+                        <div class="flex gap-3 items-center">
+                            <span id="spot-progress" class="text-xs font-medium text-indigo-200">1/20</span>
+                            <span id="spot-score" class="font-mono bg-indigo-800 px-3 py-1 rounded-full text-xs md:text-sm">Pts: 0</span>
                         </div>
                     </div>
+                    <div id="spot-game-area" class="p-6 md:p-8 text-center flex flex-col justify-center min-h-[350px] relative">
+                        <p id="spot-sentence" class="text-xl md:text-3xl font-serif mb-8 text-indigo-100 font-medium leading-relaxed"></p>
+                        
+                        <div id="spot-options" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-xl mx-auto w-full">
+                            <!-- Options JS -->
+                        </div>
 
-                    <div id="spot-end" class="hidden p-8 text-center min-h-[300px] flex-col items-center justify-center">
-                        <h3 class="text-4xl font-bold mb-4 text-green-400">¡Reto Completado!</h3>
-                        <p class="text-slate-300 mb-8">Puntuación final: <span id="spot-final-score" class="font-bold text-white text-2xl"></span></p>
-                        <button onclick="startSpotGame()" class="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition">Jugar de nuevo</button>
+                        <!-- Feedback Overlay inside game area -->
+                        <div id="spot-feedback" class="hidden absolute inset-0 bg-slate-900/95 backdrop-blur-sm flex-col items-center justify-center p-6 feedback-anim z-10">
+                            <div id="spot-icon-container" class="w-16 h-16 rounded-full flex items-center justify-center mb-4"></div>
+                            <h4 id="spot-feedback-title" class="text-2xl font-bold mb-2"></h4>
+                            <p id="spot-feedback-text" class="text-slate-300 text-sm md:text-base mb-6 max-w-md mx-auto"></p>
+                            <button onclick="nextSpotQuestion()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-3 px-8 rounded-full transition-colors">Continuar</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Over screen -->
+                    <div id="spot-end" class="hidden p-8 text-center min-h-[350px] flex-col items-center justify-center bg-slate-900">
+                        <h3 class="text-3xl md:text-4xl font-bold mb-4 text-green-400">¡Reto Completado!</h3>
+                        <p class="text-slate-300 mb-8 text-lg">Puntuación final: <span id="spot-final-score" class="font-bold text-white text-2xl ml-2"></span></p>
+                        <button onclick="startSpotGame()" class="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition-colors">Jugar de nuevo</button>
                     </div>
                 </div>
             </div>
+
         </section>
     </main>
 
     <script>
+        // Utilidad de mezcla (Randomizer)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex > 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Inicializar iconos de Lucide
         lucide.createIcons();
 
-        // Utilidad: Aleatorizar Arrays (Fisher-Yates)
-        function shuffleArray(array) {
-            let shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-
-        // Navegación principal y Menú Móvil
-        function navigate(viewId) {
-            document.querySelectorAll('.view-section').forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('flex');
-            });
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-slate-800', 'text-white');
-                btn.classList.add('text-slate-300');
-            });
-
-            const targetView = document.getElementById(`view-${viewId}`);
-            if (viewId === 'welcome' || viewId === 'test') {
-                targetView.classList.remove('hidden');
-                targetView.classList.add('flex');
-            } else {
-                targetView.classList.remove('hidden');
-            }
-
-            document.getElementById(`nav-${viewId}`).classList.add('bg-slate-800', 'text-white');
-            document.getElementById(`nav-${viewId}`).classList.remove('text-slate-300');
-
-            if(window.innerWidth < 768) {
-                toggleSidebar(); // Cierra el menú al hacer clic en móvil
-            }
-        }
-
-        function toggleSidebar() {
+        // ==========================================
+        // MOBILE MENU NAVIGATION
+        // ==========================================
+        let isMenuOpen = false;
+        function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            if (sidebar.classList.contains('-translate-x-full')) {
+            isMenuOpen = !isMenuOpen;
+            
+            if(isMenuOpen) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
             } else {
@@ -387,269 +480,138 @@
             }
         }
 
-        // Test Navigation
+        function navigate(viewId) {
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            const activeBtn = document.getElementById(`nav-${viewId}`);
+            activeBtn.classList.add('bg-slate-800', 'text-white');
+            activeBtn.classList.remove('text-slate-300');
+            
+            if(window.innerWidth < 768 && isMenuOpen) {
+                toggleMobileMenu(); // Auto-close on mobile
+            }
+            
+            // Re-render UI icons if needed
+            lucide.createIcons();
+            
+            // Scroll to top
+            document.getElementById('main-content').scrollTop = 0;
+        }
+
+        // ==========================================
+        // LÓGICA UNIT 1: READING
+        // ==========================================
+        function validateReading() {
+            const titleInput = document.getElementById('u1-title').value.toLowerCase();
+            const topicInput = document.getElementById('u1-topic').value.toLowerCase();
+            const feedbackDiv = document.getElementById('u1-feedback');
+            
+            let isTitleOk = titleInput.includes('programming') || titleInput.includes('language');
+            let isTopicOk = topicInput.includes('programming languages are the foundational tools') || 
+                            topicInput.includes('essential tools');
+
+            if(titleInput.trim() === '' || topicInput.trim() === '') {
+                showReadingFeedback('Por favor, completa ambos campos antes de validar.', 'warning');
+                return;
+            }
+
+            if (isTitleOk && isTopicOk) {
+                showReadingFeedback('¡Excelente! Has identificado el tema y la "Topic sentence".', 'success');
+            } else {
+                showReadingFeedback('Revisa tus respuestas. Busca palabras clave como "Programming" y copia la primera oración completa.', 'error');
+            }
+        }
+
+        function showReadingFeedback(message, type) {
+            const fb = document.getElementById('u1-feedback');
+            fb.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-yellow-100', 'text-yellow-700');
+            if (type === 'success') fb.classList.add('bg-green-100', 'text-green-700');
+            else if (type === 'error') fb.classList.add('bg-red-100', 'text-red-700');
+            else fb.classList.add('bg-yellow-100', 'text-yellow-700');
+            fb.innerHTML = message;
+        }
+
+        // ==========================================
+        // TEST MODE: GENERAL
+        // ==========================================
         function switchTestTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            document.querySelectorAll('.test-tab-content').forEach(content => {
-                content.classList.add('hidden');
-                content.classList.remove('flex');
-            });
-            
-            const target = document.getElementById(`test-${tabId}`);
-            target.classList.remove('hidden');
-            target.classList.add('flex');
 
-            // Iniciar juegos si no están corriendo
-            if (tabId === 'mc' && mcDataQueue.length === 0) startMCGame();
-            if (tabId === 'flash' && flashcardsQueue.length === 0) startFlashcardsGame();
-            if (tabId === 'spot' && spotQueue.length === 0) startSpotGame();
+            document.querySelectorAll('.test-tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(`test-${tabId}`).classList.remove('hidden');
+
+            if (tabId === 'mc' && currentMCIndex === 0) startMC();
+            if (tabId === 'flash' && flashcardsQueue.length === allFlashcards.length) resetFlashcards();
+            if (tabId === 'spot' && spotCurrentIndex === 0) startSpotGame();
         }
 
-        // ==================================================
-        const allFlashcardsRaw = [
-            { f: "Present Simple", b: "Se usa para rutinas y hechos generales.<br><br><b>Ej:</b> The system stores data." },
-            { f: "Present Continuous", b: "Acciones sucediendo ahora mismo.<br><br><b>Ej:</b> We are updating the server." },
-            { f: "Past Simple", b: "Acciones finalizadas en un tiempo específico del pasado.<br><br><b>Ej:</b> We deployed the app yesterday." },
-            { f: "Present Perfect", b: "Acción pasada con impacto en el presente (el tiempo exacto no importa).<br><br><b>Ej:</b> I have fixed the bug." },
-            { f: "Going to (Future)", b: "Intenciones o planes pensados previamente.<br><br><b>Ej:</b> We are going to launch next week." },
-            { f: "Present Cont. (Future)", b: "Arreglos fijos a futuro (Generalmente con hora/lugar).<br><br><b>Ej:</b> We are meeting the client tomorrow at 10 AM." },
-            { f: "Should", b: "Verbo modal para dar recomendaciones o consejos. No lleva 'to'.<br><br><b>Ej:</b> You should test your code." },
-            { f: "Can", b: "Verbo modal que indica habilidad o posibilidad.<br><br><b>Ej:</b> This server can process big data." },
-            { f: "A (Article)", b: "Se usa antes de un <b>sonido de consonante</b>.<br><br><b>Ej:</b> A user (suena 'iúser', empieza con Y)." },
-            { f: "An (Article)", b: "Se usa antes de un <b>sonido de vocal</b>.<br><br><b>Ej:</b> An hour (la H es muda). An API (suena 'éipi-ai')." },
-            { f: "In (Preposition)", b: "Para: Adentro, Meses, Años.<br><br><b>Ej:</b> In a folder, In 2024, In July." },
-            { f: "On (Preposition)", b: "Para: Superficies, Días de la semana.<br><br><b>Ej:</b> On a server, On the screen, On Monday." },
-            { f: "At (Preposition)", b: "Para: Puntos específicos, Horas exactas.<br><br><b>Ej:</b> At an IP address, At 5 PM." },
-            { f: "Any (Preguntas)", b: "Para consultar sobre la existencia de algo en plural/incontable.<br><br><b>Ej:</b> Do you have any errors?" },
-            { f: "Any (Negaciones)", b: "Para afirmar que algo no existe.<br><br><b>Ej:</b> There aren't any bugs in the code." },
-            { f: "Sílabas en Inglés", b: "Las sílabas se cuentan por <b>SONIDO</b>, no por vocales escritas.<br><br><b>Ej:</b> 'Fast' (1 sonido). 'Se-cure' (2 sonidos)." },
-            { f: "Comparative (Corto)", b: "Para adjetivos de 1 sonido silábico, se agrega <b>-er</b> + than.<br><br><b>Ej:</b> Faster than..." },
-            { f: "Comparative (Largo)", b: "Para adjetivos de 2+ sonidos, se usa <b>more</b> + adjetivo + than.<br><br><b>Ej:</b> More secure than..." },
-            { f: "Superlative (Corto)", b: "Para adjetivos de 1 sonido silábico, se agrega <b>the ... -est</b>.<br><br><b>Ej:</b> The fastest algorithm." },
-            { f: "Superlative (Largo)", b: "Para adjetivos de 2+ sonidos, se usa <b>the most</b> + adjetivo.<br><br><b>Ej:</b> The most secure protocol." }
+        // ==========================================
+        // 20 MULTIPLE CHOICE
+        // ==========================================
+        const rawMCData = [
+            { q: "We ___ deploy the new update tomorrow. (Recommendation)", options: ["must to", "should", "can", "should to"], correct: 1, explanation: "Para recomendaciones se usa 'should' seguido del verbo base sin 'to'." },
+            { q: "Python is generally considered ___ to read than C++.", options: ["more easy", "easier", "the easiest", "easyer"], correct: 1, explanation: "'Easy' termina en Y, se cambia a 'ier' para el comparativo." },
+            { q: "She is developing ___ API for the mobile app.", options: ["a", "an", "the", "any"], correct: 1, explanation: "API suena 'Éi-pi-ai', empieza con sonido de vocal, por lo que usamos 'an'." },
+            { q: "Do we have ___ errors in the console?", options: ["some", "a", "any", "an"], correct: 2, explanation: "En oraciones interrogativas (preguntas) sobre cantidades no específicas se usa 'any'." },
+            { q: "The server is currently ___ requests.", options: ["processing", "processes", "process", "processed"], correct: 0, explanation: "'Is currently' indica Present Continuous, el verbo debe llevar -ing." },
+            { q: "Java is one of the ___ secure languages.", options: ["more", "most", "much", "many"], correct: 1, explanation: "Para adjetivos largos, el superlativo se forma con 'the most'." },
+            { q: "I created a new user ___ the database.", options: ["on", "at", "in", "to"], correct: 2, explanation: "Para contenedores lógicos o bases de datos se usa 'in'." },
+            { q: "The code was written ___ a Junior Developer.", options: ["by", "for", "at", "in"], correct: 0, explanation: "En voz pasiva, quien realiza la acción se introduce con 'by'." },
+            { q: "They ___ fixed the bug yet.", options: ["haven't", "hasn't", "didn't", "don't"], correct: 0, explanation: "'Yet' indica Present Perfect. Con 'They' se usa 'have/haven't'." },
+            { q: "We ___ going to migrate the servers next week.", options: ["is", "be", "are", "am"], correct: 2, explanation: "Estructura 'Going to': Sujeto + verbo to be (We are) + going to." },
+            { q: "You ___ write your password in plain text. (Strong advice not to do it)", options: ["shouldn't", "can't", "don't", "doesn't"], correct: 0, explanation: "Para aconsejar fuertemente no hacer algo, se usa 'shouldn't'." },
+            { q: "Is C++ ___ than Java?", options: ["fastest", "faster", "more fast", "fast"], correct: 1, explanation: "Comparativo de un adjetivo corto ('fast') es 'faster'." },
+            { q: "Please log in ___ the admin panel.", options: ["at", "to", "on", "in"], correct: 1, explanation: "El verbo 'log in' suele ir acompañado de 'to' cuando indica dirección (log in to the panel)." },
+            { q: "___ you process this data before 5 PM?", options: ["Should", "Can", "Are", "Have"], correct: 1, explanation: "'Can' se usa para preguntar sobre la habilidad o posibilidad de hacer algo." },
+            { q: "He works as ___ frontend developer.", options: ["a", "an", "the", "any"], correct: 0, explanation: "'Frontend' empieza con sonido consonante (F), por lo tanto lleva 'a'." },
+            { q: "We ___ meeting the client at 10 AM tomorrow.", options: ["are", "is", "will", "going"], correct: 0, explanation: "Present Continuous para un futuro agendado (arrangement). 'We are meeting'." },
+            { q: "There aren't ___ files in this directory.", options: ["some", "a", "any", "no"], correct: 2, explanation: "En oraciones negativas se usa 'any' para indicar la ausencia de elementos." },
+            { q: "This is the ___ algorithm for sorting.", options: ["best", "better", "good", "more good"], correct: 0, explanation: "El superlativo irregular de 'good' es 'the best'." },
+            { q: "The application runs ___ port 8080.", options: ["in", "at", "on", "to"], correct: 2, explanation: "Para puertos, direcciones web y superficies lógicas se suele usar 'on'." },
+            { q: "I ___ a critical error yesterday.", options: ["find", "found", "have found", "finding"], correct: 1, explanation: "'Yesterday' especifica cuándo terminó la acción, lo que requiere Past Simple ('found')." }
         ];
 
-        let flashcardsQueue = [];
-        let isFlipped = false;
-
-        function startFlashcardsGame() {
-            flashcardsQueue = shuffleArray(allFlashcardsRaw);
-            document.getElementById('flashcard').classList.remove('hidden');
-            document.getElementById('flash-end').classList.add('hidden');
-            document.getElementById('flash-controls').classList.add('hidden'); // Fix flex layout issues
-            isFlipped = false;
-            document.getElementById('flashcard').classList.remove('flipped');
-            renderFlashcard();
-        }
-
-        function renderFlashcard() {
-            if (flashcardsQueue.length === 0) {
-                document.getElementById('flashcard').classList.add('hidden');
-                document.getElementById('flash-controls').classList.add('opacity-0', 'pointer-events-none');
-                document.getElementById('flash-end').classList.remove('hidden');
-                document.getElementById('flash-end').classList.add('flex');
-                return;
-            }
-
-            document.getElementById('flash-counter').textContent = flashcardsQueue.length;
-            
-            if (isFlipped) {
-                document.getElementById('flashcard').classList.remove('flipped');
-                isFlipped = false;
-                setTimeout(setCardContent, 300);
-            } else {
-                setCardContent();
-            }
-
-            document.getElementById('flash-controls').classList.replace('opacity-100', 'opacity-0');
-            document.getElementById('flash-controls').classList.replace('pointer-events-auto', 'pointer-events-none');
-        }
-
-        function setCardContent() {
-            const card = flashcardsQueue[0];
-            document.getElementById('flash-front').innerHTML = card.f;
-            document.getElementById('flash-back').innerHTML = card.b;
-        }
-
-        function flipFlashcard() {
-            if (!isFlipped) {
-                document.getElementById('flashcard').classList.add('flipped');
-                isFlipped = true;
-                const controls = document.getElementById('flash-controls');
-                controls.classList.remove('hidden');
-                controls.classList.replace('opacity-0', 'opacity-100');
-                controls.classList.replace('pointer-events-none', 'pointer-events-auto');
-            }
-        }
-
-        function handleFlashcard(knowsIt) {
-            const card = flashcardsQueue.shift();
-            if (!knowsIt) flashcardsQueue.push(card);
-            renderFlashcard();
-        }
-
-        // ==================================================
-        const spotDataRaw = [
-            { q: "The server ___ offline at 3 AM yesterday.", opts: ["went", "has gone"], ans: 0, exp: "El tiempo (3 AM yesterday) está definido en el pasado. Se usa <b>Past Simple</b>." },
-            { q: "We ___ the firewall configuration. It's secure now.", opts: ["updated", "have updated"], ans: 1, exp: "La acción terminó pero su impacto es relevante AHORA (It's secure now). Se usa <b>Present Perfect</b>." },
-            { q: "They ___ the new software patch tomorrow morning at 9.", opts: ["are releasing", "release"], ans: 0, exp: "Es un evento futuro arreglado y agendado. Se prefiere el <b>Present Continuous for Future</b>." },
-            { q: "I ___ to upgrade my laptop next year.", opts: ["am going", "will"], ans: 0, exp: "Es una intención o plan a futuro pensado con antelación, por eso usamos <b>Going to</b>." },
-            { q: "The database ___ all passwords securely.", opts: ["is storing", "stores"], ans: 1, exp: "Es un hecho general o regla del sistema. Se usa <b>Present Simple</b>." },
-            { q: "Look! The system ___ a lot of RAM right now.", opts: ["consumes", "is consuming"], ans: 1, exp: "La acción está ocurriendo en este mismo momento ('right now', 'Look!'). Se usa <b>Present Continuous</b>." },
-            { q: "She ___ as a developer since 2020.", opts: ["worked", "has worked"], ans: 1, exp: "'Since' indica que la acción empezó en el pasado y sigue vigente. <b>Present Perfect</b>." },
-            { q: "We ___ a critical bug two days ago.", opts: ["found", "have found"], ans: 0, exp: "El marcador de tiempo 'two days ago' requiere estrictamente <b>Past Simple</b>." },
-            { q: "Usually, the API ___ in JSON format.", opts: ["responds", "is responding"], ans: 0, exp: "La palabra 'usually' marca una rutina. Se requiere <b>Present Simple</b>." },
-            { q: "We ___ a meeting with the client this evening.", opts: ["are having", "have"], ans: 0, exp: "Es una reunión agendada para el futuro cercano. <b>Present Continuous</b>." },
-            { q: "He ___ never ___ Linux before.", opts: ["has / used", "did / use"], ans: 0, exp: "Experiencias de vida en un tiempo no definido. Se requiere <b>Present Perfect</b>." },
-            { q: "The app ___ smoothly when we tested it.", opts: ["ran", "has run"], ans: 0, exp: "Ocurrió en un momento específico del pasado ('when we tested it'). <b>Past Simple</b>." },
-            { q: "They ___ to migrate the database soon.", opts: ["are going", "go"], ans: 0, exp: "Es un plan a futuro (intención). Se usa <b>Going to</b>." },
-            { q: "My code ___ perfectly now.", opts: ["works", "is working"], ans: 0, exp: "Con verbos de estado general (como funcionar en general), se prefiere <b>Present Simple</b>." },
-            { q: "I ___ to the compiler right now.", opts: ["am talking", "talk"], ans: 0, exp: "Ocurriendo en el momento ('right now'). <b>Present Continuous</b>." },
-            { q: "We ___ the project last month.", opts: ["have finished", "finished"], ans: 1, exp: "Indicador 'last month' = pasado definido. <b>Past Simple</b>." },
-            { q: "She ___ just ___ the repository.", opts: ["has / updated", "is / updating"], ans: 0, exp: "La palabra 'just' indica una acción que acaba de ocurrir. <b>Present Perfect</b>." },
-            { q: "The team ___ the new UI tomorrow.", opts: ["is designing", "are going to design"], ans: 1, exp: "Ambas son válidas para futuro, pero 'going to' enfatiza fuertemente el plan." },
-            { q: "Java ___ an object-oriented language.", opts: ["is", "is being"], ans: 0, exp: "Es un hecho permanente. <b>Present Simple</b>." },
-            { q: "I ___ an error while I was coding.", opts: ["have found", "found"], ans: 1, exp: "Fue una acción puntual que interrumpió el pasado. <b>Past Simple</b>." }
-        ];
-
-        let spotQueue = [];
-        let spotCurrent = 0;
-        let spotScore = 0;
-
-        function startSpotGame() {
-            spotQueue = shuffleArray(spotDataRaw);
-            spotCurrent = 0;
-            spotScore = 0;
-            document.getElementById('spot-end').classList.add('hidden');
-            document.getElementById('spot-end').classList.remove('flex');
-            document.getElementById('spot-game-area').classList.remove('hidden');
-            document.getElementById('spot-game-area').classList.add('flex');
-            renderSpotQuestion();
-        }
-
-        function renderSpotQuestion() {
-            if (spotCurrent >= spotQueue.length) {
-                document.getElementById('spot-game-area').classList.add('hidden');
-                document.getElementById('spot-end').classList.remove('hidden');
-                document.getElementById('spot-end').classList.add('flex');
-                document.getElementById('spot-final-score').textContent = `${spotScore} / ${spotQueue.length * 10}`;
-                return;
-            }
-
-            const data = spotQueue[spotCurrent];
-            document.getElementById('spot-score').textContent = `Pts: ${spotScore} | Pregunta: ${spotCurrent + 1}/${spotQueue.length}`;
-            document.getElementById('spot-sentence').innerHTML = `"${data.q}"`;
-            
-            const optionsContainer = document.getElementById('spot-options');
-            optionsContainer.innerHTML = '';
-            document.getElementById('spot-feedback').classList.add('hidden');
-            
-            data.opts.forEach((opt, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'spot-btn bg-slate-800 hover:bg-indigo-500 border border-slate-700 hover:border-indigo-400 text-white font-bold py-4 px-6 rounded-xl transition-colors';
-                btn.textContent = opt;
-                btn.onclick = () => handleSpotAnswer(index, btn, data);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function handleSpotAnswer(selectedIndex, btnElement, data) {
-            const buttons = document.querySelectorAll('.spot-btn');
-            buttons.forEach(b => {
-                b.disabled = true;
-                b.classList.remove('hover:bg-indigo-500', 'hover:border-indigo-400');
-            });
-
-            const feedbackArea = document.getElementById('spot-feedback');
-            const title = document.getElementById('spot-feedback-title');
-            
-            feedbackArea.classList.remove('hidden');
-
-            if (selectedIndex === data.ans) {
-                spotScore += 10;
-                btnElement.classList.add('bg-green-600', 'border-green-400');
-                feedbackArea.classList.replace('border-red-500', 'border-green-500');
-                title.textContent = "¡Correcto!";
-                title.className = "font-bold text-xl mb-2 text-green-400";
-            } else {
-                btnElement.classList.add('bg-red-600', 'border-red-400');
-                buttons[data.ans].classList.add('bg-green-600', 'border-green-400'); // Show correct
-                feedbackArea.classList.replace('border-green-500', 'border-red-500');
-                if(!feedbackArea.classList.contains('border-red-500')) feedbackArea.classList.add('border-red-500'); // safety
-                title.textContent = "Incorrecto";
-                title.className = "font-bold text-xl mb-2 text-red-400";
-            }
-
-            document.getElementById('spot-score').textContent = `Pts: ${spotScore} | Pregunta: ${spotCurrent + 1}/${spotQueue.length}`;
-            document.getElementById('spot-feedback-exp').innerHTML = data.exp;
-        }
-
-        function nextSpotQuestion() {
-            spotCurrent++;
-            renderSpotQuestion();
-        }
-
-        // ==================================================
-        const mcDataRaw = [
-            { q: "Complete with the correct modal: Developers ___ document their code.", opts: ["should", "shoulds", "can to"], ans: 0, exp: "Se usa 'should' (sin S en tercera persona, sin 'to') para recomendaciones." },
-            { q: "Which article is correct? We need to build ___ API.", opts: ["a", "an", "the"], ans: 1, exp: "API se pronuncia 'éipi-ai'. Al empezar con sonido vocálico, usamos 'An'." },
-            { q: "Select the correct comparative: Python is ___ than Java.", opts: ["more easy", "easier", "the easiest"], ans: 1, exp: "'Easy' termina en Y, se cambia por I y se suma -er -> easier." },
-            { q: "Fill the blank: Do you have ___ bugs in the system?", opts: ["some", "any", "a"], ans: 1, exp: "En preguntas, usamos 'any' para plurales o incontables." },
-            { q: "The server is running ___ Linux.", opts: ["in", "on", "at"], ans: 1, exp: "Para plataformas, sistemas operativos o superficies se usa 'On'." },
-            { q: "Which one is a Superlative?", opts: ["Faster", "The fastest", "More fast"], ans: 1, exp: "El superlativo corto agrega 'the' y el sufijo '-est'." },
-            { q: "Select the correct option: He is ___ user.", opts: ["a", "an", "some"], ans: 0, exp: "'User' empieza con sonido de consonante (Y -> 'iúser'). Usamos 'A'." },
-            { q: "We will launch the app ___ 2025.", opts: ["on", "in", "at"], ans: 1, exp: "Para años y meses usamos 'In'." },
-            { q: "There aren't ___ updates available.", opts: ["any", "some", "the"], ans: 0, exp: "En oraciones negativas se usa 'any'." },
-            { q: "Complete: This algorithm is ___ efficient than the old one.", opts: ["more", "most", "much"], ans: 0, exp: "'Efficient' tiene varios sonidos silábicos, su comparativo usa 'more'." },
-            { q: "The system ___ process millions of requests per second.", opts: ["should", "can", "is"], ans: 1, exp: "Para hablar de capacidad física o técnica usamos 'can'." },
-            { q: "They deployed the patch ___ midnight.", opts: ["in", "at", "on"], ans: 1, exp: "Para horas o puntos específicos del tiempo usamos 'At'." },
-            { q: "It takes ___ hour to compile the code.", opts: ["a", "an", "any"], ans: 1, exp: "La H en 'hour' es muda, suena como vocal ('áur'). Usamos 'An'." },
-            { q: "This is ___ secure database in the world.", opts: ["the most", "more", "most"], ans: 0, exp: "Superlativo de un adjetivo largo ('secure') usa 'the most'." },
-            { q: "You ___ share your password with anyone.", opts: ["should not", "cannot", "do not should"], ans: 0, exp: "Es una recomendación fuerte (consejo negativo). 'Should not'." },
-            { q: "The meeting is ___ Monday.", opts: ["in", "at", "on"], ans: 2, exp: "Para los días de la semana siempre se usa 'On'." },
-            { q: "Is C++ ___ than C?", opts: ["hard", "harder", "hardest"], ans: 1, exp: "Estamos comparando dos cosas (C++ vs C). Adjetivo corto 'hard' -> 'harder'." },
-            { q: "We don't need ___ help.", opts: ["any", "a", "an"], ans: 0, exp: "Oración negativa (don't). Se usa 'any'." },
-            { q: "The files are located ___ the main folder.", opts: ["on", "at", "in"], ans: 2, exp: "Para hablar de estar dentro de un contenedor o espacio (carpeta), usamos 'In'." },
-            { q: "I think you ___ use a framework to save time.", opts: ["can", "should", "are"], ans: 1, exp: "Es un consejo o sugerencia para mejorar, por lo que 'should' es la mejor opción." }
-        ];
-
-        let mcDataQueue = [];
-        let mcCurrent = 0;
+        let mcData = [];
+        let currentMCIndex = 0;
         let mcAnswered = false;
 
-        function startMCGame() {
-            mcDataQueue = shuffleArray(mcDataRaw);
-            mcCurrent = 0;
+        function startMC() {
+            mcData = shuffleArray([...rawMCData]);
+            currentMCIndex = 0;
             renderMCQuestion();
         }
 
         function renderMCQuestion() {
-            if (mcCurrent >= mcDataQueue.length) {
+            if (currentMCIndex >= mcData.length) {
                 document.getElementById('test-mc').innerHTML = `
-                    <div class="text-center p-8 bg-white rounded-2xl shadow-lg w-full max-w-2xl">
+                    <div class="text-center p-8 bg-white rounded-2xl shadow w-full max-w-xl">
                         <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mx-auto mb-4"></i>
-                        <h3 class="text-2xl font-bold text-slate-800 mb-2">¡Prueba completada!</h3>
-                        <p class="text-slate-600 mb-6">Has respondido las 20 preguntas.</p>
-                        <button onclick="resetMCUI()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition">Volver a intentar</button>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">¡Completado!</h3>
+                        <p class="text-slate-600">Has respondido las 20 preguntas.</p>
+                        <button onclick="location.reload()" class="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium">Finalizar</button>
                     </div>`;
                 lucide.createIcons();
                 return;
             }
 
-            const data = mcDataQueue[mcCurrent];
-            document.getElementById('mc-counter').textContent = `Pregunta ${mcCurrent + 1} de ${mcDataQueue.length}`;
+            const data = mcData[currentMCIndex];
+            document.getElementById('mc-counter').textContent = `Pregunta ${currentMCIndex + 1} de 20`;
             document.getElementById('mc-question').textContent = data.q;
             
             const optionsContainer = document.getElementById('mc-options');
             optionsContainer.innerHTML = '';
             
-            data.opts.forEach((opt, index) => {
+            data.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all font-medium text-slate-700 mc-opt-btn';
+                btn.className = 'w-full text-left p-3 md:p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all font-medium text-slate-700 mc-opt-btn text-sm md:text-base break-words';
                 btn.textContent = opt;
-                btn.onclick = () => checkMCAnswer(index, btn, data);
+                btn.onclick = () => checkMCAnswer(index, btn);
                 optionsContainer.appendChild(btn);
             });
 
@@ -658,80 +620,253 @@
             mcAnswered = false;
         }
 
-        function checkMCAnswer(selectedIndex, btnElement, data) {
+        function checkMCAnswer(selectedIndex, btnElement) {
             if (mcAnswered) return;
             mcAnswered = true;
             
-            const isCorrect = selectedIndex === data.ans;
+            const data = mcData[currentMCIndex];
+            const isCorrect = selectedIndex === data.correct;
             const buttons = document.querySelectorAll('.mc-opt-btn');
             
             buttons.forEach(btn => {
-                btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50');
+                btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50', 'cursor-pointer');
                 btn.classList.add('opacity-50', 'cursor-default');
-                btn.onclick = null; // Disable clicks
             });
 
+            if (isCorrect) {
+                btnElement.classList.remove('border-slate-200', 'opacity-50');
+                btnElement.classList.add('border-green-500', 'bg-green-50', 'text-green-800', 'opacity-100');
+                showMCFeedback(true, "¡Correcto!", data.explanation);
+            } else {
+                btnElement.classList.remove('border-slate-200', 'opacity-50');
+                btnElement.classList.add('border-red-500', 'bg-red-50', 'text-red-800', 'opacity-100');
+                buttons[data.correct].classList.remove('border-slate-200', 'opacity-50');
+                buttons[data.correct].classList.add('border-green-500', 'bg-green-50', 'opacity-100');
+                showMCFeedback(false, "Incorrecto", data.explanation);
+            }
+        }
+
+        function showMCFeedback(isCorrect, title, text) {
             const fb = document.getElementById('mc-feedback');
             const icon = document.getElementById('mc-feedback-icon');
-            const titleEl = document.getElementById('mc-feedback-title');
             
-            fb.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'text-green-800', 'text-red-800');
-
+            fb.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'text-green-800', 'text-red-800', 'border-green-200', 'border-red-200');
+            
             if (isCorrect) {
-                btnElement.classList.replace('border-slate-200', 'border-green-500');
-                btnElement.classList.add('bg-green-50', 'text-green-800', 'opacity-100');
-                fb.classList.add('bg-green-100', 'text-green-800');
+                fb.classList.add('bg-green-100', 'text-green-800', 'border-green-200');
                 icon.setAttribute('data-lucide', 'check-circle');
-                titleEl.textContent = "¡Respuesta Correcta!";
             } else {
-                btnElement.classList.replace('border-slate-200', 'border-red-500');
-                btnElement.classList.add('bg-red-50', 'text-red-800', 'opacity-100');
-                buttons[data.ans].classList.replace('border-slate-200', 'border-green-500');
-                buttons[data.ans].classList.add('bg-green-50', 'opacity-100');
-                
-                fb.classList.add('bg-red-100', 'text-red-800');
+                fb.classList.add('bg-red-100', 'text-red-800', 'border-red-200');
                 icon.setAttribute('data-lucide', 'x-circle');
-                titleEl.textContent = "Respuesta Incorrecta";
             }
             
-            document.getElementById('mc-feedback-text').textContent = data.exp;
+            document.getElementById('mc-feedback-title').textContent = title;
+            document.getElementById('mc-feedback-text').textContent = text;
             document.getElementById('mc-next-btn').classList.remove('hidden');
             lucide.createIcons();
         }
 
         function nextMCQuestion() {
-            mcCurrent++;
+            currentMCIndex++;
             renderMCQuestion();
         }
 
-        function resetMCUI() {
-            const mcTab = document.getElementById('test-mc');
-            mcTab.innerHTML = `
-                <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
-                    <div class="mb-6 flex justify-between items-center text-xs md:text-sm font-semibold text-slate-500">
-                        <span id="mc-counter">Pregunta 1 de 20</span>
-                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Grammar Focus</span>
-                    </div>
-                    <h3 id="mc-question" class="text-lg md:text-xl font-bold text-slate-800 mb-6 font-serif leading-relaxed"></h3>
-                    <div id="mc-options" class="space-y-3"></div>
-                    <div id="mc-feedback" class="mt-6 hidden p-4 rounded-lg">
-                        <div class="flex items-start gap-3">
-                            <i id="mc-feedback-icon" data-lucide="info" class="w-6 h-6 shrink-0 mt-0.5"></i>
-                            <div>
-                                <h4 id="mc-feedback-title" class="font-bold text-lg mb-1"></h4>
-                                <p id="mc-feedback-text" class="text-sm text-slate-700"></p>
-                            </div>
-                        </div>
-                        <button id="mc-next-btn" onclick="nextMCQuestion()" class="mt-4 bg-slate-800 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 w-full md:w-auto hidden">Siguiente Pregunta</button>
-                    </div>
-                </div>
-            `;
-            startMCGame();
+
+        // ==========================================
+        // 20 FLASHCARDS
+        // ==========================================
+        const rawFlashcards = [
+            { front: "Present Simple", back: "Habits, routines or facts.<br><b>Ex:</b> The system runs daily." },
+            { front: "Present Continuous", back: "Ongoing actions OR future arrangements.<br><b>Ex:</b> We are launching tomorrow." },
+            { front: "Past Simple", back: "Finished actions at a specific time.<br><b>Ex:</b> I pushed the code yesterday." },
+            { front: "Present Perfect", back: "Past actions with impact NOW. Time is not important.<br><b>Ex:</b> I have fixed the bug." },
+            { front: "'Going to' Future", back: "Intentions or plans without a strict schedule.<br><b>Ex:</b> I am going to learn Python." },
+            { front: "Should", back: "Modal verb for recommendations / advice.<br><b>Ex:</b> You should use a VPN." },
+            { front: "Can", back: "Modal verb for ability or possibility.<br><b>Ex:</b> This CPU can handle 8 threads." },
+            { front: "Comparatives (Short Adjectives)", back: "Adjectives with 1 syllable.<br>Add <b>-er</b> + than.<br><b>Ex:</b> Fast -> Faster than." },
+            { front: "Comparatives (Long Adjectives)", back: "Adjectives with 2+ syllables.<br>Add <b>more</b> + adj + than.<br><b>Ex:</b> Complex -> More complex than." },
+            { front: "Superlatives (Short)", back: "Add <b>the</b> + adj + <b>-est</b>.<br><b>Ex:</b> Fast -> The fastest." },
+            { front: "Superlatives (Long)", back: "Add <b>the most</b> + adj.<br><b>Ex:</b> Secure -> The most secure." },
+            { front: "Article 'A'", back: "Before CONSONANT SOUNDS.<br><b>Ex:</b> A server, A user (sounds 'yoo')." },
+            { front: "Article 'An'", back: "Before VOWEL SOUNDS.<br><b>Ex:</b> An error, An hour (silent H)." },
+            { front: "Preposition 'IN'", back: "General, inside spaces.<br><b>Ex:</b> In a file, In a folder, In 2024." },
+            { front: "Preposition 'ON'", back: "Surfaces, specific days, tech platforms.<br><b>Ex:</b> On a server, On the web, On Monday." },
+            { front: "Preposition 'AT'", back: "Very specific points/times.<br><b>Ex:</b> At 10 AM, At localhost:8080." },
+            { front: "Usage of 'Any'", back: "Negative sentences & Questions.<br><b>Ex:</b> Do you have any data? / I don't have any." },
+            { front: "Usage of 'Some'", back: "Affirmative sentences.<br><b>Ex:</b> I found some bugs." },
+            { front: "Syllables in English", back: "Counted by VOWEL SOUNDS, not letters.<br><b>Ex:</b> 'Code' = 1 syllable (the 'e' is silent)." },
+            { front: "Irregular Comparatives", back: "Good -> Better<br>Bad -> Worse<br>Far -> Further" }
+        ];
+        
+        let flashcardsQueue = [];
+        let isFlipped = false;
+
+        function resetFlashcards() {
+            flashcardsQueue = shuffleArray([...rawFlashcards]);
+            renderFlashcard();
         }
 
-        // Init
-        switchTestTab('mc');
-        navigate('welcome');
+        function renderFlashcard() {
+            const container = document.getElementById('flashcard');
+            const endScreen = document.getElementById('flash-end');
+            const counter = document.getElementById('flash-counter');
+            
+            if (flashcardsQueue.length === 0) {
+                container.classList.add('hidden');
+                document.getElementById('flash-controls').classList.add('hidden');
+                endScreen.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            endScreen.classList.add('hidden');
+            counter.textContent = flashcardsQueue.length;
+
+            if (isFlipped) {
+                container.classList.remove('flipped');
+                isFlipped = false;
+                setTimeout(() => setCardText(), 300);
+            } else {
+                setCardText();
+            }
+
+            document.getElementById('flash-controls').classList.replace('opacity-100', 'opacity-0');
+            document.getElementById('flash-controls').classList.replace('pointer-events-auto', 'pointer-events-none');
+        }
+
+        function setCardText() {
+            const currentCard = flashcardsQueue[0];
+            document.getElementById('flash-front').innerHTML = currentCard.front;
+            document.getElementById('flash-back').innerHTML = currentCard.back;
+        }
+
+        function flipFlashcard() {
+            const container = document.getElementById('flashcard');
+            if (!isFlipped) {
+                container.classList.add('flipped');
+                isFlipped = true;
+                document.getElementById('flash-controls').classList.replace('opacity-0', 'opacity-100');
+                document.getElementById('flash-controls').classList.replace('pointer-events-none', 'pointer-events-auto');
+            }
+        }
+
+        function handleFlashcard(knowIt) {
+            const card = flashcardsQueue.shift();
+            if (!knowIt) flashcardsQueue.push(card);
+            renderFlashcard();
+        }
+
+
+        // ==========================================
+        // 20 SPOT THE TENSE
+        // ==========================================
+        const rawSpotData = [
+            { sent: "The new server is processing requests.", options: ["Present Simple", "Present Continuous"], correct: 1, explanation: "Present Continuous: Se usa para acciones que están ocurriendo ahora mismo ('is processing')." },
+            { sent: "We tested the logic yesterday.", options: ["Past Simple", "Present Perfect"], correct: 0, explanation: "Past Simple: Menciona un tiempo específico en el pasado ('yesterday')." },
+            { sent: "They are going to release the patch.", options: ["Going to", "Present Continuous"], correct: 0, explanation: "Going to: Expresa una intención o plan que aún no está estrictamente agendado." },
+            { sent: "She has fixed the main bug.", options: ["Past Simple", "Present Perfect"], correct: 1, explanation: "Present Perfect: La acción ocurrió en el pasado pero tiene relevancia ahora (el bug ya no está). No se menciona CUÁNDO." },
+            { sent: "The database stores credentials securely.", options: ["Present Simple", "Present Continuous"], correct: 0, explanation: "Present Simple: Expresa un hecho o rutina general sobre el sistema." },
+            { sent: "We are deploying at 10 AM tomorrow.", options: ["Going to", "Present Continuous (Future)"], correct: 1, explanation: "Present Continuous: Se usa para un arreglo a futuro que ya está en la agenda (Arrangement)." },
+            { sent: "I haven't written the tests yet.", options: ["Past Simple", "Present Perfect"], correct: 1, explanation: "Present Perfect: El uso de 'yet' (aún) es una pista clave para este tiempo verbal." },
+            { sent: "He deployed the app last night.", options: ["Past Simple", "Present Perfect"], correct: 0, explanation: "Past Simple: La frase 'last night' encierra la acción en un tiempo terminado." },
+            { sent: "I am learning C++ this semester.", options: ["Present Simple", "Present Continuous"], correct: 1, explanation: "Present Continuous: Acción temporal en progreso durante este período (aunque no sea en este exacto segundo)." },
+            { sent: "The code runs smoothly on Linux.", options: ["Present Simple", "Past Simple"], correct: 0, explanation: "Present Simple: Es una afirmación o hecho general." },
+            { sent: "We have already updated the packages.", options: ["Past Simple", "Present Perfect"], correct: 1, explanation: "Present Perfect: La palabra 'already' indica que la acción se completó antes de lo esperado." },
+            { sent: "What are you going to do with that variable?", options: ["Going to", "Present Continuous"], correct: 0, explanation: "Going to: Pregunta sobre la intención o el plan a seguir con la variable." },
+            { sent: "Did you push the code?", options: ["Past Simple", "Present Perfect"], correct: 0, explanation: "Past Simple: Uso del auxiliar 'Did' indica pasado simple." },
+            { sent: "The CPU usually works at 60 degrees.", options: ["Present Continuous", "Present Simple"], correct: 1, explanation: "Present Simple: La palabra 'usually' marca un hábito o comportamiento regular." },
+            { sent: "They aren't meeting the client today.", options: ["Present Simple", "Present Continuous"], correct: 1, explanation: "Present Continuous: Negando un arreglo a futuro / acción en progreso (verbo To Be + ing)." },
+            { sent: "Has the server crashed?", options: ["Present Perfect", "Past Simple"], correct: 0, explanation: "Present Perfect: Empieza con auxiliar 'Has' + participio 'crashed'." },
+            { sent: "We are migrating to AWS next month.", options: ["Going to", "Present Continuous (Future)"], correct: 1, explanation: "Present Continuous: Es un plan formal y agendado (arrangement) para el mes que viene." },
+            { sent: "I didn't find any errors.", options: ["Past Simple", "Present Perfect"], correct: 0, explanation: "Past Simple: Uso del auxiliar negativo 'didn't'." },
+            { sent: "The system is rebooting.", options: ["Present Continuous", "Present Simple"], correct: 0, explanation: "Present Continuous: Acción ocurriendo justo ahora." },
+            { sent: "She is going to review the pull request.", options: ["Present Continuous", "Going to"], correct: 1, explanation: "Going to: Indica la intención de revisar el código más tarde." }
+        ];
+
+        let spotData = [];
+        let spotCurrentIndex = 0;
+        let spotScore = 0;
+
+        function startSpotGame() {
+            spotData = shuffleArray([...rawSpotData]);
+            spotCurrentIndex = 0;
+            spotScore = 0;
+            updateSpotScore();
+            document.getElementById('spot-end').classList.add('hidden');
+            document.getElementById('spot-game-area').classList.remove('hidden');
+            renderSpotQuestion();
+        }
+
+        function renderSpotQuestion() {
+            if (spotCurrentIndex >= spotData.length) {
+                endSpotGame();
+                return;
+            }
+
+            document.getElementById('spot-feedback').classList.add('hidden');
+            const data = spotData[spotCurrentIndex];
+            document.getElementById('spot-progress').textContent = `${spotCurrentIndex + 1}/20`;
+            document.getElementById('spot-sentence').textContent = `"${data.sent}"`;
+            
+            const optionsContainer = document.getElementById('spot-options');
+            optionsContainer.innerHTML = '';
+            
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-slate-800 hover:bg-indigo-500 border-2 border-slate-700 hover:border-indigo-400 text-white font-bold py-3 md:py-4 px-4 md:px-6 rounded-xl transition-all text-sm md:text-base';
+                btn.textContent = opt;
+                btn.onclick = () => showSpotFeedback(index);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function showSpotFeedback(selectedIndex) {
+            const data = spotData[spotCurrentIndex];
+            const isCorrect = selectedIndex === data.correct;
+            const feedbackBox = document.getElementById('spot-feedback');
+            const iconContainer = document.getElementById('spot-icon-container');
+            const title = document.getElementById('spot-feedback-title');
+            
+            if (isCorrect) {
+                spotScore += 10;
+                updateSpotScore();
+                iconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-green-500 text-white';
+                iconContainer.innerHTML = '<i data-lucide="check" class="w-8 h-8"></i>';
+                title.textContent = '¡Correcto!';
+                title.className = 'text-2xl font-bold mb-2 text-green-400';
+            } else {
+                iconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-red-500 text-white';
+                iconContainer.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
+                title.textContent = 'Incorrecto';
+                title.className = 'text-2xl font-bold mb-2 text-red-400';
+            }
+
+            document.getElementById('spot-feedback-text').textContent = data.explanation;
+            feedbackBox.classList.remove('hidden');
+            feedbackBox.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function nextSpotQuestion() {
+            spotCurrentIndex++;
+            renderSpotQuestion();
+        }
+
+        function updateSpotScore() {
+            document.getElementById('spot-score').textContent = `Pts: ${spotScore}`;
+        }
+
+        function endSpotGame() {
+            document.getElementById('spot-game-area').classList.add('hidden');
+            const endScreen = document.getElementById('spot-end');
+            endScreen.classList.remove('hidden');
+            endScreen.style.display = 'flex';
+            document.getElementById('spot-final-score').textContent = `${spotScore} / 200`;
+        }
+
+        // INIT Multiple Choice Data behind scenes
+        startMC();
+
     </script>
 </body>
 </html>
