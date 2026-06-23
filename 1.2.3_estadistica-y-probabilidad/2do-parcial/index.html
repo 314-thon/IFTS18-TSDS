@@ -77,30 +77,74 @@
             text-align: center;
         }
         .math-table th { background-color: #f1f5f9; font-weight: bold; }
+
+        /* Estilos específicos para la vista de impresión en A4 */
+        @media print {
+            @page { margin: 10mm; }
+            body { background-color: white; }
+            .print-hidden { display: none !important; }
+            #formulas-modal { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; top: 0; 
+                width: 100%; 
+                height: auto; 
+                background: white; 
+                overflow: visible;
+                padding: 0;
+                margin: 0;
+            }
+            .a4-container {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+            }
+            .page-break { page-break-before: always; }
+        }
+        .a4-container {
+            width: 100%;
+            max-width: 250mm; /* Aumentado para más espacio en blanco */
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 10mm; /* Reducido para ganar ancho interno */
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
 
-    <nav class="bg-blue-900 text-white shadow-md z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="bg-blue-900 text-white shadow-md z-10 print-hidden">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
+                
+                <!-- Título (Se esconde antes para no chocar) -->
+                <div class="flex items-center gap-2 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity" onclick="showHome()">
                     <span class="text-2xl">📊</span>
-                    <span class="font-bold text-xl tracking-tight hidden sm:block">Estadística Interactiva</span>
+                    <span class="font-bold text-xl tracking-tight hidden lg:block">Estadística Interactiva</span>
                 </div>
-                <div class="flex space-x-1 md:space-x-3 items-center" id="unit-nav">
+                
+                <!-- Botones de Unidades -->
+                <div class="flex space-x-1 sm:space-x-2 items-center overflow-x-auto hide-scrollbar px-2 mx-auto flex-nowrap" id="unit-nav">
                 </div>
-                <div class="ml-4 pl-4 border-l border-blue-700 flex-shrink-0">
-                    <button onclick="openTestMode()" class="bg-amber-500 hover:bg-amber-400 text-blue-900 font-bold py-2 px-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-sm md:text-base flex items-center gap-2">
+                
+                <!-- Botones de Acción Derecha -->
+                <div class="ml-2 pl-2 md:pl-4 border-l border-blue-700 flex space-x-2 flex-shrink-0">
+                    <button onclick="openFormulas()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-2 md:px-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-xs md:text-sm flex items-center gap-1 md:gap-2">
+                        <span>📄</span> <span class="hidden md:inline">Fórmulas (PDF)</span>
+                    </button>
+                    <button onclick="openTestMode()" class="bg-amber-500 hover:bg-amber-400 text-blue-900 font-bold py-2 px-2 md:px-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-xs md:text-sm flex items-center gap-1 md:gap-2">
                         <span>🧠</span> <span class="hidden md:inline">Ponte a Prueba</span>
                     </button>
                 </div>
+                
             </div>
         </div>
     </nav>
 
-    <div class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full">
-        <aside class="w-1/3 md:w-1/4 bg-white border-r border-gray-200 overflow-y-auto hide-scrollbar flex flex-col">
+    <div class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full print-hidden">
+        <aside id="sidebar" class="hidden w-1/3 md:w-1/4 bg-white border-r border-gray-200 overflow-y-auto hide-scrollbar flex flex-col">
             <div class="p-6 bg-teal-50 border-b border-teal-100">
                 <h2 id="sidebar-unit-title" class="text-lg font-bold text-teal-800">Selecciona un Tema</h2>
                 <p id="sidebar-unit-desc" class="text-sm text-teal-600 mt-2 leading-tight"></p>
@@ -109,33 +153,33 @@
             </div>
         </aside>
 
-        <main class="w-2/3 md:w-3/4 flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative">
+        <main id="main-content" class="w-full flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative">
             
             <div id="welcome-screen" class="flex flex-col items-center justify-center h-full text-center space-y-6">
                 <span class="text-6xl">🎓</span>
                 <h1 class="text-4xl font-extrabold text-blue-900">Bienvenido a tu Guía de Estudio</h1>
-                <p class="text-xl text-gray-600 max-w-2xl">Esta guía está diseñada para que apruebes el parcial. Repasaremos tema por tema, te enseñaré a reconocer qué fórmula usar (aunque no tengan nombre en el examen) y a resolver integradores.</p>
+                <p class="text-xl text-gray-600 max-w-2xl">Acá vamos a ver cómo reconocer qué fórmula usar leyendo los enunciados y a practicar con ejercicios integradores.</p>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 w-full max-w-5xl">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                    <button onclick="goToUnit('u3')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-blue-300 hover:-translate-y-1 transition-all cursor-pointer">
                         <span class="text-3xl mb-3">🎲</span>
                         <h3 class="font-bold text-base text-gray-800">Unidad 3</h3>
                         <p class="text-xs text-gray-500 text-center mt-2">Probabilidad básica, conteo, y Teorema de Bayes.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                    </button>
+                    <button onclick="goToUnit('u4')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-blue-300 hover:-translate-y-1 transition-all cursor-pointer">
                         <span class="text-3xl mb-3">📶</span>
                         <h3 class="font-bold text-base text-gray-800">Unidad 4</h3>
                         <p class="text-xs text-gray-500 text-center mt-2">Distribuciones Discretas: Binomial y Poisson.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                    </button>
+                    <button onclick="goToUnit('u5')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-md hover:border-blue-300 hover:-translate-y-1 transition-all cursor-pointer">
                         <span class="text-3xl mb-3">🔔</span>
                         <h3 class="font-bold text-base text-gray-800">Unidad 5</h3>
                         <p class="text-xs text-gray-500 text-center mt-2">Distribuciones Continuas: La Curva Normal.</p>
-                    </div>
-                    <div class="bg-blue-50 p-5 rounded-xl shadow-sm border border-blue-200 flex flex-col items-center">
+                    </button>
+                    <button onclick="goToUnit('uparcial')" class="bg-blue-50 p-5 rounded-xl shadow-sm border border-blue-200 flex flex-col items-center hover:shadow-md hover:border-blue-400 hover:bg-blue-100 hover:-translate-y-1 transition-all cursor-pointer">
                         <span class="text-3xl mb-3">📝</span>
                         <h3 class="font-bold text-base text-blue-800">Parcial</h3>
                         <p class="text-xs text-blue-600 text-center mt-2">Ejercicios de exámenes reales con guías y resolución.</p>
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -190,9 +234,10 @@
 
             </div>
 
+            <!-- Test Screens -->
             <div id="test-screen" class="hidden flex-col max-w-6xl mx-auto w-full space-y-8 pb-20">
-                
                 <div id="test-menu" class="space-y-8">
+                    <!-- Cards de test -->
                     <div class="text-center">
                         <h1 class="text-4xl font-extrabold text-blue-900">Modo Repaso Activo</h1>
                         <p class="text-lg text-gray-600 mt-3">Elige cómo quieres poner a prueba la teoría hoy.</p>
@@ -271,9 +316,7 @@
                         </div>
                     </div>
 
-                    <!-- El contenedor de feedback donde se inyectará KaTeX -->
                     <div id="quiz-feedback" class="hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg"></div>
-
                     <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">Siguiente Pregunta →</button>
                 </div>
 
@@ -323,7 +366,6 @@
                     <span id="flash-result-emoji" class="text-7xl mb-4">🧠</span>
                     <h2 class="text-3xl font-extrabold text-teal-900 mb-2">¡Mazo Terminado!</h2>
                     <p class="text-gray-600 mb-6" id="flash-result-text">Repasaste todas las tarjetas.</p>
-                    
                     <div class="flex gap-4" id="flash-result-buttons">
                     </div>
                 </div>
@@ -332,7 +374,188 @@
         </main>
     </div>
 
+    <!-- MODAL Y HOJA DE FÓRMULAS PARA IMPRESIÓN (PDF) -->
+    <div id="formulas-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0">
+        <div class="a4-container rounded-xl overflow-hidden relative">
+            
+            <!-- Botones Superiores (No se imprimen) -->
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print-hidden">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🧮</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Formulario Completo</h2>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="printPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                        <span>🖨️</span> Guardar PDF / Imprimir
+                    </button>
+                    <button onclick="closeFormulas()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-5 rounded-lg transition-colors">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área Imprimible A4 -->
+            <div id="formulas-print-area" class="text-slate-900">
+                
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-black uppercase tracking-widest text-indigo-900 border-b-4 border-indigo-600 inline-block pb-1">Fórmulas Estadística</h1>
+                    <p class="text-sm text-slate-500 mt-2 font-medium">Unidad 3, 4 y 5 • Fórmulas clave para el parcial</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-8 gap-y-6 text-sm">
+                    
+                    <!-- UNIDAD 3 -->
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-bold text-blue-900 text-base uppercase tracking-wide mb-3 border-b border-blue-200 pb-1">Unidad 3: Probabilidad</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Complemento:</span>
+                                    <div class="mt-1 format-formulas">$$ P(A') = 1 - P(A) $$</div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Regla de Adición:</span>
+                                    <div class="mt-1 format-formulas">$$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Regla de Multiplicación:</span>
+                                    <div class="mt-1 format-formulas">$$ P(A \cap B) = P(A) \cdot P(B) $$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Probabilidad Condicional:</span>
+                                    <div class="mt-1 format-formulas">$$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Teorema de Bayes:</span>
+                                    <div class="mt-1 format-formulas text-xs">$$ P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)} $$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                            <h3 class="font-bold text-indigo-900 text-base uppercase tracking-wide mb-3 border-b border-indigo-200 pb-1">Reglas de Conteo</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Permutaciones:</span>
+                                    <div class="mt-1 format-formulas">$$ P_n^N = \frac{N!}{(N-n)!} $$</div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Combinaciones:</span>
+                                    <div class="mt-1 format-formulas">$$ C_n^N = \binom{N}{n} = \frac{N!}{n!(N-n)!} $$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UNIDAD 4 & 5 -->
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                            <h3 class="font-bold text-teal-900 text-base uppercase tracking-wide mb-3 border-b border-teal-200 pb-1">Unidad 4: Discretas</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Valor Esperado:</span>
+                                    <div class="mt-1 format-formulas">$$ E(X) = \sum x \cdot P(x) $$</div>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Varianza:</span>
+                                    <div class="mt-1 format-formulas">$$ V(X) = E(X^2) - [E(X)]^2 $$</div>
+                                </div>
+
+                                <div class="mt-2">
+                                    <span class="font-semibold block text-slate-700">Distribución Binomial:</span>
+                                    <div class="mt-1 format-formulas">$$ P(x) = \binom{n}{x} p^x (1-p)^{n-x} $$</div>
+                                    <div class="flex justify-around mt-1">
+                                        <div class="format-formulas">$$ \mu = np $$</div>
+                                        <div class="format-formulas">$$ \sigma^2 = npq $$</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2">
+                                    <span class="font-semibold block text-slate-700">Distribución de Poisson:</span>
+                                    <div class="mt-1 format-formulas">$$ P(x) = \frac{\lambda^x e^{-\lambda}}{x!} $$</div>
+                                    <div class="format-formulas text-center mt-1">$$ \mu = \lambda \quad \text{y} \quad \sigma^2 = \lambda $$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <h3 class="font-bold text-amber-900 text-base uppercase tracking-wide mb-3 border-b border-amber-200 pb-1">Unidad 5: Continuas</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Distribución Uniforme:</span>
+                                    <div class="flex justify-around items-center mt-1">
+                                        <div class="format-formulas">$$ f(x) = \frac{1}{b-a} $$</div>
+                                        <div class="format-formulas">$$ E(X) = \frac{a+b}{2} $$</div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Distribución Normal Estándar (Z):</span>
+                                    <div class="mt-1 format-formulas">$$ Z = \frac{x - \mu}{\sigma} $$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Aproximación de Normal a Binomial:</span>
+                                    <div class="format-formulas mt-1">$$ \mu = np \quad \sigma = \sqrt{npq} $$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center text-xs text-slate-400 font-mono pt-4 border-t border-slate-200">
+                    Generado por Academia Interactiva de Estadística • Guarda este documento y úsalo para repasar o rendir.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts (Lógica anterior más Modal A4) -->
     <script>
+        // Funciones del Modal de Fórmulas
+        function openFormulas() {
+            document.getElementById('formulas-modal').classList.remove('hidden');
+            // Renderizar las fórmulas en el modal al abrirlo
+            if (window.renderMathInElement) {
+                document.querySelectorAll('.format-formulas').forEach(el => {
+                    renderMathInElement(el, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                });
+            }
+        }
+
+        function closeFormulas() {
+            document.getElementById('formulas-modal').classList.add('hidden');
+        }
+
+        function printPDF() {
+            // Cambia el título temporalmente para forzar el nombre de guardado del PDF
+            const originalTitle = document.title;
+            document.title = "Fórmulas Estadística";
+            
+            window.print();
+            
+            // Restaura el título original luego de imprimir
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 1000);
+        }
+
         // Mba'ekuaa ha Tembikuaa (Data & State)
         let userStats = { learnedTopics: [], quizGrades: {} };
         let currentUnitId = null;
@@ -938,7 +1161,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
         document.addEventListener('DOMContentLoaded', () => {
             loadUserData();
             renderNav();
-            selectUnit('u3');
+            showHome();
         });
 
         // Ñongatu (Persistence)
@@ -986,7 +1209,8 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             nav.innerHTML = ''; 
             appData.units.forEach(unit => {
                 const btn = document.createElement('button');
-                const baseClasses = "px-2 py-2 rounded-md text-sm font-medium transition-colors md:px-3 ";
+                // Se agregó whitespace-nowrap y se ajustaron los paddings para que quepan mejor
+                const baseClasses = "px-2 py-1 md:px-3 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ";
                 if (unit.id === 'uparcial') {
                     btn.className = baseClasses + `text-blue-900 bg-amber-100 hover:bg-amber-200 ${currentUnitId === unit.id ? 'ring-2 ring-amber-400 font-bold' : ''}`;
                     btn.innerHTML = `📝 ${unit.title}`;
@@ -995,7 +1219,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     btn.innerText = `${unit.title}`;
                 }
                 
-                btn.onclick = () => selectUnit(unit.id);
+                btn.onclick = () => goToUnit(unit.id);
                 nav.appendChild(btn);
             });
         }
@@ -1019,6 +1243,39 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     }
                 }
             });
+        }
+
+        function showHome() {
+            currentUnitId = null;
+            currentTopicId = null;
+            updateNavClasses();
+            
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
+            
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('content-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.remove('flex');
+            
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('flex');
+        }
+
+        function goToUnit(unitId) {
+            const unit = appData.units.find(u => u.id === unitId);
+            if (!unit) return;
+            
+            // Buscar el primer tema NO aprendido
+            let targetTopicId = unit.topics[0].id;
+            for (let topic of unit.topics) {
+                if (!userStats.learnedTopics.includes(topic.id)) {
+                    targetTopicId = topic.id;
+                    break;
+                }
+            }
+            
+            selectUnit(unitId);
+            selectTopic(targetTopicId);
         }
 
         function selectUnit(unitId) {
@@ -1045,11 +1302,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 
                 topicsList.appendChild(btn);
             });
-
-            document.getElementById('welcome-screen').classList.remove('hidden');
-            document.getElementById('content-screen').classList.add('hidden');
-            document.getElementById('test-screen').classList.add('hidden');
-            document.getElementById('test-screen').classList.remove('flex');
             
             currentTopicId = null;
         }
@@ -1061,6 +1313,9 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             currentTopicId = topicId;
             currentUnitId = unit.id; 
             const topic = unit.topics.find(t => t.id === topicId);
+
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('main-content').className = "w-2/3 md:w-3/4 flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
 
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('test-screen').classList.add('hidden');
@@ -1495,16 +1750,20 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
         }
 
         function openTestMode() {
+            currentUnitId = null;
+            updateNavClasses();
+            
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
+
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('content-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.remove('flex');
             
             const buttons = document.getElementById('topics-list').children;
             for(let b of buttons) {
                 b.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
             }
-            
-            const nav = document.getElementById('unit-nav');
-            Array.from(nav.children).forEach(btn => btn.classList.remove('bg-blue-800', 'ring-2', 'ring-white', 'ring-amber-400', 'font-bold'));
             
             updateQuizScoresUI();
 
@@ -1632,7 +1891,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             feedback.innerHTML = feedbackText;
             feedback.classList.add(...colorClasses);
 
-            // Renderizar KaTeX en el feedback (Render Math)
             if (window.renderMathInElement) {
                 renderMathInElement(feedback, {
                     delimiters: [
