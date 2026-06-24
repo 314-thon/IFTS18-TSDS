@@ -105,11 +105,11 @@
         }
         .a4-container {
             width: 100%;
-            max-width: 250mm; /* Aumentado para más espacio en blanco */
+            max-width: 250mm;
             margin: 0 auto;
             background: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding: 10mm; /* Reducido para ganar ancho interno */
+            padding: 10mm;
         }
     </style>
 </head>
@@ -119,7 +119,7 @@
         <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
-                <!-- Título (Se esconde antes para no chocar) -->
+                <!-- Título -->
                 <div class="flex items-center gap-2 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity" onclick="showHome()">
                     <span class="text-2xl">📊</span>
                     <span class="font-bold text-xl tracking-tight hidden lg:block">Estadística Interactiva</span>
@@ -237,14 +237,12 @@
             <!-- Test Screens -->
             <div id="test-screen" class="hidden flex-col max-w-6xl mx-auto w-full space-y-8 pb-20">
                 <div id="test-menu" class="space-y-8">
-                    <!-- Cards de test -->
                     <div class="text-center">
                         <h1 class="text-4xl font-extrabold text-blue-900">Modo Repaso Activo</h1>
                         <p class="text-lg text-gray-600 mt-3">Elige cómo quieres poner a prueba la teoría hoy.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                        <!-- Card 1: Quiz Teórico -->
                         <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
                             <span class="text-5xl mb-4">📝</span>
                             <h2 class="text-2xl font-bold text-gray-800">Quiz Teórico</h2>
@@ -262,7 +260,6 @@
                             <button onclick="startQuiz('theory')" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Empezar Quiz</button>
                         </div>
 
-                        <!-- Card 2: Flashcards -->
                         <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-200 flex flex-col items-center text-center">
                             <span class="text-5xl mb-4">🗂️</span>
                             <h2 class="text-2xl font-bold text-gray-800">Tarjetas Didácticas</h2>
@@ -280,7 +277,6 @@
                             <button onclick="startFlashcards()" class="mt-auto w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Practicar Tarjetas</button>
                         </div>
 
-                        <!-- Card 3: Identifica el Problema -->
                         <div class="bg-gradient-to-b from-amber-50 to-white p-8 rounded-2xl shadow-md border border-amber-200 flex flex-col items-center text-center relative overflow-hidden">
                             <div class="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">¡NUEVO!</div>
                             <span class="text-5xl mb-4">🕵️‍♂️</span>
@@ -366,6 +362,7 @@
                     <span id="flash-result-emoji" class="text-7xl mb-4">🧠</span>
                     <h2 class="text-3xl font-extrabold text-teal-900 mb-2">¡Mazo Terminado!</h2>
                     <p class="text-gray-600 mb-6" id="flash-result-text">Repasaste todas las tarjetas.</p>
+                    
                     <div class="flex gap-4" id="flash-result-buttons">
                     </div>
                 </div>
@@ -471,7 +468,7 @@
 
                                 <div class="mt-2">
                                     <span class="font-semibold block text-slate-700">Distribución Binomial:</span>
-                                    <div class="mt-1 format-formulas">$$ P(x) = \binom{n}{x} p^x (1-p)^{n-x} $$</div>
+                                    <div class="mt-1 format-formulas">$$ P(x|n,p) = \frac{n!}{x!(n-x)!} p^x q^{n-x} $$</div>
                                     <div class="flex justify-around mt-1">
                                         <div class="format-formulas">$$ \mu = np $$</div>
                                         <div class="format-formulas">$$ \sigma^2 = npq $$</div>
@@ -499,12 +496,12 @@
                                 </div>
                                 
                                 <div>
-                                    <span class="font-semibold block text-slate-700">Distribución Normal Estándar (Z):</span>
+                                    <span class="font-semibold block text-slate-700">Aproximación de normal a normal estándar:</span>
                                     <div class="mt-1 format-formulas">$$ Z = \frac{x - \mu}{\sigma} $$</div>
                                 </div>
 
                                 <div>
-                                    <span class="font-semibold block text-slate-700">Aproximación de Normal a Binomial:</span>
+                                    <span class="font-semibold block text-slate-700">Aproximación de Normal a Binomial (n &ge; 30):</span>
                                     <div class="format-formulas mt-1">$$ \mu = np \quad \sigma = \sqrt{npq} $$</div>
                                 </div>
                             </div>
@@ -520,12 +517,10 @@
         </div>
     </div>
 
-    <!-- Scripts (Lógica anterior más Modal A4) -->
+    <!-- Scripts (Lógica de la aplicación) -->
     <script>
-        // Funciones del Modal de Fórmulas
         function openFormulas() {
             document.getElementById('formulas-modal').classList.remove('hidden');
-            // Renderizar las fórmulas en el modal al abrirlo
             if (window.renderMathInElement) {
                 document.querySelectorAll('.format-formulas').forEach(el => {
                     renderMathInElement(el, {
@@ -544,19 +539,16 @@
         }
 
         function printPDF() {
-            // Cambia el título temporalmente para forzar el nombre de guardado del PDF
             const originalTitle = document.title;
             document.title = "Fórmulas Estadística";
             
             window.print();
             
-            // Restaura el título original luego de imprimir
             setTimeout(() => {
                 document.title = originalTitle;
             }, 1000);
         }
 
-        // Mba'ekuaa ha Tembikuaa (Data & State)
         let userStats = { learnedTopics: [], quizGrades: {} };
         let currentUnitId = null;
         let currentTopicId = null;
@@ -1126,7 +1118,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             identifyPool: [
                 { q: "Una fábrica tiene 3 líneas de ensamblaje. La línea A produce el 50%, B el 30% y C el 20%. Las tasas de defectos son 1%, 2% y 3%. Si se elige un artículo defectuoso al azar, ¿cuál es la probabilidad de que provenga de la línea B?", options: ["Distribución Binomial", "Probabilidad Condicional Simple", "Teorema de Bayes", "Regla de Adición"], ans: 2, exp: "<strong>Por qué:</strong> Te dan la probabilidad de defectos por máquina, pero la pregunta 'viaja al pasado': sabiendo el final (es defectuoso), te pide la probabilidad del origen (línea B).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{P(A_1)P(B | A_1) + \\dots + P(A_n)P(B | A_n)} $$</span></div>" },
                 { q: "En una central de atención al cliente entran en promedio 12 llamadas por minuto. ¿Cuál es la probabilidad de recibir exactamente 5 llamadas en los próximos 30 segundos?", options: ["Distribución Normal", "Distribución de Poisson", "Valor Esperado", "Distribución Binomial"], ans: 1, exp: "<strong>Por qué:</strong> Menciona un 'promedio' de ocurrencias dentro de un intervalo específico de tiempo continuo (minutos/segundos). ¡Ojo con ajustar la media a 30 segundos!<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x) = \\frac{\\lambda^x e^{-\\lambda}}{x!} $$ y $$ E(X) = \\lambda $$</span></div>" },
-                { q: "Un examen de opción múltiple tiene 15 preguntas, cada una con 4 opciones. Si un estudiante responde todas al azar, ¿cuál es la probabilidad de que acierte a exactamente 8 preguntas?", options: ["Distribución Binomial", "Permutación", "Aproximación Normal", "Probabilidad Uniforme"], ans: 0, exp: "<strong>Por qué:</strong> Hay un número fijo de intentos (n=15), una probabilidad de éxito constante (1/4 o 0.25) y solo hay dos resultados (acertar o fallar).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x) = \\binom{n}{x} p^x q^{n-x} $$ y $$ E(X) = n p $$</span></div>" },
+                { q: "Un examen de opción múltiple tiene 15 preguntas, cada una con 4 opciones. Si un estudiante responde todas al azar, ¿cuál es la probabilidad de que acierte a exactamente 8 preguntas?", options: ["Distribución Binomial", "Permutación", "Aproximación Normal", "Probabilidad Uniforme"], ans: 0, exp: "<strong>Por qué:</strong> Hay un número fijo de intentos (n=15), una probabilidad de éxito constante (1/4 o 0.25) y solo hay dos resultados (acertar o fallar).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x|n,p) = \\frac{n!}{x!(n-x)!} p^x q^{n-x} $$ y $$ E(X) = n p $$</span></div>" },
                 { q: "El peso de los paquetes de harina empacados por una máquina se distribuye con una media de 500g y una varianza de 25g. ¿Cuál es la probabilidad de que un paquete elegido al azar pese más de 510g?", options: ["Teorema de Bayes", "Distribución Uniforme", "Valor Esperado", "Distribución Normal"], ans: 3, exp: "<strong>Por qué:</strong> Trata con una variable continua (peso) y te proporciona la media y la varianza para estandarizar los datos.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Normal Estándar (Z)</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$</span></div>" },
                 { q: "Un gerente debe seleccionar a 4 empleados de un equipo de 12 para asistir a una conferencia en otra ciudad. ¿De cuántas formas distintas puede armar el grupo?", options: ["Permutación", "Combinación", "Valor Esperado", "Ley de Multiplicación"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo de un total, pero el ORDEN en que son elegidos NO importa (el grupo de 4 personas es el mismo sin importar quién fue nombrado primero).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Combinaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ C_n^N = \\binom{N}{n} = \\frac{N!}{n!(N-n)!} $$</span></div>" },
                 { q: "En una carrera ecuestre compiten 8 caballos. ¿De cuántas formas diferentes pueden quedar asignados los 3 primeros lugares (oro, plata y bronce)?", options: ["Combinación", "Permutación", "Probabilidad Condicional", "Ley de Adición"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo, pero el ORDEN SÍ IMPORTA debido a que los premios son diferentes para cada posición.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" },
@@ -1209,7 +1201,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             nav.innerHTML = ''; 
             appData.units.forEach(unit => {
                 const btn = document.createElement('button');
-                // Se agregó whitespace-nowrap y se ajustaron los paddings para que quepan mejor
                 const baseClasses = "px-2 py-1 md:px-3 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ";
                 if (unit.id === 'uparcial') {
                     btn.className = baseClasses + `text-blue-900 bg-amber-100 hover:bg-amber-200 ${currentUnitId === unit.id ? 'ring-2 ring-amber-400 font-bold' : ''}`;
@@ -1265,7 +1256,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             const unit = appData.units.find(u => u.id === unitId);
             if (!unit) return;
             
-            // Buscar el primer tema NO aprendido
             let targetTopicId = unit.topics[0].id;
             for (let topic of unit.topics) {
                 if (!userStats.learnedTopics.includes(topic.id)) {
@@ -1341,7 +1331,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             const expDiv = document.getElementById('topic-explanation');
             expDiv.innerHTML = topic.exp;
             
-            // Render Math inside Explanation if present
             if (window.renderMathInElement) {
                 renderMathInElement(expDiv, {
                     delimiters: [
@@ -1425,7 +1414,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 exContainer.insertAdjacentHTML('beforeend', html);
             });
 
-            // Render math inside exercises
             if (window.renderMathInElement) {
                 document.querySelectorAll('.format-math').forEach(el => {
                     renderMathInElement(el, {
@@ -1729,7 +1717,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             ctx.fillText('35%', getX((z1+2)/2), getY(0.08));
         }
 
-        // Ñeha'ã (Test Mode)
         function updateQuizScoresUI() {
             const select = document.getElementById('quiz-unit-select');
             Array.from(select.options).forEach(opt => {
@@ -1777,7 +1764,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             document.getElementById('flash-results').classList.add('hidden');
         }
 
-        // Mbohapýha (Shuffle Array)
         function shuffleArray(array) {
             let curId = array.length;
             while (0 !== curId) {
