@@ -82,13 +82,17 @@
         </div>
     </div>
 
+    <div id="toast-exito" class="fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0 pointer-events-none z-50 flex items-center gap-2">
+        <span class="text-2xl">✨</span> <span class="font-bold">¡Turno Confirmado!</span>
+    </div>
+
     <script type="module">
         // ==========================================
         // 1. IMPORTACIONES
         // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // ==========================================
         // 2. CONFIGURACIÓN E INICIALIZACIÓN
@@ -252,17 +256,27 @@
         };
 
         function cargarTurnosEnTiempoReal() {
-            const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
+            const q = query(collection(db, "turnos")); 
             onSnapshot(q, (querySnapshot) => {
                 turnosGlobales = [];
+        
+                querySnapshot.forEach((documento) => {
+                    const data = documento.data();
+                    data.id = documento.id; // Capturamos el ID único para poder borrarlo
+                    turnosGlobales.push(data);
+                });
+
+                // ORDENAMIENTO CRONOLÓGICO: Del más próximo al más lejano
+                turnosGlobales.sort((a, b) => {
+                    const fechaA = new Date(`${a.fecha}T${a.hora}`);
+                    const fechaB = new Date(`${b.fecha}T${b.hora}`);
+                    return fechaA - fechaB;
+                });
+
                 const listaUI = document.getElementById('lista-turnos-html');
                 listaUI.innerHTML = ""; 
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    turnosGlobales.push(data); 
-                    
-                    // Seguimos dibujando la lista de abajo para tener el detalle y los botones
+        
+                turnosGlobales.forEach((data) => {
                     const li = document.createElement("li");
                     li.className = "py-3 flex justify-between items-center";
                     li.innerHTML = `
@@ -270,15 +284,19 @@
                             <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
                             <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
                         </div>
-                        <div class="text-right flex flex-col items-end gap-2">
+                        <div class="text-right flex items-center gap-2">
                             <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
-                            <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded flex items-center gap-1 transition-colors">
-                                <img src="whatsapp.ico" alt="WA" class="w-4 h-4"> Confirmar
+                            <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 flex items-center gap-1 rounded transition-colors" title="Confirmar por WhatsApp">
+                                Confirmar
+                            </button>
+                            <button onclick="window.borrarTurno('${data.id}')" class="bg-red-100 hover:bg-red-200 text-red-600 text-xs px-2 py-1 rounded transition-colors" title="Borrar Turno">
+                                🗑️
                             </button>
                         </div>
                     `;
                     listaUI.appendChild(li);
                 });
+        
                 renderizarCalendario(); 
             });
         }
@@ -289,6 +307,17 @@
             document.getElementById('selected-datetime').innerText = `🗓️ ${fecha} a las ⏰ ${hora} hs`;
             document.getElementById('modal-turno').classList.remove('hidden');
         }
+
+        window.borrarTurno = async function(id) {
+            if (confirm("🚨 ¿Estás seguro de que querés borrar este turno? Esta acción es definitiva y no se puede deshacer.")) {
+                try {
+                    await deleteDoc(doc(db, "turnos", id));
+                } catch (error) {
+                    console.error("Error al borrar turno:", error);
+                    alert("Hubo un error al intentar borrar el turno.");
+                }
+            }
+        };
 
         // ==========================================
         // 6. EVENTOS Y ESCUCHADORES (Lo último que lee el navegador)
@@ -302,6 +331,20 @@
                 loginScreen.classList.remove('hidden');
                 appScreen.classList.add('hidden');
             }
+        });
+
+        document.getElementById('cli-tel').addEventListener('input', function(e) {
+            let numero = e.target.value.replace(/\D/g, ''); // Deja solo los números
+    
+            if (numero.startsWith('549')) numero = numero.substring(3);
+            else if (numero.startsWith('54')) numero = numero.substring(2);
+    
+            // Si quedan más de 10 dígitos, nos quedamos con los últimos 10
+            if (numero.length > 10) {
+                numero = numero.substring(numero.length - 10);
+            }
+    
+            e.target.value = numero;
         });
 
         document.getElementById('btn-google').addEventListener('click', (e) => {
@@ -350,6 +393,14 @@
                 document.getElementById('cli-nombre').value = '';
                 document.getElementById('cli-tel').value = '';
                 document.getElementById('monto-senia').value = '';
+                
+                // Disparamos la animación del Toast
+                const toast = document.getElementById('toast-exito');
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
+                
             } catch (e) {
                 console.error("Error guardando turno: ", e);
             }
