@@ -6,30 +6,37 @@
     <title>Agenda de Aditi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" href="aditi.png">
+    
+    <style>
+        .perspective { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
 </head>
 <body class="bg-gray-100 p-8 font-sans">
 
     <div id="login-screen" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
-    <h2 class="text-2xl font-bold mb-4 text-center">Acceso Privado</h2>
-    
-    <input type="email" id="email" placeholder="Email" class="w-full border p-2 mb-3 rounded">
-    <input type="password" id="password" placeholder="Contraseña" class="w-full border p-2 mb-4 rounded">
-    
-    <p id="login-error" class="text-red-500 text-sm mb-2 hidden">Error al iniciar sesión.</p>
-    
-    <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 mb-2 rounded hover:bg-blue-700">Entrar con Mail</button>
+        <h2 class="text-2xl font-bold mb-4 text-center">Acceso Privado</h2>
+        
+        <input type="email" id="email" placeholder="Email" class="w-full border p-2 mb-3 rounded">
+        <input type="password" id="password" placeholder="Contraseña" class="w-full border p-2 mb-4 rounded">
+        
+        <p id="login-error" class="text-red-500 text-sm mb-2 hidden">Error al iniciar sesión.</p>
+        
+        <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 mb-2 rounded hover:bg-blue-700">Entrar con Mail</button>
 
-    <div class="flex items-center justify-between my-4">
-        <hr class="w-full border-gray-300">
-        <span class="px-2 text-gray-500 text-sm">O</span>
-        <hr class="w-full border-gray-300">
+        <div class="flex items-center justify-between my-4">
+            <hr class="w-full border-gray-300">
+            <span class="px-2 text-gray-500 text-sm">O</span>
+            <hr class="w-full border-gray-300">
+        </div>
+
+        <button id="btn-google" class="w-full bg-white border border-gray-300 text-gray-700 font-bold py-2 rounded hover:bg-gray-50 flex items-center justify-center gap-2">
+            <img src="google.ico" alt="Logo Google" class="w-5 h-5"> 
+            <span>Entrar con Google</span>
+        </button>
     </div>
-
-    <button id="btn-google" class="w-full bg-white border border-gray-300 text-gray-700 font-bold py-2 rounded hover:bg-gray-50 flex items-center justify-center gap-2">
-        <img src="google.ico" alt="Logo Google" class="w-5 h-5"> 
-        <span>Entrar con Google</span>
-    </button>
-</div>
 
     <div id="app-screen" class="max-w-6xl mx-auto hidden p-4">
         <div class="flex justify-between items-center mb-6">
@@ -49,13 +56,6 @@
             </ul>
         </div>
     </div>
-
-    <style>
-        .perspective { perspective: 1000px; }
-        .preserve-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-    </style>
 
     <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 perspective">
         <div id="modal-inner" class="w-full max-w-md relative preserve-3d">
@@ -99,56 +99,45 @@
     </div>
 
     <script type="module">
-        // ==========================================
         // 1. IMPORTACIONES
-        // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // ==========================================
-        // 2. CONFIGURACIÓN E INICIALIZACIÓN
-        // ==========================================
+        // 2. CONFIGURACIÓN
         const firebaseConfig = {
             apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
             authDomain: "agenditi-d0aa0.firebaseapp.com",
             projectId: "agenditi-d0aa0",
             storageBucket: "agenditi-d0aa0.firebasestorage.app",
             messagingSenderId: "1096149766612",
-            appId: "1:1096149766612:web:2a70d018991192f2a08641",
-            measurementId: "G-XJ8PTYS64S"
+            appId: "1:1096149766612:web:2a70d018991192f2a08641"
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // ==========================================
-        // 3. VARIABLES GLOBALES (Las que cambian de estado)
-        // ==========================================
+        // 3. VARIABLES GLOBALES
         let turnosGlobales = [];
         let fechaSeleccionada = "";
         let horaSeleccionada = "";
         const loginScreen = document.getElementById('login-screen');
         const appScreen = document.getElementById('app-screen');
 
-        // ==========================================
-        // 4. CLASES POO (Definidas antes de usarlas)
-        // ==========================================
+        // 4. CLASES POO
         class Cliente {
             constructor(nombre, telefono) {
                 this.nombre = nombre;
                 this.telefono = telefono;
             }
         }
-
         class Tratamiento {
             constructor(nombre, precioBase) {
                 this.nombre = nombre;
                 this.precioBase = precioBase;
             }
         }
-
         class Pago {
             constructor(monto, metodoPago, tipo) {
                 this.monto = monto;
@@ -156,7 +145,6 @@
                 this.tipo = tipo;
             }
         }
-
         class Turno {
             constructor(cliente, tratamiento, fecha, hora, pagoInicial) {
                 this.cliente = cliente;
@@ -165,7 +153,6 @@
                 this.hora = hora;
                 this.pagos = [pagoInicial];
             }
-
             toPlainObject() {
                 return {
                     cliente: { nombre: this.cliente.nombre, telefono: this.cliente.telefono },
@@ -178,9 +165,7 @@
             }
         }
 
-        // ==========================================
         // 5. FUNCIONES PRINCIPALES
-        // ==========================================
         function renderizarCalendario() {
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = ''; 
@@ -235,36 +220,35 @@
             });
         }
 
-        // Función para enviar confirmación por WhatsApp (Versión Blindada Hexadecimal)
         window.abrirWhatsApp = function(telefono, nombre, fecha, hora) {
-            // 1. Calculamos el saludo
             const horaActual = new Date().getHours();
             let saludo = "¡Buenas noches!";
             if (horaActual >= 6 && horaActual < 13) saludo = "¡Buenos días!";
             else if (horaActual >= 13 && horaActual < 20) saludo = "¡Buenas tardes!";
 
-            // 2. Armamos las partes del texto y las codificamos de forma segura
             const textoBase = encodeURIComponent(`${saludo} ${nombre} `);
-            const emojiMano = "%F0%9F%91%8B"; // 👋
-            
+            const emojiMano = "%F0%9F%91%8B";
             const textoMedio = encodeURIComponent(`\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* `);
-            const emojiReloj = "%E2%8F%B0"; // ⏰
-            
+            const emojiReloj = "%E2%8F%B0";
             const textoFin = encodeURIComponent(`.\n\n¡Te esperamos! `);
-            // ✨ 💅 (salto de línea) Aditi Estética 🌸
             const emojisAditi = "%E2%9C%A8%F0%9F%92%85%0AAditi Est%C3%A9tica %F0%9F%8C%B8"; 
 
-            // 3. Unimos todo en la URL final
             const mensajeFinal = textoBase + emojiMano + textoMedio + emojiReloj + textoFin + emojisAditi;
             
-            // 4. Limpieza del teléfono
             let telLimpio = telefono.replace(/\D/g, ''); 
-            if (telLimpio.length === 10) {
-                telLimpio = "549" + telLimpio; 
-            }
+            if (telLimpio.length === 10) telLimpio = "549" + telLimpio; 
 
-            // 5. Abrimos la API oficial de WhatsApp
             window.open(`https://api.whatsapp.com/send?phone=${telLimpio}&text=${mensajeFinal}`, '_blank');
+        };
+
+        window.borrarTurno = async function(id) {
+            if (confirm("🚨 ¿Estás seguro de que querés borrar este turno? Esta acción es definitiva.")) {
+                try {
+                    await deleteDoc(doc(db, "turnos", id));
+                } catch (error) {
+                    console.error("Error al borrar turno:", error);
+                }
+            }
         };
 
         function cargarTurnosEnTiempoReal() {
@@ -274,11 +258,11 @@
         
                 querySnapshot.forEach((documento) => {
                     const data = documento.data();
-                    data.id = documento.id; // Capturamos el ID único para poder borrarlo
+                    data.id = documento.id;
                     turnosGlobales.push(data);
                 });
 
-                // ORDENAMIENTO CRONOLÓGICO: Del más próximo al más lejano
+                // Orden cronológico
                 turnosGlobales.sort((a, b) => {
                     const fechaA = new Date(`${a.fecha}T${a.hora}`);
                     const fechaB = new Date(`${b.fecha}T${b.hora}`);
@@ -290,7 +274,13 @@
         
                 turnosGlobales.forEach((data) => {
                     const li = document.createElement("li");
-                    li.className = "py-3 flex justify-between items-center";
+                    li.className = "py-3 flex justify-between items-center border-b last:border-0";
+                    
+                    // Lógica segura de dinero (por si hay datos viejos en la base)
+                    const senia = data.pagos && data.pagos.length > 0 ? data.pagos[0].monto : 0;
+                    const precioTotal = data.tratamiento ? data.tratamiento.precioBase : 0;
+                    const saldoPendiente = precioTotal - senia;
+
                     li.innerHTML = `
                         <div class="flex-1 flex items-center gap-3">
                             <div>
@@ -301,9 +291,12 @@
                                 🗑️
                             </button>
                         </div>
-                        <div class="text-right flex items-center gap-2">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
-                            <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 flex items-center gap-1 rounded transition-colors" title="Confirmar por WhatsApp">
+                        <div class="text-right flex items-center gap-3">
+                            <div class="flex flex-col items-end gap-1">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-[11px] px-2 rounded-full font-bold">Seña: $${senia}</span>
+                                <span class="inline-block bg-orange-100 text-orange-800 text-[11px] px-2 rounded-full font-bold">Resta: $${saldoPendiente}</span>
+                            </div>
+                            <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-2 flex items-center gap-1 rounded transition-colors" title="Confirmar por WhatsApp">
                                 <img src="whatsapp.ico" alt="WA" class="w-4 h-4"> Confirmar
                             </button>
                         </div>
@@ -322,20 +315,7 @@
             document.getElementById('modal-turno').classList.remove('hidden');
         }
 
-        window.borrarTurno = async function(id) {
-            if (confirm("🚨 ¿Estás seguro de que querés borrar este turno? Esta acción es definitiva y no se puede deshacer.")) {
-                try {
-                    await deleteDoc(doc(db, "turnos", id));
-                } catch (error) {
-                    console.error("Error al borrar turno:", error);
-                    alert("Hubo un error al intentar borrar el turno.");
-                }
-            }
-        };
-
-        // ==========================================
-        // 6. EVENTOS Y ESCUCHADORES (Lo último que lee el navegador)
-        // ==========================================
+        // 6. EVENTOS Y ESCUCHADORES
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginScreen.classList.add('hidden');
@@ -348,16 +328,10 @@
         });
 
         document.getElementById('cli-tel').addEventListener('input', function(e) {
-            let numero = e.target.value.replace(/\D/g, ''); // Deja solo los números
-    
+            let numero = e.target.value.replace(/\D/g, ''); 
             if (numero.startsWith('549')) numero = numero.substring(3);
             else if (numero.startsWith('54')) numero = numero.substring(2);
-    
-            // Si quedan más de 10 dígitos, nos quedamos con los últimos 10
-            if (numero.length > 10) {
-                numero = numero.substring(numero.length - 10);
-            }
-    
+            if (numero.length > 10) numero = numero.substring(numero.length - 10);
             e.target.value = numero;
         });
 
@@ -369,6 +343,8 @@
         document.getElementById('btn-login').addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
+            document.getElementById('login-error').classList.add('hidden');
+            
             signInWithEmailAndPassword(auth, email, pass).catch((error) => {
                 document.getElementById('login-error').classList.remove('hidden');
                 console.error("Error de login:", error);
@@ -401,18 +377,15 @@
             const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
 
             try {
-                // Mandamos a la nube
                 await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
                 
-                // 1. Girar la tarjeta mágicamente
+                // Animación Flashcard 3D
                 document.getElementById('modal-inner').classList.add('rotate-y-180');
                 
-                // 2. Esperar 2 segundos para que el usuario disfrute la animación, luego cerrar y limpiar
                 setTimeout(() => {
-                    document.getElementById('modal-turno').classList.add('hidden'); // Ocultar
-                    document.getElementById('modal-inner').classList.remove('rotate-y-180'); // Volver a girar para la próxima
+                    document.getElementById('modal-turno').classList.add('hidden');
+                    document.getElementById('modal-inner').classList.remove('rotate-y-180');
                     
-                    // Limpiar formulario
                     document.getElementById('cli-nombre').value = '';
                     document.getElementById('cli-tel').value = '';
                     document.getElementById('monto-senia').value = '';
