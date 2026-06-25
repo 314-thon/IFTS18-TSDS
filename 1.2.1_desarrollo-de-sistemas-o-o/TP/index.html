@@ -83,15 +83,17 @@
     </div>
 
     <script type="module">
-        // 1. IMPORTAMOS FIREBASE DESDE LA NUBE
+        // ==========================================
+        // 1. IMPORTACIONES
+        // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // ==========================================
         // 2. CONFIGURACIÓN E INICIALIZACIÓN
-        const provider = new GoogleAuthProvider();
+        // ==========================================
         const firebaseConfig = {
-                    // 2. CONFIGURACIÓN DE TU PROYECTO (Pegá la tuya acá)
             apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
             authDomain: "agenditi-d0aa0.firebaseapp.com",
             projectId: "agenditi-d0aa0",
@@ -102,50 +104,20 @@
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);        
-        const loginScreen = document.getElementById('login-screen');
-        const appScreen = document.getElementById('app-screen');            
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
-        const listaUI = document.getElementById('lista-turnos-html');
-        const data = doc.data();
-        const li = document.createElement("li");
-        const grid = document.getElementById('calendar-grid');
-        const horas = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
-        const nombre = document.getElementById('cli-nombre').value;
-        const tel = document.getElementById('cli-tel').value;
-        const montoSenia = parseFloat(document.getElementById('monto-senia').value);
-        const tratData = document.getElementById('tratamiento-select').value.split('|');
-        const nuevoCliente = new Cliente(nombre, tel);
-        const nuevoTratamiento = new Tratamiento(tratData[0], parseFloat(tratData[1]));
-        const nuevaSenia = new Pago(montoSenia, document.getElementById('metodo-pago').value, "Seña");
-        const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
-
-        // 3. VARIABLES GLOBALES (Para que las funciones las vean)        
-        let diasVisibles = [];
-        let fechaIterador = new Date();
-        let div = document.createElement('div');
-        let divHora = document.createElement('div');
-        let ocupados = turnosGlobales.filter(t => t.fecha === dia.iso && t.hora === hora).length;
-        let slot = document.createElement('div');
-
-
-// Evento para el botón de Google
-document.getElementById('btn-google').addEventListener('click', () => {
-    signInWithPopup(auth, provider)
-        .then((result) => {
-            console.log("Logueado con Google:", result.user.email);
-        }).catch((error) => {
-            console.error("Error con Google:", error);
-        });
-});
-
-        // Inicializamos Firebase
-
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
         // ==========================================
-        // 3. DEFINICIÓN DE CLASES POO
+        // 3. VARIABLES GLOBALES (Las que cambian de estado)
+        // ==========================================
+        let turnosGlobales = [];
+        let fechaSeleccionada = "";
+        let horaSeleccionada = "";
+        const loginScreen = document.getElementById('login-screen');
+        const appScreen = document.getElementById('app-screen');
+
+        // ==========================================
+        // 4. CLASES POO (Definidas antes de usarlas)
         // ==========================================
         class Cliente {
             constructor(nombre, telefono) {
@@ -165,7 +137,7 @@ document.getElementById('btn-google').addEventListener('click', () => {
             constructor(monto, metodoPago, tipo) {
                 this.monto = monto;
                 this.metodoPago = metodoPago; 
-                this.tipo = tipo; // "Seña" o "Saldo"
+                this.tipo = tipo;
             }
         }
 
@@ -178,8 +150,6 @@ document.getElementById('btn-google').addEventListener('click', () => {
                 this.pagos = [pagoInicial];
             }
 
-            // METODO CLAVE: Firestore necesita objetos planos, no instancias de clases.
-            // Esto transforma nuestros objetos complejos a un formato que la nube entiende.
             toPlainObject() {
                 return {
                     cliente: { nombre: this.cliente.nombre, telefono: this.cliente.telefono },
@@ -187,96 +157,24 @@ document.getElementById('btn-google').addEventListener('click', () => {
                     fecha: this.fecha,
                     hora: this.hora,
                     pagos: this.pagos.map(p => ({ monto: p.monto, metodo: p.metodoPago, tipo: p.tipo })),
-                    creadoEn: new Date() // Sello de tiempo para ordenarlos
+                    creadoEn: new Date()
                 };
             }
         }
 
         // ==========================================
-        // 4. LÓGICA DE AUTENTICACIÓN
+        // 5. FUNCIONES PRINCIPALES
         // ==========================================
-
-
-        // Escucha si hay un usuario logueado
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loginScreen.classList.add('hidden');
-                appScreen.classList.remove('hidden');
-                cargarTurnosEnTiempoReal(); // Si entra, cargamos la base de datos
-            } else {
-                loginScreen.classList.remove('hidden');
-                appScreen.classList.add('hidden');
-            }
-        });
-
-        // Evento Botón Login
-        document.getElementById('btn-login').addEventListener('click', () => {
-
-            signInWithEmailAndPassword(auth, email, pass)
-                .catch((error) => {
-                    document.getElementById('login-error').classList.remove('hidden');
-                    console.error("Error de login:", error);
-                });
-        });
-
-        // Evento Botón Logout
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth);
-        });
-
-        // ==========================================
-        // 5. LÓGICA DE CALENDARIO Y BASE DE DATOS
-        // ==========================================
-
-        let turnosGlobales = []; // Acá guardamos los turnos de la base de datos
-        let fechaSeleccionada = "";
-        let horaSeleccionada = "";
-
-        // Escuchador en Tiempo Real
-        function cargarTurnosEnTiempoReal() {
-            const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
-            
-            onSnapshot(q, (querySnapshot) => {
-                turnosGlobales = [];
-                const listaUI = document.getElementById('lista-turnos-html');
-                listaUI.innerHTML = ""; 
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    turnosGlobales.push(data); // Llenamos nuestro array local
-                    
-                    // Seguimos dibujando la lista de abajo para tener el detalle
-                    const li = document.createElement("li");
-                    li.className = "py-3 flex justify-between";
-                    li.innerHTML = `
-                        <div>
-                            <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
-                            <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
-                        </div>
-                    `;
-                    listaUI.appendChild(li);
-                });
-
-                // Cada vez que hay un cambio, redibujamos el calendario con los colores actualizados
-                renderizarCalendario(); 
-            });
-        }
-
         function renderizarCalendario() {
             const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = ''; // Limpiamos la grilla
+            grid.innerHTML = ''; 
 
             const horas = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
             
-            // Generamos los próximos 6 días hábiles (saltando domingos)
             let diasVisibles = [];
             let fechaIterador = new Date();
             while(diasVisibles.length < 6) {
-                if(fechaIterador.getDay() !== 0) { // 0 es Domingo
-                    // Guardamos un objeto con la fecha ISO (para la BD) y un texto corto (para pantalla)
+                if(fechaIterador.getDay() !== 0) { 
                     diasVisibles.push({
                         iso: fechaIterador.toISOString().split('T')[0],
                         texto: fechaIterador.toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'numeric' })
@@ -285,7 +183,6 @@ document.getElementById('btn-google').addEventListener('click', () => {
                 fechaIterador.setDate(fechaIterador.getDate() + 1);
             }
 
-            // Fila 1: Encabezados (Esquina vacía + Días)
             grid.appendChild(document.createElement('div')); 
             diasVisibles.forEach(dia => {
                 let div = document.createElement('div');
@@ -294,19 +191,14 @@ document.getElementById('btn-google').addEventListener('click', () => {
                 grid.appendChild(div);
             });
 
-            // Filas siguientes: Horarios
             horas.forEach(hora => {
-                // Etiqueta de la hora a la izquierda
                 let divHora = document.createElement('div');
                 divHora.className = "text-right pr-2 text-sm text-gray-600 font-bold self-center";
                 divHora.innerText = hora;
                 grid.appendChild(divHora);
 
-                // Bloques de turnos para cada día
                 diasVisibles.forEach(dia => {
-                    // Contamos cuántos turnos coinciden en esta fecha y hora EXACTA
                     let ocupados = turnosGlobales.filter(t => t.fecha === dia.iso && t.hora === hora).length;
-
                     let slot = document.createElement('div');
                     slot.className = "border rounded p-1 text-center text-xs font-bold transition-all h-10 flex flex-col items-center justify-center ";
 
@@ -322,15 +214,38 @@ document.getElementById('btn-google').addEventListener('click', () => {
                         slot.classList.add('bg-red-100', 'text-red-800', 'border-red-300', 'cursor-not-allowed', 'opacity-70');
                         slot.innerText = "Lleno (2/2)";
                     }
-
                     grid.appendChild(slot);
                 });
             });
         }
 
-        // ==========================================
-        // 6. EVENTOS DEL FORMULARIO MODAL
-        // ==========================================
+        function cargarTurnosEnTiempoReal() {
+            const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
+            onSnapshot(q, (querySnapshot) => {
+                turnosGlobales = [];
+                const listaUI = document.getElementById('lista-turnos-html');
+                listaUI.innerHTML = ""; 
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    turnosGlobales.push(data); 
+                    
+                    const li = document.createElement("li");
+                    li.className = "py-3 flex justify-between";
+                    li.innerHTML = `
+                        <div>
+                            <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
+                            <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
+                        </div>
+                    `;
+                    listaUI.appendChild(li);
+                });
+                renderizarCalendario(); 
+            });
+        }
 
         function abrirModal(fecha, hora) {
             fechaSeleccionada = fecha;
@@ -339,11 +254,42 @@ document.getElementById('btn-google').addEventListener('click', () => {
             document.getElementById('modal-turno').classList.remove('hidden');
         }
 
+        // ==========================================
+        // 6. EVENTOS Y ESCUCHADORES (Lo último que lee el navegador)
+        // ==========================================
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                cargarTurnosEnTiempoReal(); 
+            } else {
+                loginScreen.classList.remove('hidden');
+                appScreen.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('btn-google').addEventListener('click', (e) => {
+            e.preventDefault();
+            signInWithPopup(auth, provider).catch((error) => console.error("Error con Google:", error));
+        });
+
+        document.getElementById('btn-login').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+                document.getElementById('login-error').classList.remove('hidden');
+                console.error("Error de login:", error);
+            });
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
         document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
             document.getElementById('modal-turno').classList.add('hidden');
         });
 
-        // Al hacer clic en "Añadir Turno" instanciamos los objetos de la cátedra
         document.getElementById('btn-guardar-turno').addEventListener('click', async () => {
             const nombre = document.getElementById('cli-nombre').value;
             const tel = document.getElementById('cli-tel').value;
@@ -354,7 +300,6 @@ document.getElementById('btn-google').addEventListener('click', () => {
                 return;
             }
 
-            // Desarmamos el value del select (Ej: "Limpieza Facial|15000")
             const tratData = document.getElementById('tratamiento-select').value.split('|');
             const nuevoCliente = new Cliente(nombre, tel);
             const nuevoTratamiento = new Tratamiento(tratData[0], parseFloat(tratData[1]));
@@ -363,10 +308,8 @@ document.getElementById('btn-google').addEventListener('click', () => {
             const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
 
             try {
-                // Guardamos en la nube
                 await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
                 
-                // Cerramos y limpiamos el formulario
                 document.getElementById('modal-turno').classList.add('hidden');
                 document.getElementById('cli-nombre').value = '';
                 document.getElementById('cli-tel').value = '';
