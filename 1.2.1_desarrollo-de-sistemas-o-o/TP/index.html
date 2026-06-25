@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Turnos - Estética</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8 font-sans">
+
+    <div id="login-screen" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
+        <h2 class="text-2xl font-bold mb-4 text-center">Acceso Privado</h2>
+        <input type="email" id="email" placeholder="Email" class="w-full border p-2 mb-3 rounded">
+        <input type="password" id="password" placeholder="Contraseña" class="w-full border p-2 mb-4 rounded">
+        <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">Entrar</button>
+        <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Error al iniciar sesión.</p>
+    </div>
+
+    <div id="app-screen" class="max-w-4xl mx-auto hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Agenda de Turnos</h1>
+            <button id="btn-logout" class="bg-red-500 text-white px-4 py-2 rounded font-bold hover:bg-red-600">Cerrar Sesión</button>
+        </div>
+        
+        <button id="btn-crear-turno" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold mb-6 hover:bg-green-700 shadow">
+            + Crear Turno de Prueba
+        </button>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4">Próximos Turnos</h2>
+            <ul id="lista-turnos-html" class="divide-y divide-gray-200">
+                <li class="py-2 text-gray-500">Cargando turnos desde la nube...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        // 1. IMPORTAMOS FIREBASE DESDE LA NUBE
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // 2. CONFIGURACIÓN DE TU PROYECTO (Pegá la tuya acá)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
+            authDomain: "agenditi-d0aa0.firebaseapp.com",
+            projectId: "agenditi-d0aa0",
+            storageBucket: "agenditi-d0aa0.firebasestorage.app",
+            messagingSenderId: "1096149766612",
+            appId: "1:1096149766612:web:2a70d018991192f2a08641",
+            measurementId: "G-XJ8PTYS64S"
+        };
+
+        // Inicializamos Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ==========================================
+        // 3. DEFINICIÓN DE CLASES POO
+        // ==========================================
+        class Cliente {
+            constructor(nombre, telefono) {
+                this.nombre = nombre;
+                this.telefono = telefono;
+            }
+        }
+
+        class Tratamiento {
+            constructor(nombre, precioBase) {
+                this.nombre = nombre;
+                this.precioBase = precioBase;
+            }
+        }
+
+        class Pago {
+            constructor(monto, metodoPago, tipo) {
+                this.monto = monto;
+                this.metodoPago = metodoPago; 
+                this.tipo = tipo; // "Seña" o "Saldo"
+            }
+        }
+
+        class Turno {
+            constructor(cliente, tratamiento, fecha, hora, pagoInicial) {
+                this.cliente = cliente;
+                this.tratamiento = tratamiento;
+                this.fecha = fecha;
+                this.hora = hora;
+                this.pagos = [pagoInicial];
+            }
+
+            // METODO CLAVE: Firestore necesita objetos planos, no instancias de clases.
+            // Esto transforma nuestros objetos complejos a un formato que la nube entiende.
+            toPlainObject() {
+                return {
+                    cliente: { nombre: this.cliente.nombre, telefono: this.cliente.telefono },
+                    tratamiento: { nombre: this.tratamiento.nombre, precioBase: this.tratamiento.precioBase },
+                    fecha: this.fecha,
+                    hora: this.hora,
+                    pagos: this.pagos.map(p => ({ monto: p.monto, metodo: p.metodoPago, tipo: p.tipo })),
+                    creadoEn: new Date() // Sello de tiempo para ordenarlos
+                };
+            }
+        }
+
+        // ==========================================
+        // 4. LÓGICA DE AUTENTICACIÓN
+        // ==========================================
+        const loginScreen = document.getElementById('login-screen');
+        const appScreen = document.getElementById('app-screen');
+
+        // Escucha si hay un usuario logueado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                cargarTurnosEnTiempoReal(); // Si entra, cargamos la base de datos
+            } else {
+                loginScreen.classList.remove('hidden');
+                appScreen.classList.add('hidden');
+            }
+        });
+
+        // Evento Botón Login
+        document.getElementById('btn-login').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch((error) => {
+                    document.getElementById('login-error').classList.remove('hidden');
+                    console.error("Error de login:", error);
+                });
+        });
+
+        // Evento Botón Logout
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // ==========================================
+        // 5. LÓGICA DE BASE DE DATOS (Firestore)
+        // ==========================================
+
+        // Función para enviar un turno a la nube
+        async function guardarTurnoInteractivo() {
+            // Instanciamos los objetos usando POO
+            const nuevoCliente = new Cliente("Marta (Prueba)", "1144556677");
+            const nuevoTratamiento = new Tratamiento("Limpieza Facial", 15000);
+            const nuevaSenia = new Pago(5000, "Transferencia", "Seña");
+            
+            const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, "2026-06-30", "15:00", nuevaSenia);
+
+            try {
+                // Guardamos en la colección "turnos" usando nuestro método toPlainObject()
+                await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
+                alert("¡Turno guardado en la nube exitosamente!");
+            } catch (e) {
+                console.error("Error añadiendo documento: ", e);
+            }
+        }
+
+        // Asignamos la función al botón
+        document.getElementById('btn-crear-turno').addEventListener('click', guardarTurnoInteractivo);
+
+        // Función para leer datos EN TIEMPO REAL
+        function cargarTurnosEnTiempoReal() {
+            const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
+            
+            // onSnapshot se dispara automáticamente cada vez que alguien carga un turno en CUALQUIER dispositivo
+            onSnapshot(q, (querySnapshot) => {
+                const listaUI = document.getElementById('lista-turnos-html');
+                listaUI.innerHTML = ""; // Limpiamos la lista
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const li = document.createElement("li");
+                    li.className = "py-3 flex justify-between";
+                    li.innerHTML = `
+                        <div>
+                            <p class="font-bold text-lg">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
+                            <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold uppercase tracking-wide">
+                                Seña: $${data.pagos[0].monto}
+                            </span>
+                        </div>
+                    `;
+                    listaUI.appendChild(li);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
