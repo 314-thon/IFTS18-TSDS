@@ -219,27 +219,36 @@
             });
         }
 
-        // Función para enviar confirmación por WhatsApp
+        // Función para enviar confirmación por WhatsApp (Versión Blindada Hexadecimal)
         window.abrirWhatsApp = function(telefono, nombre, fecha, hora) {
-            // 1. Calculamos el saludo según la hora de la computadora
+            // 1. Calculamos el saludo
             const horaActual = new Date().getHours();
-            let saludo = "¡Buenas noches!"; // Default (20 a 05)
+            let saludo = "¡Buenas noches!";
             if (horaActual >= 6 && horaActual < 13) saludo = "¡Buenos días!";
             else if (horaActual >= 13 && horaActual < 20) saludo = "¡Buenas tardes!";
 
-            // 2. Armamos el mensaje con formato (asteriscos = negrita en WhatsApp)
-            // Reemplazamos los emojis visuales por sus códigos Unicode seguros
-            const mensaje = `${saludo} ${nombre} \u{1F44B}\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* \u{23F0}.\n\n¡Te esperamos! \u{2728}\u{1F485}\nAditi Estética \u{1F338}`;            
-            // 3. Limpiamos el teléfono de guiones o espacios
+            // 2. Armamos las partes del texto y las codificamos de forma segura
+            const textoBase = encodeURIComponent(`${saludo} ${nombre} `);
+            const emojiMano = "%F0%9F%91%8B"; // 👋
+            
+            const textoMedio = encodeURIComponent(`\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* `);
+            const emojiReloj = "%E2%8F%B0"; // ⏰
+            
+            const textoFin = encodeURIComponent(`.\n\n¡Te esperamos! `);
+            // ✨ 💅 (salto de línea) Aditi Estética 🌸
+            const emojisAditi = "%E2%9C%A8%F0%9F%92%85%0AAditi Est%C3%A9tica %F0%9F%8C%B8"; 
+
+            // 3. Unimos todo en la URL final
+            const mensajeFinal = textoBase + emojiMano + textoMedio + emojiReloj + textoFin + emojisAditi;
+            
+            // 4. Limpieza del teléfono
             let telLimpio = telefono.replace(/\D/g, ''); 
-            // Si cargan el número local de 10 dígitos (ej: 1144556677), le sumamos el prefijo de Argentina
             if (telLimpio.length === 10) {
                 telLimpio = "549" + telLimpio; 
             }
 
-            // 4. Codificamos el texto para URL y abrimos la pestaña
-            const mensajeCodificado = encodeURIComponent(mensaje);
-            window.open(`https://wa.me/${telLimpio}?text=${mensajeCodificado}`, '_blank');
+            // 5. Abrimos la API oficial de WhatsApp
+            window.open(`https://api.whatsapp.com/send?phone=${telLimpio}&text=${mensajeFinal}`, '_blank');
         };
 
         function cargarTurnosEnTiempoReal() {
