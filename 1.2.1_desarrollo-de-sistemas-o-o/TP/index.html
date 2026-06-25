@@ -228,8 +228,8 @@
             else if (horaActual >= 13 && horaActual < 20) saludo = "¡Buenas tardes!";
 
             // 2. Armamos el mensaje con formato (asteriscos = negrita en WhatsApp)
-// Reemplazamos los emojis visuales por sus códigos Unicode seguros
-const mensaje = `${saludo} ${nombre} \u{1F44B}\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* \u{23F0}.\n\n¡Te esperamos! \u{2728}\u{1F485}\nAditi Estética \u{1F338}`;            
+            // Reemplazamos los emojis visuales por sus códigos Unicode seguros
+            const mensaje = `${saludo} ${nombre} \u{1F44B}\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* \u{23F0}.\n\n¡Te esperamos! \u{2728}\u{1F485}\nAditi Estética \u{1F338}`;            
             // 3. Limpiamos el teléfono de guiones o espacios
             let telLimpio = telefono.replace(/\D/g, ''); 
             // Si cargan el número local de 10 dígitos (ej: 1144556677), le sumamos el prefijo de Argentina
