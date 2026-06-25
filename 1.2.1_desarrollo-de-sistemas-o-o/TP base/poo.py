@@ -81,18 +81,23 @@ def crear_turno_interactivo():
     nombre = input("Nombre del cliente: ")
     tel = input("Teléfono: ")
     
-    print("\nTratamientos disponibles:")
-    print("1. Limpieza Facial ($15.000)")
-    print("2. Lifting de Pestañas ($12.000)")
-    print("3. Masaje Descontracturante ($18.000)")
-    opcion_trat = input("Seleccione el tratamiento (1/2/3): ")
+    opcion_trat = ""
+
+    while opcion_trat not in ["1", "2", "3"]:
+        print("\nTratamientos disponibles:")
+        print("1. Limpieza Facial ($15.000)")
+        print("2. Lifting de Pestañas ($12.000)")
+        print("3. Masaje Descontracturante ($18.000)")
+        opcion_trat = input("Seleccione el tratamiento (1/2/3): ")
     
-    if opcion_trat == "1":
-        trat = Tratamiento("Limpieza Facial", 15000)
-    elif opcion_trat == "2":
-        trat = Tratamiento("Lifting de Pestañas", 12000)
-    else:
-        trat = Tratamiento("Masaje Descontracturante", 18000)
+        if opcion_trat == "1":
+            trat = Tratamiento("Limpieza Facial", 15000)
+        elif opcion_trat == "2":
+            trat = Tratamiento("Lifting de Pestañas", 12000)
+        elif opcion_trat == "3":
+            trat = Tratamiento("Masaje Descontracturante", 18000)
+        else:
+            print("Ha ingresado una opción incorrecta, intente nuevamente.")
         
     fecha = input("\nFecha (Ej: 2026-07-02): ")
     hora = input("Hora (Ej: 16:30): ")
