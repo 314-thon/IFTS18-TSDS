@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia Interactiva de POO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- KaTeX CSS & JS para renderizar código o fórmulas hermosas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 30vh;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            background-color: #f8fafc; /* Slate-50 */
+            color: #334155; /* Slate-700 */
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-flipper { 
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); 
+            transform-style: preserve-3d; 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+        }
+        .card-flip-container.flipped .card-flipper { transform: rotateY(180deg); }
+        .card-front, .card-back { 
+            backface-visibility: hidden; 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+        .card-back { 
+            transform: rotateY(180deg); 
+            background-color: #eef2ff; /* Indigo-50 */
+            border: 2px solid #6366f1; /* Indigo-500 */
+        }
+        .card-front {
+            background-color: #ffffff;
+            border: 2px solid #cbd5e1; /* Slate-300 */
+        }
+        .math-table th, .math-table td {
+            border: 1px solid #94a3b8; /* Slate-400 */
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .math-table th { background-color: #e2e8f0; font-weight: bold; } /* Slate-200 */
+
+        /* Estilos específicos para la vista de impresión en A4 */
+        @media print {
+            @page { margin: 10mm; }
+            body { background-color: white; }
+            .print-hidden { display: none !important; }
+            #formulas-modal { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; top: 0; 
+                width: 100%; 
+                height: auto; 
+                background: white; 
+                overflow: visible;
+                padding: 0;
+                margin: 0;
+            }
+            .a4-container {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+            }
+            .page-break { page-break-before: always; }
+        }
+        .a4-container {
+            width: 100%;
+            max-width: 250mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 10mm;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <nav class="bg-slate-900 text-white shadow-md z-10 print-hidden">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Título -->
+                <div class="flex items-center gap-2 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity" onclick="showHome()">
+                    <span class="text-2xl">💻</span>
+                    <span class="font-bold text-xl tracking-tight hidden lg:block">POO Interactiva</span>
+                </div>
+                
+                <!-- Botones de Unidades -->
+                <div class="flex space-x-1 sm:space-x-2 items-center overflow-x-auto hide-scrollbar px-2 mx-auto flex-nowrap" id="unit-nav">
+                </div>
+                
+                <!-- Botones de Acción Derecha -->
+                <div class="ml-2 pl-2 md:pl-4 border-l border-slate-700 flex space-x-2 flex-shrink-0">
+                    <button onclick="openFormulas()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-2 md:px-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-xs md:text-sm flex items-center gap-1 md:gap-2">
+                        <span>📄</span> <span class="hidden md:inline">Resumen UML (PDF)</span>
+                    </button>
+                    <button onclick="openTestMode()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-2 px-2 md:px-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 text-xs md:text-sm flex items-center gap-1 md:gap-2">
+                        <span>🧠</span> <span class="hidden md:inline">Ponte a Prueba</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full print-hidden">
+        <aside id="sidebar" class="hidden w-1/3 md:w-1/4 bg-white border-r border-slate-200 overflow-y-auto hide-scrollbar flex flex-col">
+            <div class="p-6 bg-indigo-50 border-b border-indigo-100">
+                <h2 id="sidebar-unit-title" class="text-lg font-bold text-indigo-900">Selecciona un Tema</h2>
+                <p id="sidebar-unit-desc" class="text-sm text-indigo-700 mt-2 leading-tight"></p>
+            </div>
+            <div id="topics-list" class="flex-1 p-4 space-y-2">
+            </div>
+        </aside>
+
+        <main id="main-content" class="w-full flex flex-col overflow-y-auto bg-[#f8fafc] p-6 lg:p-10 relative">
+            
+            <div id="welcome-screen" class="flex flex-col items-center justify-center h-full text-center space-y-6">
+                <span class="text-6xl">🎓</span>
+                <h1 class="text-4xl font-extrabold text-slate-900">Bienvenido a tu Guía de Estudio</h1>
+                <p class="text-xl text-slate-600 max-w-2xl">Aprenderás a modelar el mundo real en objetos, comprender diagramas UML y prepararte para tu examen de Fundamentos de POO.</p>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 w-full max-w-5xl">
+                    <button onclick="goToUnit('u1')" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center hover:shadow-md hover:border-indigo-300 hover:-translate-y-1 transition-all cursor-pointer">
+                        <span class="text-3xl mb-3">🧩</span>
+                        <h3 class="font-bold text-base text-slate-800">Unidad 1</h3>
+                        <p class="text-xs text-slate-500 text-center mt-2">Abstracción, Encapsulamiento y Modelado.</p>
+                    </button>
+                    <button onclick="goToUnit('u2')" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center hover:shadow-md hover:border-indigo-300 hover:-translate-y-1 transition-all cursor-pointer">
+                        <span class="text-3xl mb-3">📦</span>
+                        <h3 class="font-bold text-base text-slate-800">Unidad 2</h3>
+                        <p class="text-xs text-slate-500 text-center mt-2">Clases, Objetos, Mensajes y Métodos.</p>
+                    </button>
+                    <button onclick="goToUnit('u3')" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center hover:shadow-md hover:border-indigo-300 hover:-translate-y-1 transition-all cursor-pointer">
+                        <span class="text-3xl mb-3">📊</span>
+                        <h3 class="font-bold text-base text-slate-800">Unidad 3</h3>
+                        <p class="text-xs text-slate-500 text-center mt-2">UML: Diagramas de Clases y Relaciones.</p>
+                    </button>
+                    <button onclick="goToUnit('uparcial')" class="bg-indigo-50 p-5 rounded-xl shadow-sm border border-indigo-200 flex flex-col items-center hover:shadow-md hover:border-indigo-400 hover:bg-indigo-100 hover:-translate-y-1 transition-all cursor-pointer">
+                        <span class="text-3xl mb-3">📝</span>
+                        <h3 class="font-bold text-base text-indigo-900">Parcial</h3>
+                        <p class="text-xs text-indigo-700 text-center mt-2">Identificación de objetos e integrador UML.</p>
+                    </button>
+                </div>
+            </div>
+
+            <div id="content-screen" class="hidden flex-col max-w-4xl mx-auto w-full space-y-8 pb-20">
+                
+                <header class="border-b-2 border-indigo-500 pb-4">
+                    <span id="topic-badge" class="inline-block bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full font-semibold tracking-wide uppercase mb-2"></span>
+                    <h1 id="topic-title" class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight"></h1>
+                </header>
+
+                <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span>💡</span> Explicación Sencilla y Tips
+                    </h2>
+                    <div id="topic-explanation" class="text-slate-700 text-lg leading-relaxed"></div>
+                </section>
+
+                <section id="viz-section" class="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 md:p-8 shadow-sm border border-indigo-100 hidden">
+                    <h2 class="text-xl font-bold text-indigo-900 mb-2 flex items-center gap-2">
+                        <span>📈</span> Simulador Interactivo
+                    </h2>
+                    <p id="viz-desc" class="text-sm text-slate-600 mb-6"></p>
+                    
+                    <div id="viz-controls" class="mb-6 bg-white p-4 rounded-lg shadow-inner flex flex-wrap gap-4 items-center justify-center">
+                    </div>
+
+                    <div class="chart-container bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                        <canvas id="interactiveCanvas"></canvas>
+                    </div>
+                </section>
+
+                <section id="videos-section">
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span>🎥</span> Videos Recomendados
+                    </h2>
+                    <div id="topic-videos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+                </section>
+
+                <section class="space-y-6">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span>📝</span> Práctica Guiada
+                    </h2>
+                    <p class="text-sm text-slate-500 mb-4" id="exercise-intro-text">Intenta resolver el ejercicio antes de ver la respuesta.</p>
+                    
+                    <div id="exercises-container" class="space-y-6">
+                    </div>
+                </section>
+
+                <div id="completion-btn-container" class="mt-8 border-t border-slate-200 pt-6">
+                </div>
+
+            </div>
+
+            <div id="test-screen" class="hidden flex-col max-w-6xl mx-auto w-full space-y-8 pb-20">
+                <div id="test-menu" class="space-y-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl font-extrabold text-slate-900">Modo Repaso Activo</h1>
+                        <p class="text-lg text-slate-600 mt-3">Elige cómo quieres poner a prueba la teoría hoy.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200 flex flex-col items-center text-center">
+                            <span class="text-5xl mb-4">📝</span>
+                            <h2 class="text-2xl font-bold text-slate-800">Quiz Teórico</h2>
+                            <p class="text-slate-500 mt-2 mb-6">Múltiple choice rápido de conceptos. Se elegirán 10 preguntas para poner a prueba tu base teórica.</p>
+                            
+                            <div class="w-full mb-6 text-left">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Filtrar por unidad:</label>
+                                <select id="quiz-unit-select" class="w-full border border-slate-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="all">Todas las unidades mezcladas</option>
+                                    <option value="u1">Unidad 1: Conceptos Básicos</option>
+                                    <option value="u2">Unidad 2: Elementos de POO</option>
+                                    <option value="u3">Unidad 3: Modelado UML</option>
+                                </select>
+                            </div>
+                            <button onclick="startQuiz('theory')" class="mt-auto w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Empezar Quiz</button>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200 flex flex-col items-center text-center">
+                            <span class="text-5xl mb-4">🗂️</span>
+                            <h2 class="text-2xl font-bold text-slate-800">Tarjetas Didácticas</h2>
+                            <p class="text-slate-500 mt-2 mb-6">Aparición de conceptos 1 a 1. Intenta recordarlo, voltea la tarjeta y clasifica si necesitas repaso.</p>
+                            
+                            <div class="w-full mb-6 text-left">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Filtrar por unidad:</label>
+                                <select id="flash-unit-select" class="w-full border border-slate-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="all">Todas las unidades mezcladas</option>
+                                    <option value="u1">Unidad 1: Conceptos Básicos</option>
+                                    <option value="u2">Unidad 2: Elementos de POO</option>
+                                    <option value="u3">Unidad 3: Modelado UML</option>
+                                </select>
+                            </div>
+                            <button onclick="startFlashcards()" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">Practicar Tarjetas</button>
+                        </div>
+
+                        <div class="bg-gradient-to-b from-amber-50 to-white p-8 rounded-2xl shadow-md border border-amber-200 flex flex-col items-center text-center relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">¡NUEVO!</div>
+                            <span class="text-5xl mb-4">🕵️‍♂️</span>
+                            <h2 class="text-2xl font-bold text-amber-900">Identifica el Problema</h2>
+                            <p class="text-slate-600 mt-2 mb-6">Lee el enunciado y selecciona qué relación UML, concepto o elemento de POO se aplica al escenario.</p>
+                            
+                            <div class="w-full mb-6 text-left flex-1 flex flex-col justify-center">
+                                <div class="bg-white/60 p-3 rounded border border-amber-100 text-sm text-amber-800">
+                                    <b>Dinámica:</b> 10 ejercicios al azar donde tu único trabajo es saber <em>identificar la teoría</em> en un contexto del mundo real.
+                                </div>
+                                <p class="text-center text-sm font-bold text-slate-500 mt-4" id="identify-score-badge">Mejor Nota: --/10 🏆</p>
+                            </div>
+                            <button onclick="startQuiz('identify')" class="mt-auto w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow">Entrenar Ojo Clínico</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-ui" class="hidden flex-col items-center w-full max-w-4xl mx-auto">
+                    <div class="w-full flex justify-between items-center mb-6">
+                        <button onclick="openTestMode()" class="text-indigo-600 hover:text-indigo-800 font-medium">← Volver al Menú</button>
+                        <span id="quiz-progress" class="bg-indigo-100 text-indigo-800 font-bold py-1 px-3 rounded-full text-sm">Pregunta 1 de 10</span>
+                    </div>
+                    
+                    <div class="bg-white w-full p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                        <span id="quiz-unit-badge" class="inline-block bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-bold uppercase mb-4">UNIDAD X</span>
+                        <h3 id="quiz-question" class="text-xl md:text-2xl font-bold text-slate-800 mb-8 leading-relaxed">¿Cargando pregunta...?</h3>
+                        
+                        <div id="quiz-z-chart-container" class="hidden w-full flex justify-center mb-8">
+                            <canvas id="quiz-z-canvas" class="w-full max-w-md"></canvas>
+                        </div>
+                        
+                        <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        </div>
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg"></div>
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">Siguiente Pregunta →</button>
+                </div>
+
+                <div id="quiz-results" class="hidden flex-col items-center justify-center text-center bg-white p-10 rounded-3xl shadow-md border border-slate-100 max-w-2xl mx-auto w-full">
+                    <span id="quiz-result-emoji" class="text-7xl mb-4">🏆</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">¡Completado!</h2>
+                    <p class="text-slate-600 mb-6" id="quiz-result-msg">Aquí tienes tu puntuación final.</p>
+                    <div class="text-6xl font-black text-amber-500 mb-8" id="quiz-score-display">8/10</div>
+                    <div class="flex gap-4">
+                        <button onclick="startQuiz(testState.submode)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm">Jugar de Nuevo</button>
+                        <button onclick="openTestMode()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-6 rounded-xl transition-colors">Volver al Menú</button>
+                    </div>
+                </div>
+
+                <div id="flash-ui" class="hidden flex-col items-center w-full max-w-2xl mx-auto">
+                    <div class="w-full flex justify-between items-center mb-6">
+                        <button onclick="openTestMode()" class="text-blue-600 hover:text-blue-800 font-medium">← Volver al Menú</button>
+                        <span id="flash-progress" class="bg-blue-100 text-blue-800 font-bold py-1 px-3 rounded-full text-sm">Tarjeta 1 de X</span>
+                    </div>
+
+                    <div class="perspective-1000 w-full h-80 md:h-96 mb-8 cursor-pointer card-flip-container" id="flashcard-container" onclick="flipCard()">
+                        <div class="card-flipper shadow-lg rounded-2xl">
+                            <div class="card-front text-center p-6">
+                                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Pregunta (Toca para voltear)</span>
+                                <h3 id="flash-front-text" class="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">¿Cargando frente?</h3>
+                            </div>
+                            <div class="card-back text-center w-full h-full overflow-y-auto p-6 md:p-8">
+                                <span class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-4 block">Respuesta</span>
+                                <div id="flash-back-text" class="text-xl font-medium text-slate-800 leading-relaxed text-left w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="flash-controls" class="hidden w-full grid grid-cols-2 gap-4">
+                        <button onclick="markFlashcard(false)" class="flex flex-col items-center justify-center bg-red-50 hover:bg-red-100 border-2 border-red-200 text-red-700 font-bold py-4 rounded-xl transition-colors group">
+                            <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">❌</span>
+                            <span>Aún no la sé</span>
+                        </button>
+                        <button onclick="markFlashcard(true)" class="flex flex-col items-center justify-center bg-green-50 hover:bg-green-100 border-2 border-green-200 text-green-700 font-bold py-4 rounded-xl transition-colors group">
+                            <span class="text-3xl mb-1 group-hover:scale-110 transition-transform">✅</span>
+                            <span>Ya lo dominé</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="flash-results" class="hidden flex-col items-center justify-center text-center bg-white p-10 rounded-3xl shadow-md border border-slate-100 max-w-2xl mx-auto w-full">
+                    <span id="flash-result-emoji" class="text-7xl mb-4">🧠</span>
+                    <h2 class="text-3xl font-extrabold text-blue-900 mb-2">¡Mazo Terminado!</h2>
+                    <p class="text-slate-600 mb-6" id="flash-result-text">Repasaste todas las tarjetas.</p>
+                    
+                    <div class="flex gap-4" id="flash-result-buttons">
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL Y HOJA DE FÓRMULAS PARA IMPRESIÓN (PDF) -->
+    <div id="formulas-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0">
+        <div class="a4-container rounded-xl overflow-hidden relative">
+            
+            <!-- Botones Superiores (No se imprimen) -->
+            <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6 print-hidden">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🧮</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Formulario Completo</h2>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="printPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                        <span>🖨️</span> Guardar PDF / Imprimir
+                    </button>
+                    <button onclick="closeFormulas()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-5 rounded-lg transition-colors">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área Imprimible A4 -->
+            <div id="formulas-print-area" class="text-slate-900">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-black uppercase tracking-widest text-indigo-900 border-b-4 border-indigo-600 inline-block pb-1">Cheatsheet POO & UML</h1>
+                    <p class="text-sm text-slate-500 mt-2 font-medium">Conceptos Básicos, Sintaxis y Diagramas de Clases</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-8 gap-y-6 text-sm">
+                    <!-- COL 1 -->
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                            <h3 class="font-bold text-indigo-900 text-base uppercase tracking-wide mb-3 border-b border-indigo-200 pb-1">Conceptos Base</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Objeto:</span>
+                                    <p class="text-xs mt-1 text-slate-600">Tiene <strong>Estado</strong> (variables), <strong>Comportamiento</strong> (mensajes) e <strong>Identidad</strong> (es único).</p>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Clase:</span>
+                                    <p class="text-xs mt-1 text-slate-600">El molde o plano. Define las variables de instancia y aloja los métodos compartidos por las instancias.</p>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block text-slate-700">Encapsulamiento:</span>
+                                    <p class="text-xs mt-1 text-slate-600">Ocultar el estado interno. Interacción exclusiva a través de métodos públicos (Protocolo).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                            <h3 class="font-bold text-slate-900 text-base uppercase tracking-wide mb-3 border-b border-slate-200 pb-1">Envío de Mensajes</h3>
+                            <div class="space-y-3 text-xs">
+                                <p><strong>Mensaje:</strong> Petición de un emisor a un receptor (el "qué").</p>
+                                <p><strong>Método:</strong> La implementación dentro del receptor (el "cómo").</p>
+                                <p><strong>Sintaxis:</strong> <code>receptor.mensaje(parametros)</code></p>
+                                <p><strong>'this':</strong> Seudovariable usada para referenciarse a sí mismo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- COL 2 -->
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <h3 class="font-bold text-amber-900 text-base uppercase tracking-wide mb-3 border-b border-amber-200 pb-1">UML - Diagrama de Clases</h3>
+                            <div class="space-y-3 text-xs">
+                                <p><strong>Caja de Clase:</strong> Nombre (arriba), Atributos (medio), Operaciones (abajo).</p>
+                                <p><strong>Visibilidad:</strong></p>
+                                <ul class="list-disc pl-4 space-y-1 mt-1 text-amber-900">
+                                    <li><code>+</code> <strong>Público</strong> (Accesible desde afuera)</li>
+                                    <li><code>-</code> <strong>Privado</strong> (Accesible solo internamente)</li>
+                                    <li><code>#</code> <strong>Protegido</strong> (Para herencia)</li>
+                                </ul>
+                                <p class="mt-2"><strong>Subrayado:</strong> Atributos/Métodos de Clase (Estáticos).</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-bold text-blue-900 text-base uppercase tracking-wide mb-3 border-b border-blue-200 pb-1">UML - Relaciones</h3>
+                            <div class="space-y-3 text-xs">
+                                <p><strong>Asociación:</strong> Línea simple. Navegabilidad y conocimiento.</p>
+                                <p><strong>Agregación (◇):</strong> Rombo vacío. Relación "todo/parte" débil. La parte sobrevive sin el todo.</p>
+                                <p><strong>Composición (◆):</strong> Rombo lleno. Relación fuerte y exclusiva. Partes mueren con el todo.</p>
+                                <p><strong>Generalización (▷):</strong> Triángulo hueco sólido. Herencia ("es-un"). Apunta al padre.</p>
+                                <p><strong>Dependencia (- - >):</strong> Flecha punteada. Uso temporal (instanciación local o parámetro).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center text-xs text-slate-400 font-mono pt-4 border-t border-slate-200">
+                    Generado por Academia Interactiva de POO • Guarda este documento y úsalo para repasar o rendir.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts (Lógica de la aplicación) -->
+    <script>
+        function openFormulas() {
+            document.getElementById('formulas-modal').classList.remove('hidden');
+            if (window.renderMathInElement) {
+                document.querySelectorAll('.format-formulas').forEach(el => {
+                    renderMathInElement(el, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                });
+            }
+        }
+
+        function closeFormulas() {
+            document.getElementById('formulas-modal').classList.add('hidden');
+        }
+
+        function printPDF() {
+            const originalTitle = document.title;
+            document.title = "Fórmulas Estadístic"; // Kept to not break any external hooks, but it's just title change.
+            document.title = "CheatSheet POO";
+            
+            window.print();
+            
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 1000);
+        }
+
+        let userStats = { learnedTopics: [], quizGrades: {} };
+        let currentUnitId = null;
+        let currentTopicId = null;
+        let currentChart = null;
+        let testState = { mode: null, submode: null, activeItems: [], currentIndex: 0, score: 0, flashMistakes: [] };
+
+        const appData = {
+            units: [
+                {
+                    id: "u1",
+                    title: "UNIDAD 1",
+                    subtitle: "CONCEPTOS BÁSICOS",
+                    desc: "Fundamentos de la Programación Orientada a Objetos: Abstracción, Encapsulamiento y Modelos.",
+                    topics: [
+                        {
+                            id: "u1t1",
+                            title: "1. Abstracción y Modelado",
+                            exp: `La abstracción es el proceso intencional de <strong>supresión u ocultamiento de detalles</strong> respecto de un fenómeno, dejando de lado lo no esencial para concentrarnos en los aspectos significativos de nuestro contexto.<br><br>Es completamente <strong>subjetiva</strong>: diferentes personas abstraen diferente. Un mecánico ve un auto por su motor, un conductor como transporte.<br><br>Un <strong>Modelo</strong> es una versión simplificada del mundo real, construida a través de la abstracción.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>El nivel de abstracción correcto es crítico. Un error común en desarrollo temprano es preocuparse por detalles de muy bajo nivel en lugar de asegurar la separación de responsabilidades.</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "¿Qué busca el proceso de abstracción?", hint: "Piensa en el significado de 'abstraer' cosas innecesarias.", a: "Busca separar efectivamente los objetos concretos de la idea que queremos representar, ignorando diferencias y concentrándose en similitudes relevantes." },
+                                { level: "Normal", q: "Menciona dos características de un 'Modelo'.", hint: "Es una herramienta mental o física simplificada.", a: "1. Es una abstracción utilizada para entender y razonar sobre entidades del mundo real.\n2. Debe omitir detalles no esenciales y tener un grado de granularidad acorde a sus propósitos." }
+                            ]
+                        },
+                        {
+                            id: "u1t2",
+                            title: "2. Encapsulamiento",
+                            exp: `El <strong>ocultamiento de la información</strong> es fundamental. Los objetos son complejas estructuras de datos que no deben ser accedidas libremente por clientes. Razones para encapsular:<br>
+                            - La representación interna está sujeta a cambios.<br>
+                            - Los objetos no son meros contenedores de datos, son entidades activas.<br>
+                            - Poseen otros objetos de forma privada.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>La meta central es lograr un <strong>acoplamiento bajo</strong>. Los cambios en el interior de un objeto (privado) no deben romper a otros objetos del sistema.</li>
+                                    <li>La única forma de interactuar con el objeto es a través de su <strong>protocolo</strong> (sus mensajes públicos).</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Normal", q: "¿Por qué el encapsulamiento ayuda ante los cambios en el desarrollo?", hint: "Imagina que cambias el tipo de dato de una variable de instancia.", a: "Porque si los clientes no acceden directamente a las variables, puedes modificar la representación interna del objeto y este quedará consistente sin afectar ni romper a los clientes que lo invocan." },
+                                { level: "Fácil", q: "Desde el punto de vista más puro del paradigma orientado a objetos, ¿cómo se define un objeto?", hint: "A través de lo que puede brindar y hacer público.", a: "Se define por los servicios que puede brindar, es decir, por los mensajes que entiende (su parte pública)." }
+                            ]
+                        },
+                        {
+                            id: "u1t3",
+                            title: "3. Programación Estructurada vs POO",
+                            exp: `<strong>Programación Estructurada:</strong> Visión clásica centrada en el control de ejecución (condiciones, bucles). La regla general es la sucesión de instrucciones.<br><br>
+                            <strong>Programación Orientada a Objetos:</strong> TODO es un objeto. Los programas se organizan en base a clases y jerarquías de herencia. Los objetos se comunican <strong>enviando y recibiendo mensajes</strong>. Tienen su propia memoria.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>Diferencia core: En POO los objetos son entidades activas responsables de llevar a cabo ciertas acciones. La forma de pedirselos es mediante el envío de un mensaje.</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "En POO, ¿cómo se pide a un objeto que lleve a cabo una determinada tarea?", hint: "No usas 'llamadas a función'.", a: "Se lo pide por medio del envío de un mensaje." },
+                                { level: "Normal", q: "¿Qué contienen las 'Clases' según la visión general de la POO?", hint: "Piensa en el molde y las reglas.", a: "Las clases contienen el comportamiento compartido por sus instancias." }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "u2",
+                    title: "UNIDAD 2",
+                    subtitle: "ELEMENTOS DE POO",
+                    desc: "Conceptos core de programación: Clases, Instancias, Métodos y Envíos de Mensajes.",
+                    topics: [
+                        {
+                            id: "u2t1",
+                            title: "4. Objetos y sus 3 características",
+                            exp: `Un objeto es una abstracción de una entidad del dominio primario que utilizaremos para construir programas. Tienen 3 características innegables:<br>
+                            1. <strong>Comportamiento bien determinado:</strong> Responsabilidades materializadas en el conjunto de mensajes que entiende.<br>
+                            2. <strong>Estado interno:</strong> Su estructura en términos de variables de instancia, que acompaña al objeto toda su vida.<br>
+                            3. <strong>Identidad:</strong> Propiedad intrínseca única. Un objeto solo es idéntico a sí mismo.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>Identidad <strong>NO</strong> es igualdad. Si creas dos cuentas bancarias con saldo 0, son 'iguales' en estado, pero tienen 'identidades' distintas (pueden ser diferenciados dentro de un sistema).</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "¿Qué determina la identidad de un objeto?", hint: "Es una propiedad intrínseca.", a: "Indica que un objeto es único y solo es idéntico a sí mismo, sirviendo para distinguir objetos individuales coexistiendo dentro de un sistema." },
+                                { level: "Normal", q: "¿Por qué decimos que las variables de instancia son privadas por definición?", hint: "Tiene que ver con el encapsulamiento y el poder.", a: "Porque es la estructura interna del objeto, y darle privacidad le da la posibilidad al objeto de decidir exactamente qué es lo que quiere publicar." }
+                            ]
+                        },
+                        {
+                            id: "u2t2",
+                            title: "5. Clases e Instanciación",
+                            exp: `Dado que nos encontramos con conjuntos de objetos que se comportan igual, necesitamos agrupar ese comportamiento. Una <strong>clase</strong> es un molde, plantilla o descripción abstracta de un conjunto de objetos. Describe su formato y agrupa comportamiento común.<br><br>
+                            Un objeto creado a partir de una clase se llama <strong>instancia</strong>.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: Clase vs Instancia</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li><strong>Clase:</strong> El molde. Define <em>qué</em> variables tendrán las instancias y el comportamiento que usarán.</li>
+                                    <li><strong>Instancia:</strong> El objeto creado. Tiene <em>sus propios valores</em> en sus variables y su propia identidad (instanciación usando 'new').</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Normal", q: "Si instanciamos dos objetos 'CajaDeAhorro', ¿qué comparten y qué NO comparten?", hint: "Piensa en el molde vs los valores reales y la identidad.", a: "Comparten la Clase (por ende, el mismo comportamiento/métodos y la misma estructura interna). NO comparten el Estado (el valor exacto de su saldo y titular) ni su Identidad (son entes distintos)." },
+                                { level: "Fácil", q: "Cuando a un objeto se le envía un mensaje, ¿dónde busca el intérprete la manera de responderle?", hint: "Busca en el repositorio de comportamiento.", a: "Lo que hace el intérprete es buscar en la Clase del objeto receptor un método con el cual responder al envío del mensaje." }
+                            ]
+                        },
+                        {
+                            id: "u2t3",
+                            title: "6. Mensajes, Métodos y Conocimiento",
+                            exp: `<strong>Mensaje:</strong> Petición de un objeto Emisor a un Receptor. Especifica el nombre de la acción y envía parámetros.<br>
+                            <strong>Método:</strong> La contraparte funcional. Expresa el "cómo" se resuelve (la implementación interna).<br><br>
+                            <strong>Formas de conocimiento</strong> (para enviar un mensaje, hay que poder nombrar/conocer al receptor):<br>
+                            - <em>Variables de Instancia:</em> Conocimiento Interno.<br>
+                            - <em>Parámetros:</em> Conocimiento Externo.<br>
+                            - <em>Variables temporales:</em> Conocimiento Temporal.<br>
+                            - <em>Seudo-variable this:</em> Forma de auto referenciamiento.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>Al finalizar su ejecución, todo método <strong>SIEMPRE</strong> retorna un objeto (devolviendo el control al emisor).</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "¿Cuál es la diferencia entre un mensaje y un método?", hint: "Uno es la petición pública, otro es la implementación privada.", a: "El mensaje especifica QUÉ se le pide al objeto hacer. El método es el CÓMO hace el objeto internamente para responder a ese mensaje." },
+                                { level: "Normal", q: "Un método puede realizar básicamente 3 cosas durante su ejecución. ¿Cuáles son?", hint: "Tiene que ver con su estado, colaboradores y su finalización.", a: "1. Modificar el estado interno del objeto.\n2. Colaborar con otros objetos (enviándoles mensajes).\n3. Retornar (un resultado) y terminar." }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "u3",
+                    title: "UNIDAD 3",
+                    subtitle: "UML",
+                    desc: "Lenguaje Unificado de Modelado: Diagrama de Clases, Asociaciones, Herencia y Dependencias.",
+                    topics: [
+                        {
+                            id: "u3t1",
+                            title: "7. Introducción a UML y Diagrama de Clases",
+                            exp: `UML estandariza y unifica metodologías para la construcción de modelos gráficos. El <strong>Diagrama de Clases</strong> describe la vista estática del sistema. Una clase se dibuja con 3 compartimientos: <strong>Nombre, Atributos y Operaciones</strong>.<br><br>
+                            <strong>Visibilidad:</strong><br>
+                            <code>+</code> Público (Accesible desde afuera)<br>
+                            <code>-</code> Privado (Accesible solo dentro del objeto)<br>
+                            <code>#</code> Protegido (Accesible por subclases)
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>Un atributo o método subrayado indica que es un elemento <strong>de Clase</strong> (variable de clase o compartida estáticamente).</li>
+                                    <li>La notación para un método es: <code>[visibilidad] nombre(params) : tipo_retorno</code>.</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "¿Qué representan los 3 compartimientos del rectángulo de una Clase en UML?", hint: "Nombre, lo que tiene, lo que hace.", a: "1. Nombre de la clase. 2. Atributos (estructura). 3. Operaciones o mensajes." },
+                                { level: "Normal", q: "¿Qué significa la visibilidad de Paquete (~) y la Privada (-) en atributos?", hint: "Limitan quién interactúa.", a: "Privada (-) significa que solo se puede usar en el objeto donde está definido. Paquete (~) permite acceso solo a objetos del mismo paquete donde está definida la clase." }
+                            ]
+                        },
+                        {
+                            id: "u3t2",
+                            title: "8. Asociación, Agregación y Composición",
+                            exp: `Las relaciones son conexiones semánticas entre objetos.<br>
+                            <strong>Asociación:</strong> Camino de comunicación bidireccional o navegable. Se indica la multiplicidad (ej. 1..*).<br>
+                            <strong>Agregación (Rombo Vacío):</strong> Relación "todo/parte". La clase representa el 'todo' y se compone de 'partes'. Es estructural pero no liga la existencia (la parte sobrevive sin el todo).<br>
+                            <strong>Composición (Rombo Lleno):</strong> Forma de agregación con exclusividad y dependencia. Tiempo de vida coincidente: si el todo muere, las partes mueren.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>En Composición, una parte SIEMPRE se asocia a un único todo de forma exclusiva.</li>
+                                    <li>Multiplicidad: <code>0..1</code> significa 'Cero o uno'. <code>0..*</code> significa 'Muchos'.</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Normal", q: "¿Qué diferencia principal hay entre Agregación y Composición respecto al tiempo de vida de las partes?", hint: "Analiza el destino de la parte cuando el todo se destruye.", a: "En Agregación, el tiempo de vida no coincide (la parte puede seguir existiendo). En Composición, el tiempo de vida es coincidente: la parte no puede existir sin el todo exclusivo." },
+                                { level: "Fácil", q: "Si 'Motor' es parte exclusiva de un 'Automóvil', ¿qué rombo de UML debes dibujar del lado de 'Automóvil'?", hint: "Relación fuerte.", a: "Rombo lleno (Composición), indicando que el Motor es posesión fuerte del Automóvil." }
+                            ]
+                        },
+                        {
+                            id: "u3t3",
+                            title: "9. Generalización y Dependencia",
+                            exp: `<strong>Generalización:</strong> Representa la relación "es-un" (Herencia). La clase hija hereda propiedades, atributos y operaciones de las clases padres. Se dibuja con una flecha de triángulo hueco sólido apuntando al padre.<br><br>
+                            <strong>Dependencia:</strong> Indica que la instanciación u operación de una clase depende de otro objeto (generalmente por conocimiento temporal o parámetros). Se dibuja con una flecha punteada.
+                            <div class='mt-6 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-indigo-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-indigo-900 space-y-1 text-sm'>
+                                    <li>Las clases que no tienen padres pero sí tienen hijos se denominan 'Clases Base' o 'Clase Raíz'.</li>
+                                    <li>Una clase sin hijos se llama 'Clase Hoja'.</li>
+                                </ul>
+                            </div>`,
+                            videos: [],
+                            exercises: [
+                                { level: "Fácil", q: "Gráficamente, ¿hacia dónde apunta la flecha de generalización en un esquema de herencia?", hint: "Del que hereda al dueño original.", a: "Apunta desde la clase Hija (la especialización) hacia la clase Padre (la generalización)." },
+                                { level: "Normal", q: "¿En qué situación del código de POO justificarías modelar una relación como 'Dependencia' en vez de una Asociación o Agregación?", hint: "Tiempo de vida del conocimiento.", a: "Cuando una clase requiere a otra solo durante la ejecución de un método (por ejemplo, recibiéndola por parámetro o instanciándola temporalmente), sin mantenerla como variable de instancia." }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "uparcial",
+                    title: "PARCIAL",
+                    subtitle: "INTEGRADOR UML",
+                    desc: "Identificación de objetos, modelado de mensajes y escenarios de parcial.",
+                    topics: [
+                        {
+                            id: "p1",
+                            title: "10. Identificación de Objetos y Propiedades",
+                            exp: "Ejercicios extraídos de la guía para analizar requerimientos textuales de un problema de desarrollo.",
+                            videos: [],
+                            exercises: [
+                                {
+                                    level: "Parcial",
+                                    q: "Agrupa los siguientes términos de requerimientos bancarios en Objetos o Propiedades/Comportamientos:\nBanco, Extraer, Apellido, Depositar, DNI, CuentaBancaria, Cliente, CrearCuenta, Saldo, CerrarCuenta",
+                                    hint: "Los sustantivos son objetos/clases. Verbos o datos descriptivos son propiedades/comportamientos.",
+                                    a: "<strong>Objetos/Clases:</strong> Banco, CuentaBancaria, Cliente.\n\n<strong>Propiedades/Estado:</strong> Apellido, DNI, Saldo.\n\n<strong>Comportamiento/Mensajes:</strong> Extraer, Depositar, CrearCuenta, CerrarCuenta."
+                                },
+                                {
+                                    level: "Parcial",
+                                    q: "Identifique objetos y propiedades en el texto de dominio: 'Una computadora está formada por un monitor, un gabinete y un teclado. Cada parte posee un modelo y un número de serie. El gabinete puede determinar su temperatura y puertos USB.'",
+                                    hint: "Busca las entidades y luego qué datos guarda cada una y qué acciones o cálculos realiza.",
+                                    a: "<strong>Objetos/Clases:</strong> Computadora, Monitor, Gabinete, Teclado.\n\n<strong>Propiedades (Estado):</strong> modelo, númeroDeSerie (aplican a las 3 partes), temperatura (Gabinete), cantidadDePuertos (Gabinete).\n\n<strong>Comportamientos:</strong> determinarTemperatura(), determinarPuertos() asignados al Gabinete."
+                                }
+                            ]
+                        },
+                        {
+                            id: "p2",
+                            title: "11. Lectura de Envíos de Mensajes",
+                            exp: "Análisis de expresiones encadenadas para detectar Receptores y Mensajes tal como en la memoria del sistema.",
+                            videos: [],
+                            exercises: [
+                                {
+                                    level: "Parcial",
+                                    q: "En la siguiente expresión POO:\n` (cajero.obtenerCuenta(210321)).saldo() `\nIndica la secuencia exacta de ejecución y receptores.",
+                                    hint: "Se resuelve de adentro hacia afuera (los paréntesis obligan precedencia).",
+                                    a: "1. El objeto emisor envía el mensaje `obtenerCuenta` (con parámetro 210321) al objeto receptor <strong>cajero</strong>.\n2. El método ejecutado por 'cajero' retorna un objeto resultante (una instancia de Cuenta).\n3. A ese objeto cuenta recién obtenido, se le envía inmediatamente el mensaje <strong>saldo()</strong>."
+                                },
+                                {
+                                    level: "Parcial",
+                                    q: "Escribe la expresión correcta enviando mensajes de izquierda a derecha para lograr este comportamiento: 'Decirle a un banco que suspenda al titular de la cuenta número 211101'.",
+                                    hint: "1) El banco busca la cuenta. 2) A la cuenta se le pide el titular. 3) Al banco se le ordena suspender a la persona obtenida.",
+                                    a: "La expresión encadenada es:\n`banco.suspender( banco.obtenerCuenta(211101).titular() )`\n\nExplicación interna:\n1. banco.obtenerCuenta(211101) localiza la cuenta.\n2. A esa cuenta se le envía .titular() devolviendo una Persona.\n3. Ese objeto Persona viaja como parámetro al mensaje .suspender() del banco."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const testData = {
+            quizPool: [
+                { unit: "u1", q: "¿Qué es la abstracción en el contexto de la Programación Orientada a Objetos?", options: ["Ignorar absolutamente todos los detalles sin criterio.", "El proceso intencional de supresión de detalles para concentrarse en lo significativo en cierto contexto.", "Un tipo de relación rígida entre clases en UML.", "La creación de instancias de una clase base."], ans: 1 },
+                { unit: "u1", q: "El Encapsulamiento en POO ayuda principalmente a:", options: ["Mantener todas las variables de instancia públicas para un rápido acceso desde fuera.", "Aumentar el acoplamiento general del software.", "Ocultar la información y estructura interna de un objeto a sus clientes, previniendo rupturas.", "Eliminar por completo la necesidad de usar métodos en una clase."], ans: 2 },
+                { unit: "u1", q: "Según la POO, la unidad básica y principal que estructura los programas es:", options: ["La función o procedimiento global.", "El bucle condicional.", "El objeto y los mensajes.", "La base de datos relacional."], ans: 2 },
+                { unit: "u2", q: "¿Qué afirmación sobre la Identidad de un objeto es correcta?", options: ["Dos objetos con los mismos datos internos comparten siempre la misma identidad en el programa.", "La identidad sirve para distinguir objetos individuales; un objeto solo es idéntico a sí mismo.", "Es una variable de instancia que el programador debe declarar y configurar manualmente en cada objeto.", "La identidad es la responsable directa de definir qué mensajes entiende el objeto."], ans: 1 },
+                { unit: "u2", q: "Las variables de instancia de un objeto definen:", options: ["El comportamiento o protocolo público del objeto ante otros.", "La clase padre de la que heredó el objeto al momento de nacer.", "El estado interno y las relaciones de conocimiento del objeto que persisten durante su vida.", "Exclusivamente el conocimiento temporal o de corta duración."], ans: 2 },
+                { unit: "u2", q: "¿Cuál es el rol primordial de una 'Clase' en POO?", options: ["Es el ente en ejecución de la memoria RAM que se envía mensajes entre procesos.", "Es un molde o plantilla abstracta que describe el comportamiento genérico y formato estructural de un conjunto de objetos.", "Es el mensaje de respuesta de un método void.", "Es una función que se invoca únicamente para liberar el espacio ocupado por un objeto."], ans: 1 },
+                { unit: "u2", q: "¿Qué representa el término 'método' en POO?", options: ["La contraparte funcional y privada del mensaje, que expresa el cómo se resuelve el comportamiento.", "El nombre en inglés que se le da a una variable de instancia temporal.", "El proceso de destruir una instancia del sistema usando basura.", "Una relación jerárquica obligatoria entre dos clases en diseño UML."], ans: 0 },
+                { unit: "u2", q: "La seudovariable 'this' (o 'self') se utiliza para:", options: ["Crear una instancia gemela en memoria y clonar datos.", "Eliminar el rastro de un objeto temporal tras un método largo.", "Que un objeto pueda referenciarse e invocarse mensajes a sí mismo dentro de su propia lógica interna.", "Para comunicarse estáticamente con la clase padre raíz."], ans: 2 },
+                { unit: "u3", q: "En UML, ¿qué denota el símbolo menos (-) delante del nombre de un atributo?", options: ["Que tiene Visibilidad Pública.", "Que es un método, no un atributo.", "Que tiene Visibilidad Privada (encapsulado).", "Que es un atributo de clase compartido estático."], ans: 2 },
+                { unit: "u3", q: "¿Qué relación en UML describe el concepto 'todo/parte' donde la existencia de la parte depende exclusivamente del tiempo de vida del todo?", options: ["Asociación bidireccional simple.", "Generalización (Herencia directa).", "Agregación (Rombo hueco).", "Composición (Rombo lleno)."], ans: 3 },
+                { unit: "u3", q: "La línea que remata con un triángulo hueco sólido apuntando hacia arriba en UML representa gráficamente:", options: ["Agregación temporal.", "Asociación direccional estricta.", "Generalización (Relación 'es-un' / Herencia).", "Dependencia cruzada."], ans: 2 },
+                { unit: "u3", q: "Si la multiplicidad de una relación en UML indica '1..*', esto significa:", options: ["El componente tiene exactamente una instancia y nada más.", "El vínculo es Opcional, pudiendo tener cero o muchos elementos.", "Se asocian Uno o más elementos (es decir, exige al menos una existencia).", "Restricción aritmética de uno a asterisco inclusive (como constante)."], ans: 2 },
+                { unit: "u2", q: "¿Por qué decimos que dos instancias creadas a partir de la misma clase responden idénticamente al mismo mensaje?", options: ["Porque automáticamente comparten los mismos valores en sus variables de instancia al nacer.", "Porque el intérprete del sistema busca y aplica el método definido en la Clase que es común a ambas.", "Porque comparten la misma identidad profunda a nivel de memoria RAM en el sistema operativo.", "Porque al utilizar variables temporales, evitan el encapsulamiento."], ans: 1 }
+            ],
+            flashcardPool: [
+                { unit: "u1", topic: "Abstracción", f: "¿Cómo se define el proceso de 'Abstracción'?", b: "Es el proceso intencional de supresión de detalles para concentrarse solo en lo significativo para un dominio determinado." },
+                { unit: "u1", topic: "Encapsulamiento", f: "¿Por qué es clave aplicar un fuerte Encapsulamiento?", b: "Porque oculta la estructura interna de los objetos. Permite modificar internamente la clase sin afectar o romper los códigos clientes que la usan." },
+                { unit: "u2", topic: "Variables", f: "Diferencia básica entre Estado y Comportamiento en POO.", b: "Estado = Sus atributos y variables de instancia (sus datos/lo que conoce). Comportamiento = Los mensajes que atiende y sus métodos internos (lo que puede hacer o responder)." },
+                { unit: "u2", topic: "Objetos", f: "Explica brevemente la diferencia entre Identidad e Igualdad.", b: "Igualdad significa que dos objetos tienen los mismos datos en sus variables. Identidad significa ser el mismo ente en la memoria del sistema (un objeto solo es idéntico a sí mismo, por más que sea igual a otro)." },
+                { unit: "u2", topic: "Clases", f: "¿Qué es en esencia una Clase?", b: "Un molde, plano o plantilla que define la estructura (variables de instancia) y aloja el comportamiento (métodos) común para instanciar objetos similares." },
+                { unit: "u2", topic: "Interacciones", f: "Diferencia arquitectónica entre un Mensaje y un Método.", b: "Mensaje: El 'QUÉ' se le pide al objeto hacer (interfaz pública). Método: El 'CÓMO' el objeto resuelve internamente esa petición enviada (su código privado)." },
+                { unit: "u2", topic: "Métodos", f: "Enumera las 3 cosas principales que hace y produce un Método.", b: "1. Modifica el estado interno. 2. Colabora con otros objetos (enviando más mensajes). 3. Retorna un objeto/valor y da por finalizado el método." },
+                { unit: "u2", topic: "Variables", f: "Menciona las 4 Formas de Conocimiento posibles entre objetos.", b: "1. Variables de Instancia (duraderas). 2. Parámetros (llegadas externas). 3. Variables temporales (corta duración en método). 4. Seudovariable 'this' (uno mismo)." },
+                { unit: "u3", topic: "UML", f: "¿Qué dictan las marcas de visibilidad +, - y # en atributos UML?", b: "(+) Público: Accesible libremente. (-) Privado: Accesible y modificable solo dentro de la clase. (#) Protegido: Accesible por la clase actual y sus clases derivadas/hijas." },
+                { unit: "u3", topic: "UML Estático", f: "¿Cómo se indica visualmente en UML que un atributo es 'estático' o variable 'de clase'?", b: "Subrayando el nombre de dicho atributo o método en la caja de la clase." },
+                { unit: "u3", topic: "Asociaciones", f: "Diferencia conceptual y visual en UML entre Agregación y Composición.", b: "Agregación (Rombo Vacío): Relación débil donde la 'parte' sobrevive aunque el 'todo' sea destruido. Composición (Rombo Lleno): Relación fuerte, dependencia de vida y exclusividad (si el 'todo' muere, la 'parte' muere)." },
+                { unit: "u3", topic: "UML Relaciones", f: "¿Qué implica que una asociación tenga regla de multiplicidad '0..1'?", b: "Es una relación netamente opcional. Indica que puede no haber ningún objeto asociado (cero) o a lo sumo un solo objeto (uno)." },
+                { unit: "u3", topic: "UML Herencia", f: "¿Qué refleja la flecha de Generalización en UML y hacia dónde apunta?", b: "Refleja la Herencia (relación 'es-un'). Se dibuja con una flecha que termina en un triángulo vacío grande y obligatoriamente apunta hacia el elemento Padre." },
+                { unit: "u3", topic: "UML Herencia", f: "¿A qué nos referimos con clase 'Base', 'Raíz' y 'Hoja'?", b: "Base/Raíz: Una clase suprema que no tiene padres de herencia pero sí derrama sobre subclases. Hoja: Una clase final que no tiene clases hijas." },
+                { unit: "u3", topic: "UML Relaciones", f: "¿Qué situación de código puro modela la relación de Dependencia en UML?", b: "Indica que una clase requiere a otra para un uso fugaz o temporal para funcionar (ej: crearla como variable temporal o recibirla como parámetro). Se dibuja como flecha punteada." }
+            ],
+            identifyPool: [
+                { q: "En la fábrica del software, configuras que el componente 'Motor' nazca dentro de 'Auto' de forma exclusiva. Si el 'Auto' se destruye y da de baja en memoria del juego, su 'Motor' asociado también es destruido irremediablemente.", options: ["Agregación", "Dependencia", "Composición", "Generalización"], ans: 2, exp: "<strong>Por qué:</strong> Hay una relación del tipo todo/parte que tiene exclusividad absoluta y un tiempo de vida atado o coincidente. Esto se modela gráficamente usando el rombo lleno (Composición)." },
+                { q: "El objeto 'Club' aloja a múltiples 'Socios'. Sin embargo, si el club quiebra y desaparece del sistema, los 'Socios' continúan existiendo como personas y pueden unirse a otros clubes.", options: ["Composición", "Generalización", "Encapsulamiento", "Agregación"], ans: 3, exp: "<strong>Por qué:</strong> Es una relación todo/parte débil. La destrucción del club no aniquila a sus miembros o partes asociadas. En UML esto se representa usando el rombo hueco (Agregación)." },
+                { q: "El desarrollador del banco interactúa con la clase Cajero invocando `retirar(100)`, desconociendo si ese retiro conectó a AWS o a un servidor local ni el nombre de las variables subyacentes.", options: ["Abstracción", "Instanciación", "Encapsulamiento", "Generalización"], ans: 2, exp: "<strong>Por qué:</strong> El cliente del cajero utiliza el protocolo (la parte pública) pero las entrañas, la estructura interna y la complejidad implementada, se encuentran protegidas. Esto es Encapsulamiento puro." },
+                { q: "En el diagrama de un videojuego se define la plantilla 'EntidadMovil' y de ahí se desprenden los sub-tipos 'Jugador' y 'Enemigo'. Por tanto, un Jugador siempre contará como una EntidadMovil.", options: ["Dependencia", "Generalización", "Asociación", "Composición"], ans: 1, exp: "<strong>Por qué:</strong> Denota firmemente la relación de herencia o 'es-un'. 'Jugador' hereda capacidades del ente padre general 'EntidadMovil'." },
+                { q: "Para calcular la liquidación, la clase Factura necesita un objeto 'CalculadoraDeImpuestos' que llega a través del parámetro de su método `liquidar(calculadora)` y luego se desecha.", options: ["Dependencia", "Abstracción", "Agregación", "Composición"], ans: 0, exp: "<strong>Por qué:</strong> Se trata de un uso o conocimiento sumamente temporal y fugaz, no lo guarda en una variable de instancia. En UML esto es modelado con una flecha con línea punteada (Dependencia)." },
+                { q: "En vez de copiar y pegar el código para crear a cada usuario del foro individualmente, estructuras un archivo genérico en tu repositorio que define cómo será la estructura y los comportamientos disponibles para todo usuario del sistema.", options: ["Objeto", "Clase", "Mensaje", "This"], ans: 1, exp: "<strong>Por qué:</strong> Estás escribiendo el 'molde' o plantilla que agrupa y factorizará todo el comportamiento que tendrán las ocurrencias futuras." },
+                { q: "En la consola, se observa que el objeto 'TorreControl3' le solicita la operación activa `aterrizar(pistaA)` al objeto 'VueloDelta45'.", options: ["Mensaje", "Variable de Instancia", "Variable Temporal", "Herencia"], ans: 0, exp: "<strong>Por qué:</strong> En POO, las acciones transcurren gracias a la petición de uno al otro (emisor y receptor colaboran); esta petición a un receptor es el envío de Mensaje." },
+                { q: "Tienes los objetos 'Vaso A' y 'Vaso B' mapeados en memoria. Ambos tienen el atributo volumen=500 y material=vidrio. Son idénticos ante los ojos, pero están en casilleros de memoria separados.", options: ["Ambos tienen la misma Identidad Oculta", "Son exactamente la misma Instancia de memoria", "Tienen el mismo estado de datos pero diferente Identidad", "Comparten por defecto la variable privada this"], ans: 2, exp: "<strong>Por qué:</strong> Poseen Igualdad total (mismos datos) pero la Identidad asegura que siguen siendo dos entidades discriminables dentro de la población de objetos (un ente solo es idéntico a sí mismo)." },
+                { q: "A nivel código interno, en el módulo bancario tienes un bloque de sentencias que reza: `saldo = saldo - monto; if(saldo < 0) alert();` oculto al exterior de la clase.", options: ["El Método o Implementación Privada", "Un Atributo Público", "Una Generalización de Sistema", "Un Acto de Instanciación"], ans: 0, exp: "<strong>Por qué:</strong> Es el proceso minucioso, funcional y detallista del 'cómo' el objeto responde y procesa un pedido u operación. Esto yace puramente oculto en la implementación de la clase (Método)." },
+                { q: "Al diseñar el modelo POO de un sistema que gestiona turnos de clínica, decides omitir características visuales del paciente como color de cabello o talla de zapatos, reteniendo solo Nombre y Síntomas.", options: ["Polimorfismo Oculto", "Dependencia UML", "Abstracción Funcional", "Encapsulamiento Duro"], ans: 2, exp: "<strong>Por qué:</strong> Has aplicado una supresión intencional de detalles, discriminando características inútiles a fines de quedarte solo con lo útil o esencial dentro del contexto 'clínico'." },
+                { q: "Deseas lograr que un objeto ventana GUI invoque internamente una orden de actualización que también le pertenece a él. El objeto necesita referenciarse o apuntarse hacia él mismo en el código.", options: ["Invocar mediante Parámetros Externos", "Conocimiento Temporal Clásico", "Uso de la Seudovariable 'this' o 'self'", "Delegando en Herencia Superior"], ans: 2, exp: "<strong>Por qué:</strong> 'this' provee la capacidad de auto referenciamiento. Funciona como una variable de instancia especial no declarada que apunta al sujeto mismo de ejecución." },
+                { q: "Viendo un diagrama de sistema UML de una compañía, notas un atributo para la clase Ticket precedido por un signo menos y decorado: `- limiteDescuento : Integer {frozen}`.", options: ["Representa a un Constante privada inmutable tras inicializar", "Representa un Método estático público de sistema", "Representa un Atributo relacional compartido (clase)", "Representa una Propiedad dependiente derivada de otra"], ans: 0, exp: "<strong>Por qué:</strong> El guión '-' indica que su visibilidad se encapsula de forma privada. La etiqueta o tag '{frozen}' dictamina que su valor queda 'congelado' una vez que es provisto, impidiendo posteriores alteraciones." },
+                { q: "Un sistema reserva el espacio de memoria RAM mediante la palabra clave reservada 'new' para materializar de la nada una nueva 'Cuenta Bancaria' basándose en su molde.", options: ["Modelado Lógico UML", "Encapsulamiento del Espacio", "Instanciación o Creación", "Dependencia Dinámica"], ans: 2, exp: "<strong>Por qué:</strong> Estás procediendo con la táctica de creación en ejecución; creando un objeto viviente (Instancia) extraído a partir de una descripción molde o plantilla estática (Clase)." },
+                { q: "Dentro del diagrama de diseño, existe una asociación bidireccional dibujada entre 'Cliente' y 'Carrito', mostrando sobre la línea un '0..*' pegado del lado del Carrito.", options: ["Visibilidad compartida", "Restricción de Multiplicidad", "Dependencia Temporal", "Relación todo/parte (Composición)"], ans: 1, exp: "<strong>Por qué:</strong> Detalla cuántas partes pueden ser enlazadas como máximo y mínimo. El '0..*' manifiesta que un Cliente podría estar asociado con Ningún carrito o con Múltiples carritos sin tope." },
+                { q: "Generas centenares de objetos villanos de clase 'Orco' en pantalla que se mueven o golpean. ¿Dónde es que el intérprete del código en vivo realmente localiza o aloja la receta que sabe CÓMO ellos atacan?", options: ["Guardado internamente dentro de cada objeto Orco vivo", "Anidado en el Diagrama Estructurado de Secuencia", "Depositado centralmente en la Clase 'Orco' molde", "Estructurado en los parámetros del último Mensaje emitido"], ans: 2, exp: "<strong>Por qué:</strong> Los objetos evitan duplicación lógica. Las clases actúan como el gran repositorio común de comportamiento. Cada vez que el objeto recibe mensaje, se consulta a su Clase creadora compartida por la respuesta metódica real." }
+            ]
+        };
+
+        // Ñepyrũ (Init)
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            renderNav();
+            showHome();
+        });
+
+        // Ñongatu (Persistence)
+        function loadUserData() {
+            const data = localStorage.getItem('stats_poo_v1'); 
+            if (data) {
+                userStats = JSON.parse(data);
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem('stats_poo_v1', JSON.stringify(userStats));
+        }
+
+        function toggleTopicLearned(topicId) {
+            const index = userStats.learnedTopics.indexOf(topicId);
+            if (index === -1) {
+                userStats.learnedTopics.push(topicId);
+            } else {
+                userStats.learnedTopics.splice(index, 1);
+            }
+            saveUserData();
+            
+            const btn = document.getElementById(`btn-topic-${topicId}`);
+            if (btn) {
+                const unit = appData.units.find(u => u.topics.some(t => t.id === topicId));
+                if(unit) {
+                    const topicTitle = unit.topics.find(t => t.id === topicId).title;
+                    const isLearned = userStats.learnedTopics.includes(topicId);
+                    btn.innerHTML = `<span>${topicTitle}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
+                }
+            }
+        }
+
+        function saveQuizGrade(unitId, score) {
+            if (!userStats.quizGrades[unitId] || score > userStats.quizGrades[unitId]) {
+                userStats.quizGrades[unitId] = score;
+                saveUserData();
+            }
+        }
+
+        // Ñembohape (Navigation & UI)
+        function renderNav() {
+            const nav = document.getElementById('unit-nav');
+            nav.innerHTML = ''; 
+            appData.units.forEach(unit => {
+                const btn = document.createElement('button');
+                const baseClasses = "px-2 py-1 md:px-3 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ";
+                if (unit.id === 'uparcial') {
+                    btn.className = baseClasses + `text-indigo-900 bg-amber-100 hover:bg-amber-200 ${currentUnitId === unit.id ? 'ring-2 ring-amber-400 font-bold' : ''}`;
+                    btn.innerHTML = `📝 ${unit.title}`;
+                } else {
+                    btn.className = baseClasses + `hover:bg-slate-800 ${currentUnitId === unit.id ? 'bg-slate-800 ring-2 ring-white' : ''}`;
+                    btn.innerText = `${unit.title}`;
+                }
+                
+                btn.onclick = () => goToUnit(unit.id);
+                nav.appendChild(btn);
+            });
+        }
+
+        function updateNavClasses() {
+            const nav = document.getElementById('unit-nav');
+            Array.from(nav.children).forEach((btn, idx) => {
+                const uId = appData.units[idx].id;
+                
+                if (uId === 'uparcial') {
+                    if (uId === currentUnitId) {
+                        btn.classList.add('ring-2', 'ring-amber-400', 'font-bold');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-amber-400', 'font-bold');
+                    }
+                } else {
+                    if(uId === currentUnitId) {
+                        btn.classList.add('bg-slate-800', 'ring-2', 'ring-white');
+                    } else {
+                        btn.classList.remove('bg-slate-800', 'ring-2', 'ring-white');
+                    }
+                }
+            });
+        }
+
+        function showHome() {
+            currentUnitId = null;
+            currentTopicId = null;
+            updateNavClasses();
+            
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#f8fafc] p-6 lg:p-10 relative";
+            
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('content-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.remove('flex');
+            
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('flex');
+        }
+
+        function goToUnit(unitId) {
+            const unit = appData.units.find(u => u.id === unitId);
+            if (!unit) return;
+            
+            let targetTopicId = unit.topics[0].id;
+            for (let topic of unit.topics) {
+                if (!userStats.learnedTopics.includes(topic.id)) {
+                    targetTopicId = topic.id;
+                    break;
+                }
+            }
+            
+            selectUnit(unitId);
+            selectTopic(targetTopicId);
+        }
+
+        function selectUnit(unitId) {
+            currentUnitId = unitId;
+            updateNavClasses();
+            
+            const unit = appData.units.find(u => u.id === unitId);
+            if(!unit) return;
+            
+            document.getElementById('sidebar-unit-title').innerText = `${unit.title}: ${unit.subtitle}`;
+            document.getElementById('sidebar-unit-desc').innerText = unit.desc;
+
+            const topicsList = document.getElementById('topics-list');
+            topicsList.innerHTML = '';
+            
+            unit.topics.forEach((topic) => {
+                const btn = document.createElement('button');
+                const isLearned = userStats.learnedTopics.includes(topic.id);
+                
+                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors border flex justify-between items-center hover:bg-indigo-50 hover:border-indigo-200 text-slate-700`;
+                btn.id = `btn-topic-${topic.id}`;
+                btn.innerHTML = `<span>${topic.title}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
+                btn.onclick = () => selectTopic(topic.id);
+                
+                topicsList.appendChild(btn);
+            });
+            
+            currentTopicId = null;
+        }
+
+        function selectTopic(topicId) {
+            const unit = appData.units.find(u => u.topics.some(t => t.id === topicId));
+            if(!unit) return;
+            
+            currentTopicId = topicId;
+            currentUnitId = unit.id; 
+            const topic = unit.topics.find(t => t.id === topicId);
+
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('main-content').className = "w-2/3 md:w-3/4 flex flex-col overflow-y-auto bg-[#f8fafc] p-6 lg:p-10 relative";
+
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('flex');
+            
+            document.getElementById('content-screen').classList.remove('hidden');
+            document.getElementById('content-screen').classList.add('flex');
+
+            updateNavClasses();
+
+            const buttons = document.getElementById('topics-list').children;
+            for(let b of buttons) {
+                b.classList.remove('bg-indigo-50', 'border-indigo-500', 'text-indigo-900', 'font-bold');
+            }
+            const activeBtn = document.getElementById(`btn-topic-${topicId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-indigo-50', 'border-indigo-500', 'text-indigo-900', 'font-bold');
+            }
+
+            document.getElementById('topic-badge').innerText = `${unit.title} - ${unit.subtitle}`;
+            document.getElementById('topic-title').innerText = topic.title;
+            
+            const expDiv = document.getElementById('topic-explanation');
+            expDiv.innerHTML = topic.exp;
+            
+            if (window.renderMathInElement) {
+                renderMathInElement(expDiv, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            const videoContainer = document.getElementById('topic-videos');
+            const videoSection = document.getElementById('videos-section');
+            if (topic.videos && topic.videos.length > 0) {
+                videoSection.classList.remove('hidden');
+                videoContainer.innerHTML = '';
+                topic.videos.forEach(vid => {
+                    const a = document.createElement('a');
+                    a.href = vid.url;
+                    a.target = "_blank";
+                    a.className = "flex items-center gap-3 p-4 border border-slate-200 rounded-lg bg-white hover:bg-red-50 hover:border-red-200 transition-colors group";
+                    a.innerHTML = `
+                        <div class="bg-red-100 text-red-600 p-2 rounded-full group-hover:bg-red-600 group-hover:text-white transition-colors">
+                            <span class="text-xl leading-none">▶</span>
+                        </div>
+                        <span class="font-medium text-slate-800 group-hover:text-red-700">${vid.title}</span>
+                    `;
+                    videoContainer.appendChild(a);
+                });
+            } else {
+                videoSection.classList.add('hidden');
+            }
+
+            const exContainer = document.getElementById('exercises-container');
+            exContainer.innerHTML = '';
+            
+            if(unit.id === 'uparcial') {
+                document.getElementById('exercise-intro-text').innerText = "Estos son ejercicios extraídos de tu guía. Usa el botón de 'Ver Guía' para una pista antes de ver la resolución.";
+            } else {
+                document.getElementById('exercise-intro-text').innerText = "Intenta resolver o comprender la lógica de diseño antes de revelar la resolución.";
+            }
+
+            topic.exercises.forEach((ex, index) => {
+                const exId = `topic-ex-${index}`;
+                let chartHtml = '';
+                if (ex.hasZChart) {
+                    chartHtml = `<div class="w-full flex justify-center my-6"><canvas id="topic-z-canvas-${index}" class="w-full max-w-md"></canvas></div>`;
+                }
+
+                let html = `
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
+                        <div class="w-full">
+                            <span class="inline-block px-2 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold uppercase tracking-wider rounded">Ejercicio ${index + 1} • ${ex.level}</span>
+                            <div class="mt-4 text-slate-800 font-medium whitespace-pre-line">${ex.q}</div>
+                            ${chartHtml}
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 flex flex-wrap gap-3 justify-center">
+                `;
+
+                if (ex.hint) {
+                    html += `<button onclick="toggleElement('${exId}-hint')" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>💡</span> Ver Guía</button>`;
+                }
+
+                html += `<button onclick="toggleElement('${exId}-a')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>✅</span> Ver Resolución</button>
+                    </div>`;
+
+                if (ex.hint) {
+                    html += `<div id="${exId}-hint" class="hidden p-6 bg-amber-50 border-t border-amber-100 text-amber-900 border-l-4 border-l-amber-500">
+                        <span class="font-bold uppercase text-xs tracking-wider text-amber-600 block mb-2">Pista Estratégica:</span> 
+                        <div class="whitespace-pre-line format-math">${ex.hint}</div>
+                    </div>`;
+                }
+
+                html += `<div id="${exId}-a" class="hidden p-6 bg-indigo-50 border-t border-indigo-100 text-indigo-900 border-l-4 border-l-indigo-500">
+                        <span class="font-bold uppercase text-xs tracking-wider text-indigo-600 block mb-2">Resolución Paso a Paso:</span> 
+                        <div class="whitespace-pre-line format-math">${ex.a}</div>
+                    </div>
+                </div>`;
+
+                exContainer.insertAdjacentHTML('beforeend', html);
+            });
+
+            if (window.renderMathInElement) {
+                document.querySelectorAll('.format-math').forEach(el => {
+                    renderMathInElement(el, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                });
+            }
+
+            renderVisualization(unit.id, topic.id);
+
+            const isLearned = userStats.learnedTopics.includes(topicId);
+            const container = document.getElementById('completion-btn-container');
+            container.innerHTML = ''; 
+            
+            const checkBtn = document.createElement('button');
+            checkBtn.className = `w-full py-4 rounded-xl font-bold transition-all shadow-sm ${
+                isLearned ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-slate-200 text-slate-700 hover:bg-indigo-600 hover:text-white'
+            }`;
+            checkBtn.innerText = isLearned ? "✓ Tema Completado" : "Marcar tema como aprendido";
+            checkBtn.onclick = () => {
+                toggleTopicLearned(topicId);
+                selectTopic(topicId); 
+            };
+            container.appendChild(checkBtn);
+
+            topic.exercises.forEach((ex, index) => {
+                if (ex.hasZChart) {
+                    drawZProblemCanvas(`topic-z-canvas-${index}`);
+                }
+            });
+        }
+
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Ta'ãnga (Visualizations) - Mantenido intacto pero deshabilitado sutilmente al no mapear IDs
+        function renderVisualization(unitId, topicId) {
+            const vizSection = document.getElementById('viz-section');
+            const vizControls = document.getElementById('viz-controls');
+            vizControls.innerHTML = '';
+
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+
+            if (unitId === 'u4' && topicId === 'u4t4') {
+                vizSection.classList.remove('hidden');
+                document.getElementById('viz-desc').innerText = "Observa cómo cambia la distribución binomial al modificar la probabilidad de éxito (p) o el número de intentos (n).";
+                
+                vizControls.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-gray-700">Intentos (n):</label>
+                        <input type="range" id="binom-n" min="1" max="20" value="10" class="w-24">
+                        <span id="binom-n-val" class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">10</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-gray-700">Probabilidad (p):</label>
+                        <input type="range" id="binom-p" min="0" max="1" step="0.1" value="0.5" class="w-24">
+                        <span id="binom-p-val" class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">0.5</span>
+                    </div>
+                `;
+
+                const ctx = document.getElementById('interactiveCanvas').getContext('2d');
+                currentChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: getBinomialData(10, 0.5),
+                    options: getChartOptions('Probabilidad Binomial', 'x (Éxitos)', 'P(x)')
+                });
+
+                document.getElementById('binom-n').oninput = (e) => {
+                    document.getElementById('binom-n-val').innerText = e.target.value;
+                    updateBinomial();
+                };
+                document.getElementById('binom-p').oninput = (e) => {
+                    document.getElementById('binom-p-val').innerText = parseFloat(e.target.value).toFixed(1);
+                    updateBinomial();
+                };
+
+            } else if (unitId === 'u5' && ['u5t2', 'u5t3', 'u5t4', 'u5t5'].includes(topicId)) {
+                vizSection.classList.remove('hidden');
+                document.getElementById('viz-desc').innerText = "Visualiza la Curva Normal Estándar. Ajusta la media para ver cómo la campana se desplaza manteniendo su simetría.";
+                
+                vizControls.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-gray-700">Media (μ):</label>
+                        <input type="range" id="norm-mu" min="-3" max="3" step="0.5" value="0" class="w-32">
+                        <span id="norm-mu-val" class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">0</span>
+                    </div>
+                `;
+
+                const ctx = document.getElementById('interactiveCanvas').getContext('2d');
+                currentChart = new Chart(ctx, {
+                    type: 'line',
+                    data: getNormalData(0, 1),
+                    options: getChartOptions('Curva Normal', 'Valores', 'Densidad', true)
+                });
+
+                document.getElementById('norm-mu').oninput = (e) => {
+                    document.getElementById('norm-mu-val').innerText = parseFloat(e.target.value).toFixed(1);
+                    const mu = parseFloat(e.target.value);
+                    currentChart.data = getNormalData(mu, 1);
+                    currentChart.update();
+                };
+
+            } else {
+                vizSection.classList.add('hidden');
+            }
+        }
+
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            for (var i = n - 1; i >= 1; i--) { n *= i; }
+            return n;
+        }
+        function combinations(n, k) {
+            return factorial(n) / (factorial(k) * factorial(n - k));
+        }
+        function getBinomialData(n, p) {
+            const labels = [];
+            const data = [];
+            for (let x = 0; x <= n; x++) {
+                labels.push(x);
+                let prob = combinations(n, x) * Math.pow(p, x) * Math.pow(1 - p, n - x);
+                data.push(prob);
+            }
+            return {
+                labels: labels,
+                datasets: [{
+                    label: 'Probabilidad',
+                    data: data,
+                    backgroundColor: 'rgba(15, 118, 110, 0.7)',
+                    borderColor: 'rgba(15, 118, 110, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            };
+        }
+        function updateBinomial() {
+            if(!currentChart) return;
+            const n = parseInt(document.getElementById('binom-n').value);
+            const p = parseFloat(document.getElementById('binom-p').value);
+            currentChart.data = getBinomialData(n, p);
+            currentChart.update();
+        }
+
+        function getNormalData(mu, sigma) {
+            const labels = [];
+            const data = [];
+            for (let x = -5; x <= 5; x += 0.2) {
+                labels.push(x.toFixed(1));
+                let y = (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+                data.push(y);
+            }
+            return {
+                labels: labels,
+                datasets: [{
+                    label: 'Densidad Normal',
+                    data: data,
+                    backgroundColor: 'rgba(30, 64, 175, 0.2)',
+                    borderColor: 'rgba(30, 64, 175, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            };
+        }
+
+        function getChartOptions(title, xTitle, yTitle, isLine = false) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(4);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: xTitle, font: { weight: 'bold' } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        title: { display: true, text: yTitle, font: { weight: 'bold' } },
+                        beginAtZero: true,
+                        max: isLine ? 0.45 : null 
+                    }
+                },
+                animation: { duration: 400 }
+            };
+        }
+
+        function drawZProblemCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const w = 600;
+            const h = 300;
+            canvas.width = w;
+            canvas.height = h;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
+            
+            const padB = 40; 
+            const padT = 20;
+            
+            function getX(z) { return (z + 3.5) / 7 * w; }
+            function getY(y) { return h - padB - (y / 0.45) * (h - padB - padT); }
+            
+            function normalDist(z) {
+                return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * Math.pow(z, 2));
+            }
+
+            const z2 = -0.674;
+            const z1 = 0.385;
+
+            ctx.beginPath();
+            ctx.moveTo(getX(z2), getY(0));
+            for(let z = z2; z <= z1; z += 0.02) {
+                ctx.lineTo(getX(z), getY(normalDist(z)));
+            }
+            ctx.lineTo(getX(z1), getY(0));
+            ctx.closePath();
+            ctx.fillStyle = '#22c55e';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(getX(z1), getY(0));
+            for(let z = z1; z <= 3.5; z += 0.02) {
+                ctx.lineTo(getX(z), getY(normalDist(z)));
+            }
+            ctx.lineTo(getX(3.5), getY(0));
+            ctx.closePath();
+            ctx.fillStyle = '#c4b5fd'; 
+            ctx.fill();
+
+            ctx.beginPath();
+            for(let z = -3.5; z <= 3.5; z += 0.02) {
+                if(z === -3.5) ctx.moveTo(getX(z), getY(normalDist(z)));
+                else ctx.lineTo(getX(z), getY(normalDist(z)));
+            }
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, getY(0));
+            ctx.lineTo(w, getY(0));
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.setLineDash([6, 4]);
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            
+            ctx.moveTo(getX(0), getY(0));
+            ctx.lineTo(getX(0), getY(normalDist(0)));
+            ctx.moveTo(getX(z2), getY(0));
+            ctx.lineTo(getX(z2), getY(normalDist(z2)));
+            ctx.moveTo(getX(z1), getY(0));
+            ctx.lineTo(getX(z1), getY(normalDist(z1)));
+            
+            ctx.stroke();
+            ctx.setLineDash([]); 
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            
+            ctx.fillText('Z2 = ?', getX(z2), getY(0) + 25);
+            ctx.fillText('Z1 = ?', getX(z1), getY(0) + 25);
+            
+            ctx.font = 'bold 20px sans-serif';
+            ctx.fillText('40%', getX((z2+0)/2), getY(0.15));
+            ctx.fillText('35%', getX((z1+2)/2), getY(0.08));
+        }
+
+        function updateQuizScoresUI() {
+            const select = document.getElementById('quiz-unit-select');
+            Array.from(select.options).forEach(opt => {
+                const unitId = opt.value;
+                if (unitId !== 'all' && userStats.quizGrades[unitId] !== undefined) {
+                    if(!opt.text.includes('🏆')) {
+                        opt.text = `${opt.text} (Mejor: ${userStats.quizGrades[unitId]}/10 🏆)`;
+                    } else {
+                        opt.text = opt.text.replace(/\(Mejor:.*\)/, `(Mejor: ${userStats.quizGrades[unitId]}/10 🏆)`);
+                    }
+                }
+            });
+
+            const idScoreBadge = document.getElementById('identify-score-badge');
+            if(userStats.quizGrades['identify'] !== undefined) {
+                idScoreBadge.innerText = `Mejor Nota: ${userStats.quizGrades['identify']}/10 🏆`;
+            }
+        }
+
+        function openTestMode() {
+            currentUnitId = null;
+            updateNavClasses();
+            
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#f8fafc] p-6 lg:p-10 relative";
+
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.add('hidden');
+            document.getElementById('content-screen').classList.remove('flex');
+            
+            const buttons = document.getElementById('topics-list').children;
+            for(let b of buttons) {
+                b.classList.remove('bg-indigo-50', 'border-indigo-500', 'text-indigo-900', 'font-bold');
+            }
+            
+            updateQuizScoresUI();
+
+            document.getElementById('test-screen').classList.remove('hidden');
+            document.getElementById('test-screen').classList.add('flex');
+            
+            document.getElementById('test-menu').classList.remove('hidden');
+            document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('flash-ui').classList.add('hidden');
+            document.getElementById('flash-results').classList.add('hidden');
+        }
+
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        function startQuiz(modeStr = 'theory') {
+            testState.submode = modeStr;
+            let pool = [];
+
+            if (modeStr === 'identify') {
+                pool = testData.identifyPool;
+            } else {
+                const unitFilter = document.getElementById('quiz-unit-select').value;
+                pool = testData.quizPool;
+                if (unitFilter !== 'all') {
+                    pool = pool.filter(q => q.unit === unitFilter);
+                }
+            }
+
+            let shuffled = shuffleArray([...pool]);
+            testState.activeItems = shuffled.slice(0, Math.min(10, shuffled.length));
+            testState.currentIndex = 0;
+            testState.score = 0;
+            testState.mode = 'quiz';
+
+            if(testState.activeItems.length === 0) {
+                alert("No hay preguntas para esta selección."); return;
+            }
+
+            document.getElementById('test-menu').classList.add('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-ui').classList.remove('hidden');
+            document.getElementById('quiz-ui').classList.add('flex');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const item = testState.activeItems[testState.currentIndex];
+            const total = testState.activeItems.length;
+            
+            document.getElementById('quiz-progress').innerText = `Pregunta ${testState.currentIndex + 1} de ${total}`;
+            
+            let unitStr = "POO GENERAL";
+            if (testState.submode === 'identify') {
+                unitStr = "IDENTIFICA EL CONCEPTO 🔍";
+            } else {
+                if (item.unit === "u1") unitStr = "UNIDAD 1: Conceptos Básicos";
+                if (item.unit === "u2") unitStr = "UNIDAD 2: Elementos de POO";
+                if (item.unit === "u3") unitStr = "UNIDAD 3: UML";
+            }
+            
+            document.getElementById('quiz-unit-badge').innerText = unitStr;
+            document.getElementById('quiz-question').innerText = item.q;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.add('hidden');
+            feedback.className = 'hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg'; 
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            item.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 border-2 border-slate-200 rounded-xl hover:bg-indigo-50 hover:border-indigo-300 font-medium text-slate-700 transition-colors option-btn";
+                btn.innerText = optText;
+                btn.onclick = () => handleQuizAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedIndex, btnElement) {
+            const item = testState.activeItems[testState.currentIndex];
+            const isCorrect = selectedIndex === item.ans;
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            allButtons.forEach((btn, idx) => {
+                btn.onclick = null; 
+                btn.classList.remove('hover:bg-indigo-50', 'hover:border-indigo-300');
+                if (idx === item.ans) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800'); 
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800'); 
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            
+            if (isCorrect) {
+                testState.score++;
+            }
+            
+            let feedbackText = isCorrect ? "¡Correcto! Excelente trabajo. ✅" : "Incorrecto. La respuesta correcta está en verde. ❌";
+            let colorClasses = isCorrect ? ['bg-green-50', 'text-green-700', 'border', 'border-green-200'] : ['bg-red-50', 'text-red-700', 'border', 'border-red-200'];
+            
+            if (item.exp) {
+                feedbackText += `<div class="mt-4 p-4 bg-white/60 rounded-lg text-left text-sm text-slate-800 border border-slate-200">${item.exp}</div>`;
+            }
+
+            feedback.innerHTML = feedbackText;
+            feedback.classList.add(...colorClasses);
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.classList.remove('hidden');
+            if (testState.currentIndex === testState.activeItems.length - 1) {
+                nextBtn.innerText = "Ver Resultados Finales 🏆";
+            } else {
+                nextBtn.innerText = "Siguiente Ejercicio →";
+            }
+        }
+
+        function nextQuizQuestion() {
+            testState.currentIndex++;
+            if (testState.currentIndex < testState.activeItems.length) {
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            document.getElementById('quiz-results').classList.add('flex');
+            
+            const total = testState.activeItems.length;
+            const score = testState.score;
+            document.getElementById('quiz-score-display').innerText = `${score} / ${total}`;
+            
+            let isNewRecord = false;
+
+            if (testState.submode === 'identify') {
+                if (!userStats.quizGrades['identify'] || score > userStats.quizGrades['identify']) {
+                    isNewRecord = true;
+                    saveQuizGrade('identify', score);
+                }
+            } else {
+                const unitFilter = document.getElementById('quiz-unit-select').value;
+                if(unitFilter !== 'all') {
+                    if (!userStats.quizGrades[unitFilter] || score > userStats.quizGrades[unitFilter]) {
+                        isNewRecord = true;
+                        saveQuizGrade(unitFilter, score);
+                    }
+                }
+            }
+
+            const resultMsg = document.getElementById('quiz-result-msg');
+            if (isNewRecord) {
+                resultMsg.innerHTML = `<span class="text-green-600 font-bold text-xl">¡Nuevo Récord en este modo! 🌟</span>`;
+            } else {
+                resultMsg.innerText = "Aquí tienes tu puntuación final.";
+            }
+
+            const emoji = document.getElementById('quiz-result-emoji');
+            if(score === total) emoji.innerText = '🥇';
+            else if (score >= total * 0.7) emoji.innerText = '👍';
+            else emoji.innerText = '📚';
+        }
+
+        function startFlashcards(isRetry = false) {
+            if (!isRetry) {
+                const unitFilter = document.getElementById('flash-unit-select').value;
+                let pool = testData.flashcardPool;
+                
+                if (unitFilter !== 'all') {
+                    pool = pool.filter(f => f.unit === unitFilter);
+                }
+                testState.activeItems = shuffleArray([...pool]);
+                testState.flashMistakes = [];
+            } else {
+                testState.activeItems = shuffleArray([...testState.flashMistakes]);
+                testState.flashMistakes = []; 
+            }
+
+            testState.currentIndex = 0;
+            testState.mode = 'flash';
+
+            if(testState.activeItems.length === 0) {
+                alert("No hay tarjetas para repasar."); return;
+            }
+
+            document.getElementById('test-menu').classList.add('hidden');
+            document.getElementById('flash-results').classList.add('hidden');
+            document.getElementById('flash-ui').classList.remove('hidden');
+            document.getElementById('flash-ui').classList.add('flex');
+
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const item = testState.activeItems[testState.currentIndex];
+            const total = testState.activeItems.length;
+            
+            document.getElementById('flash-progress').innerText = `Tarjeta ${testState.currentIndex + 1} de ${total}`;
+            
+            const cardContainer = document.getElementById('flashcard-container');
+            cardContainer.classList.remove('flipped');
+            document.getElementById('flash-controls').classList.add('hidden');
+
+            document.getElementById('flash-front-text').innerText = item.f;
+            document.getElementById('flash-back-text').innerText = item.b;
+        }
+
+        function flipCard() {
+            const cardContainer = document.getElementById('flashcard-container');
+            if(!cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.add('flipped');
+                setTimeout(() => {
+                    document.getElementById('flash-controls').classList.remove('hidden');
+                }, 300);
+            }
+        }
+
+        function markFlashcard(knewIt) {
+            const currentItem = testState.activeItems[testState.currentIndex];
+            if (!knewIt) {
+                testState.flashMistakes.push(currentItem);
+            }
+
+            testState.currentIndex++;
+            if (testState.currentIndex < testState.activeItems.length) {
+                renderFlashcard();
+            } else {
+                showFlashResults();
+            }
+        }
+
+        function showFlashResults() {
+            document.getElementById('flash-ui').classList.add('hidden');
+            document.getElementById('flash-results').classList.remove('hidden');
+            document.getElementById('flash-results').classList.add('flex');
+            
+            const total = testState.activeItems.length;
+            const mistakes = testState.flashMistakes.length;
+            const known = total - mistakes;
+
+            const resText = document.getElementById('flash-result-text');
+            const resButtons = document.getElementById('flash-result-buttons');
+            resButtons.innerHTML = '';
+
+            if (mistakes === 0) {
+                resText.innerText = `¡Excelente! Dominaste todas las ${total} tarjetas.`;
+                document.getElementById('flash-result-emoji').innerText = '🎉';
+            } else {
+                resText.innerText = `Recordaste ${known} tarjetas, pero hay ${mistakes} que necesitan más repaso.`;
+                document.getElementById('flash-result-emoji').innerText = '💪';
+                
+                const retryBtn = document.createElement('button');
+                retryBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm";
+                retryBtn.innerText = `Repasar las ${mistakes} que fallé`;
+                retryBtn.onclick = () => startFlashcards(true);
+                resButtons.appendChild(retryBtn);
+            }
+
+            const menuBtn = document.createElement('button');
+            menuBtn.className = "bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-6 rounded-xl transition-colors";
+            menuBtn.innerText = "Volver al Menú";
+            menuBtn.onclick = openTestMode;
+            resButtons.appendChild(menuBtn);
+        }
+    </script>
+</body>
+</html>
