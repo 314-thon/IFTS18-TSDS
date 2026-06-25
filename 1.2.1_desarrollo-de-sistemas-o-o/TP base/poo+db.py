@@ -71,7 +71,7 @@ def mostrar_agenda():
         print("No hay turnos registrados en el sistema.")
     else:
         for id_turno, nombre, tel, trat_nombre, trat_precio, fecha, hora, senia in turnos:
-            print(f"[{fecha} | {hora} hs] {nombre} - {trat_nombre} (Seña: ${senia})")
+            print(f"[{fecha} | {hora} hs] {nombre} - {trat_nombre} (Tel: {tel}) - (Seña: ${senia}) - (Resta abonar: ${trat_precio - senia})")
             
     print("="*40 + "\n")
     conexion.close()
