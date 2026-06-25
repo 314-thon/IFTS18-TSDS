@@ -50,40 +50,52 @@
         </div>
     </div>
 
-    <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 class="text-xl font-bold mb-2">Nuevo Turno</h3>
-            <p id="selected-datetime" class="text-blue-600 mb-4 font-bold bg-blue-50 p-2 rounded text-center"></p>
+    <style>
+        .perspective { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
 
-            <div class="space-y-3">
-                <input type="text" id="cli-nombre" placeholder="Nombre del Cliente" class="w-full border p-2 rounded">
-                <input type="text" id="cli-tel" placeholder="Teléfono" class="w-full border p-2 rounded">
-                
-                <select id="tratamiento-select" class="w-full border p-2 rounded bg-gray-50">
-                    <option value="Limpieza Facial|15000">Limpieza Facial ($15.000)</option>
-                    <option value="Lifting de Pestañas|12000">Lifting de Pestañas ($12.000)</option>
-                    <option value="Masaje Descontracturante|18000">Masaje Descontracturante ($18.000)</option>
-                </select>
+    <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 perspective">
+        <div id="modal-inner" class="w-full max-w-md relative preserve-3d">
+            
+            <div id="modal-front" class="bg-white p-6 rounded-lg shadow-lg backface-hidden w-full">
+                <h3 class="text-xl font-bold mb-2">Nuevo Turno</h3>
+                <p id="selected-datetime" class="text-blue-600 mb-4 font-bold bg-blue-50 p-2 rounded text-center"></p>
 
-                <div class="flex gap-2">
-                    <input type="number" id="monto-senia" placeholder="Monto Seña $" class="w-1/2 border p-2 rounded">
-                    <select id="metodo-pago" class="w-1/2 border p-2 rounded bg-gray-50">
-                        <option value="Transferencia">Transferencia</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Mercado Pago">Mercado Pago</option>
+                <div class="space-y-3">
+                    <input type="text" id="cli-nombre" placeholder="Nombre del Cliente" class="w-full border p-2 rounded">
+                    <input type="text" id="cli-tel" placeholder="Teléfono" class="w-full border p-2 rounded">
+                    
+                    <select id="tratamiento-select" class="w-full border p-2 rounded bg-gray-50">
+                        <option value="Limpieza Facial|15000">Limpieza Facial ($15.000)</option>
+                        <option value="Lifting de Pestañas|12000">Lifting de Pestañas ($12.000)</option>
+                        <option value="Masaje Descontracturante|18000">Masaje Descontracturante ($18.000)</option>
                     </select>
+
+                    <div class="flex gap-2">
+                        <input type="number" id="monto-senia" placeholder="Monto Seña $" class="w-1/2 border p-2 rounded">
+                        <select id="metodo-pago" class="w-1/2 border p-2 rounded bg-gray-50">
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Mercado Pago">Mercado Pago</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button id="btn-cerrar-modal" class="bg-gray-200 text-gray-700 px-4 py-2 rounded font-bold hover:bg-gray-300">Cancelar</button>
+                    <button id="btn-guardar-turno" class="bg-green-600 text-white px-4 py-2 rounded font-bold hover:bg-green-700">Añadir Turno</button>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 mt-6">
-                <button id="btn-cerrar-modal" class="bg-gray-200 text-gray-700 px-4 py-2 rounded font-bold hover:bg-gray-300">Cancelar</button>
-                <button id="btn-guardar-turno" class="bg-green-600 text-white px-4 py-2 rounded font-bold hover:bg-green-700">Añadir Turno</button>
+            <div id="modal-back" class="bg-white p-6 rounded-lg shadow-lg backface-hidden w-full absolute inset-0 flex flex-col items-center justify-center rotate-y-180">
+                <div class="text-6xl mb-4 animate-bounce">✨</div>
+                <h3 class="text-3xl font-bold text-green-600 mb-2">¡Confirmado!</h3>
+                <p class="text-gray-600 font-medium">El turno se guardó en la agenda.</p>
             </div>
         </div>
-    </div>
-
-    <div id="toast-exito" class="fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0 pointer-events-none z-50 flex items-center gap-2">
-        <span class="text-2xl">✨</span> <span class="font-bold">¡Turno Confirmado!</span>
     </div>
 
     <script type="module">
@@ -280,17 +292,19 @@
                     const li = document.createElement("li");
                     li.className = "py-3 flex justify-between items-center";
                     li.innerHTML = `
-                        <div class="flex-1">
-                            <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
-                            <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
+                        <div class="flex-1 flex items-center gap-3">
+                            <div>
+                                <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
+                                <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
+                            </div>
+                            <button onclick="window.borrarTurno('${data.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs px-2 py-1 rounded transition-colors border border-red-200" title="Borrar Turno">
+                                🗑️
+                            </button>
                         </div>
                         <div class="text-right flex items-center gap-2">
                             <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
                             <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 flex items-center gap-1 rounded transition-colors" title="Confirmar por WhatsApp">
-                                Confirmar
-                            </button>
-                            <button onclick="window.borrarTurno('${data.id}')" class="bg-red-100 hover:bg-red-200 text-red-600 text-xs px-2 py-1 rounded transition-colors" title="Borrar Turno">
-                                🗑️
+                                <img src="whatsapp.ico" alt="WA" class="w-4 h-4"> Confirmar
                             </button>
                         </div>
                     `;
@@ -387,19 +401,22 @@
             const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
 
             try {
+                // Mandamos a la nube
                 await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
                 
-                document.getElementById('modal-turno').classList.add('hidden');
-                document.getElementById('cli-nombre').value = '';
-                document.getElementById('cli-tel').value = '';
-                document.getElementById('monto-senia').value = '';
+                // 1. Girar la tarjeta mágicamente
+                document.getElementById('modal-inner').classList.add('rotate-y-180');
                 
-                // Disparamos la animación del Toast
-                const toast = document.getElementById('toast-exito');
-                toast.classList.remove('translate-y-20', 'opacity-0');
+                // 2. Esperar 2 segundos para que el usuario disfrute la animación, luego cerrar y limpiar
                 setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 3000);
+                    document.getElementById('modal-turno').classList.add('hidden'); // Ocultar
+                    document.getElementById('modal-inner').classList.remove('rotate-y-180'); // Volver a girar para la próxima
+                    
+                    // Limpiar formulario
+                    document.getElementById('cli-nombre').value = '';
+                    document.getElementById('cli-tel').value = '';
+                    document.getElementById('monto-senia').value = '';
+                }, 2000);
                 
             } catch (e) {
                 console.error("Error guardando turno: ", e);
