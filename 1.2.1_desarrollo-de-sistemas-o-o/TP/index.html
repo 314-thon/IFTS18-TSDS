@@ -87,9 +87,49 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        // Agregá GoogleAuthProvider y signInWithPopup a tu import
 
-const provider = new GoogleAuthProvider();
+        // 2. CONFIGURACIÓN E INICIALIZACIÓN
+        const provider = new GoogleAuthProvider();
+        const firebaseConfig = {
+                    // 2. CONFIGURACIÓN DE TU PROYECTO (Pegá la tuya acá)
+            apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
+            authDomain: "agenditi-d0aa0.firebaseapp.com",
+            projectId: "agenditi-d0aa0",
+            storageBucket: "agenditi-d0aa0.firebasestorage.app",
+            messagingSenderId: "1096149766612",
+            appId: "1:1096149766612:web:2a70d018991192f2a08641",
+            measurementId: "G-XJ8PTYS64S"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);        
+        const loginScreen = document.getElementById('login-screen');
+        const appScreen = document.getElementById('app-screen');            
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
+        const listaUI = document.getElementById('lista-turnos-html');
+        const data = doc.data();
+        const li = document.createElement("li");
+        const grid = document.getElementById('calendar-grid');
+        const horas = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
+        const nombre = document.getElementById('cli-nombre').value;
+        const tel = document.getElementById('cli-tel').value;
+        const montoSenia = parseFloat(document.getElementById('monto-senia').value);
+        const tratData = document.getElementById('tratamiento-select').value.split('|');
+        const nuevoCliente = new Cliente(nombre, tel);
+        const nuevoTratamiento = new Tratamiento(tratData[0], parseFloat(tratData[1]));
+        const nuevaSenia = new Pago(montoSenia, document.getElementById('metodo-pago').value, "Seña");
+        const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
+
+        // 3. VARIABLES GLOBALES (Para que las funciones las vean)        
+        let diasVisibles = [];
+        let fechaIterador = new Date();
+        let div = document.createElement('div');
+        let divHora = document.createElement('div');
+        let ocupados = turnosGlobales.filter(t => t.fecha === dia.iso && t.hora === hora).length;
+        let slot = document.createElement('div');
+
 
 // Evento para el botón de Google
 document.getElementById('btn-google').addEventListener('click', () => {
@@ -101,21 +141,8 @@ document.getElementById('btn-google').addEventListener('click', () => {
         });
 });
 
-        // 2. CONFIGURACIÓN DE TU PROYECTO (Pegá la tuya acá)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
-            authDomain: "agenditi-d0aa0.firebaseapp.com",
-            projectId: "agenditi-d0aa0",
-            storageBucket: "agenditi-d0aa0.firebasestorage.app",
-            messagingSenderId: "1096149766612",
-            appId: "1:1096149766612:web:2a70d018991192f2a08641",
-            measurementId: "G-XJ8PTYS64S"
-        };
-
         // Inicializamos Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+
 
         // ==========================================
         // 3. DEFINICIÓN DE CLASES POO
@@ -168,8 +195,7 @@ document.getElementById('btn-google').addEventListener('click', () => {
         // ==========================================
         // 4. LÓGICA DE AUTENTICACIÓN
         // ==========================================
-        const loginScreen = document.getElementById('login-screen');
-        const appScreen = document.getElementById('app-screen');
+
 
         // Escucha si hay un usuario logueado
         onAuthStateChanged(auth, (user) => {
@@ -185,8 +211,7 @@ document.getElementById('btn-google').addEventListener('click', () => {
 
         // Evento Botón Login
         document.getElementById('btn-login').addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
+
             signInWithEmailAndPassword(auth, email, pass)
                 .catch((error) => {
                     document.getElementById('login-error').classList.remove('hidden');
@@ -199,32 +224,6 @@ document.getElementById('btn-google').addEventListener('click', () => {
             signOut(auth);
         });
 
-        // ==========================================
-        // 5. LÓGICA DE BASE DE DATOS (Firestore)
-        // ==========================================
-
-        // Función para enviar un turno a la nube
-        async function guardarTurnoInteractivo() {
-            // Instanciamos los objetos usando POO
-            const nuevoCliente = new Cliente("Marta (Prueba)", "1144556677");
-            const nuevoTratamiento = new Tratamiento("Lifting", 15000);
-            const nuevaSenia = new Pago(5000, "Transferencia", "Seña");
-            
-            const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, "2026-06-30", "15:00", nuevaSenia);
-
-            try {
-                // Guardamos en la colección "turnos" usando nuestro método toPlainObject()
-                await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
-                alert("¡Turno guardado en la nube exitosamente!");
-            } catch (e) {
-                console.error("Error añadiendo documento: ", e);
-            }
-        }
-
-        // Asignamos la función al botón
-        document.getElementById('btn-crear-turno').addEventListener('click', guardarTurnoInteractivo);
-
-        // Función para leer datos EN TIEMPO REAL
         // ==========================================
         // 5. LÓGICA DE CALENDARIO Y BASE DE DATOS
         // ==========================================
