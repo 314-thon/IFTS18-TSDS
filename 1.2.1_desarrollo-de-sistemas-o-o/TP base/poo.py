@@ -97,11 +97,11 @@ def crear_turno_interactivo():
         elif opcion_trat == "3":
             trat = Tratamiento("Masaje Descontracturante", 18000)
         else:
-            print("Ha ingresado una opción incorrecta, intente nuevamente.")
+            print("\nHa ingresado una opción incorrecta, intente nuevamente.")
         
     fecha = input("\nFecha (Ej: 2026-07-02): ")
     hora = input("Hora (Ej: 16:30): ")
-    monto_senia = float(input("Monto de la seña abonada $: "))
+    monto_senia = int(input("Monto de la seña abonada $: "))
     
     # Se instancian los objetos restantes
     cli = Cliente(nombre, tel)
