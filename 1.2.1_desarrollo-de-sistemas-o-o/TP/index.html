@@ -29,21 +29,54 @@
     </button>
 </div>
 
-    <div id="app-screen" class="max-w-4xl mx-auto hidden">
+    <div id="app-screen" class="max-w-6xl mx-auto hidden p-4">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Agenda de Aditi</h1>
+            <h1 class="text-3xl font-bold text-gray-800">Agenda Semanal</h1>
             <button id="btn-logout" class="bg-red-500 text-white px-4 py-2 rounded font-bold hover:bg-red-600">Cerrar Sesión</button>
         </div>
         
-        <button id="btn-crear-turno" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold mb-6 hover:bg-green-700 shadow">
-            + Crear Turno de Prueba
-        </button>
+        <div class="bg-white p-4 rounded-lg shadow-md mb-6 overflow-x-auto">
+            <div id="calendar-grid" class="grid grid-cols-7 gap-1 min-w-[700px]">
+                </div>
+        </div>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4">Próximos Turnos</h2>
+            <h2 class="text-xl font-bold mb-4">Detalle de Próximos Turnos</h2>
             <ul id="lista-turnos-html" class="divide-y divide-gray-200">
                 <li class="py-2 text-gray-500">Cargando turnos desde la nube...</li>
             </ul>
+        </div>
+    </div>
+
+    <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h3 class="text-xl font-bold mb-2">Nuevo Turno</h3>
+            <p id="selected-datetime" class="text-blue-600 mb-4 font-bold bg-blue-50 p-2 rounded text-center"></p>
+
+            <div class="space-y-3">
+                <input type="text" id="cli-nombre" placeholder="Nombre del Cliente" class="w-full border p-2 rounded">
+                <input type="text" id="cli-tel" placeholder="Teléfono" class="w-full border p-2 rounded">
+                
+                <select id="tratamiento-select" class="w-full border p-2 rounded bg-gray-50">
+                    <option value="Limpieza Facial|15000">Limpieza Facial ($15.000)</option>
+                    <option value="Lifting de Pestañas|12000">Lifting de Pestañas ($12.000)</option>
+                    <option value="Masaje Descontracturante|18000">Masaje Descontracturante ($18.000)</option>
+                </select>
+
+                <div class="flex gap-2">
+                    <input type="number" id="monto-senia" placeholder="Monto Seña $" class="w-1/2 border p-2 rounded">
+                    <select id="metodo-pago" class="w-1/2 border p-2 rounded bg-gray-50">
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Mercado Pago">Mercado Pago</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
+                <button id="btn-cerrar-modal" class="bg-gray-200 text-gray-700 px-4 py-2 rounded font-bold hover:bg-gray-300">Cancelar</button>
+                <button id="btn-guardar-turno" class="bg-green-600 text-white px-4 py-2 rounded font-bold hover:bg-green-700">Añadir Turno</button>
+            </div>
         </div>
     </div>
 
@@ -190,33 +223,157 @@ document.getElementById('btn-google').addEventListener('click', () => {
         document.getElementById('btn-crear-turno').addEventListener('click', guardarTurnoInteractivo);
 
         // Función para leer datos EN TIEMPO REAL
+        // ==========================================
+        // 5. LÓGICA DE CALENDARIO Y BASE DE DATOS
+        // ==========================================
+
+        let turnosGlobales = []; // Acá guardamos los turnos de la base de datos
+        let fechaSeleccionada = "";
+        let horaSeleccionada = "";
+
+        // Escuchador en Tiempo Real
         function cargarTurnosEnTiempoReal() {
             const q = query(collection(db, "turnos"), orderBy("creadoEn", "desc"));
             
-            // onSnapshot se dispara automáticamente cada vez que alguien carga un turno en CUALQUIER dispositivo
             onSnapshot(q, (querySnapshot) => {
+                turnosGlobales = [];
                 const listaUI = document.getElementById('lista-turnos-html');
-                listaUI.innerHTML = ""; // Limpiamos la lista
+                listaUI.innerHTML = ""; 
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
+                    turnosGlobales.push(data); // Llenamos nuestro array local
+                    
+                    // Seguimos dibujando la lista de abajo para tener el detalle
                     const li = document.createElement("li");
                     li.className = "py-3 flex justify-between";
                     li.innerHTML = `
                         <div>
-                            <p class="font-bold text-lg">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
+                            <p class="font-bold">${data.cliente.nombre} <span class="text-sm font-normal text-gray-500">(${data.tratamiento.nombre})</span></p>
                             <p class="text-sm text-gray-600">Día: ${data.fecha} a las ${data.hora}</p>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold uppercase tracking-wide">
-                                Seña: $${data.pagos[0].monto}
-                            </span>
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 rounded-full font-bold">Seña: $${data.pagos[0].monto}</span>
                         </div>
                     `;
                     listaUI.appendChild(li);
                 });
+
+                // Cada vez que hay un cambio, redibujamos el calendario con los colores actualizados
+                renderizarCalendario(); 
             });
         }
+
+        function renderizarCalendario() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = ''; // Limpiamos la grilla
+
+            const horas = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
+            
+            // Generamos los próximos 6 días hábiles (saltando domingos)
+            let diasVisibles = [];
+            let fechaIterador = new Date();
+            while(diasVisibles.length < 6) {
+                if(fechaIterador.getDay() !== 0) { // 0 es Domingo
+                    // Guardamos un objeto con la fecha ISO (para la BD) y un texto corto (para pantalla)
+                    diasVisibles.push({
+                        iso: fechaIterador.toISOString().split('T')[0],
+                        texto: fechaIterador.toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'numeric' })
+                    });
+                }
+                fechaIterador.setDate(fechaIterador.getDate() + 1);
+            }
+
+            // Fila 1: Encabezados (Esquina vacía + Días)
+            grid.appendChild(document.createElement('div')); 
+            diasVisibles.forEach(dia => {
+                let div = document.createElement('div');
+                div.className = "text-center font-bold text-sm bg-blue-800 text-white py-2 rounded capitalize";
+                div.innerText = dia.texto;
+                grid.appendChild(div);
+            });
+
+            // Filas siguientes: Horarios
+            horas.forEach(hora => {
+                // Etiqueta de la hora a la izquierda
+                let divHora = document.createElement('div');
+                divHora.className = "text-right pr-2 text-sm text-gray-600 font-bold self-center";
+                divHora.innerText = hora;
+                grid.appendChild(divHora);
+
+                // Bloques de turnos para cada día
+                diasVisibles.forEach(dia => {
+                    // Contamos cuántos turnos coinciden en esta fecha y hora EXACTA
+                    let ocupados = turnosGlobales.filter(t => t.fecha === dia.iso && t.hora === hora).length;
+
+                    let slot = document.createElement('div');
+                    slot.className = "border rounded p-1 text-center text-xs font-bold transition-all h-10 flex flex-col items-center justify-center ";
+
+                    if (ocupados === 0) {
+                        slot.classList.add('bg-green-100', 'text-green-800', 'border-green-300', 'cursor-pointer', 'hover:bg-green-200');
+                        slot.innerText = "Libre";
+                        slot.onclick = () => abrirModal(dia.iso, hora);
+                    } else if (ocupados === 1) {
+                        slot.classList.add('bg-yellow-100', 'text-yellow-800', 'border-yellow-300', 'cursor-pointer', 'hover:bg-yellow-200');
+                        slot.innerText = "Parcial (1/2)";
+                        slot.onclick = () => abrirModal(dia.iso, hora);
+                    } else {
+                        slot.classList.add('bg-red-100', 'text-red-800', 'border-red-300', 'cursor-not-allowed', 'opacity-70');
+                        slot.innerText = "Lleno (2/2)";
+                    }
+
+                    grid.appendChild(slot);
+                });
+            });
+        }
+
+        // ==========================================
+        // 6. EVENTOS DEL FORMULARIO MODAL
+        // ==========================================
+
+        function abrirModal(fecha, hora) {
+            fechaSeleccionada = fecha;
+            horaSeleccionada = hora;
+            document.getElementById('selected-datetime').innerText = `🗓️ ${fecha} a las ⏰ ${hora} hs`;
+            document.getElementById('modal-turno').classList.remove('hidden');
+        }
+
+        document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
+            document.getElementById('modal-turno').classList.add('hidden');
+        });
+
+        // Al hacer clic en "Añadir Turno" instanciamos los objetos de la cátedra
+        document.getElementById('btn-guardar-turno').addEventListener('click', async () => {
+            const nombre = document.getElementById('cli-nombre').value;
+            const tel = document.getElementById('cli-tel').value;
+            const montoSenia = parseFloat(document.getElementById('monto-senia').value);
+            
+            if(!nombre || !montoSenia) {
+                alert("Por favor completá el nombre y el monto de la seña.");
+                return;
+            }
+
+            // Desarmamos el value del select (Ej: "Limpieza Facial|15000")
+            const tratData = document.getElementById('tratamiento-select').value.split('|');
+            const nuevoCliente = new Cliente(nombre, tel);
+            const nuevoTratamiento = new Tratamiento(tratData[0], parseFloat(tratData[1]));
+            const nuevaSenia = new Pago(montoSenia, document.getElementById('metodo-pago').value, "Seña");
+            
+            const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
+
+            try {
+                // Guardamos en la nube
+                await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
+                
+                // Cerramos y limpiamos el formulario
+                document.getElementById('modal-turno').classList.add('hidden');
+                document.getElementById('cli-nombre').value = '';
+                document.getElementById('cli-tel').value = '';
+                document.getElementById('monto-senia').value = '';
+            } catch (e) {
+                console.error("Error guardando turno: ", e);
+            }
+        });
     </script>
 </body>
 </html>
