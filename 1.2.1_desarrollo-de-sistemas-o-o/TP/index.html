@@ -14,7 +14,18 @@
         <input type="password" id="password" placeholder="Contraseña" class="w-full border p-2 mb-4 rounded">
         <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">Entrar</button>
         <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Error al iniciar sesión.</p>
-    </div>
+        <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 mb-2 rounded hover:bg-blue-700">Entrar con Mail</button>
+
+        <div class="flex items-center justify-between my-2">
+            <hr class="w-full border-gray-300">
+          <span class="px-2 text-gray-500 text-sm">O</span>
+           <hr class="w-full border-gray-300">
+        </div>
+
+        <button id="btn-google" class="w-full bg-white border border-gray-300 text-gray-700 font-bold py-2 rounded hover:bg-gray-50 flex items-center justify-center gap-2">
+          <span>🌐</span> Entrar con Google
+        </button>
+      </div>
 
     <div id="app-screen" class="max-w-4xl mx-auto hidden">
         <div class="flex justify-between items-center mb-6">
@@ -39,6 +50,20 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // Agregá GoogleAuthProvider y signInWithPopup a tu import
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const provider = new GoogleAuthProvider();
+
+// Evento para el botón de Google
+document.getElementById('btn-google').addEventListener('click', () => {
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            console.log("Logueado con Google:", result.user.email);
+        }).catch((error) => {
+            console.error("Error con Google:", error);
+        });
+});
 
         // 2. CONFIGURACIÓN DE TU PROYECTO (Pegá la tuya acá)
         const firebaseConfig = {
