@@ -6,7 +6,7 @@ from pathlib import Path
 carpeta_actual = Path(__file__).parent
 ruta_db = carpeta_actual / "turnos.db"
 
-# CLASES DEL SISTEMA (POO)
+# CLASES DEL SISTEMA
 class Cliente:
     def __init__(self, nombre, telefono):
         self.nombre = nombre
@@ -36,7 +36,7 @@ def inicializar_db():
     conexion = sqlite3.connect(ruta_db)
     cursor = conexion.cursor()
     
-    # Armamos la query usando paréntesis y comillas
+    # Se prepara la consulta SQL para crear la tabla (solo si es la primera vez que se ejecuta el sistema)
     query_crear_tabla = (
         "CREATE TABLE IF NOT EXISTS turnos ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -50,7 +50,6 @@ def inicializar_db():
         ")"
     )
     
-    # Ejecutamos la variable
     cursor.execute(query_crear_tabla)
     
     conexion.commit()
@@ -59,26 +58,28 @@ def inicializar_db():
 def mostrar_agenda():
     print("\n")
     print("AGENDA DE TURNOS")
-    print("="*40)
+    print("="*130)
     
     conexion = sqlite3.connect(ruta_db)
     cursor = conexion.cursor()
     
+    # Se consultan todos los turnos ordenados cronológicamente por fecha y1 hora
     cursor.execute('SELECT * FROM turnos ORDER BY fecha ASC, hora ASC')
     turnos = cursor.fetchall()
     
     if not turnos:
         print("No hay turnos registrados en el sistema.")
     else:
+        # Se desempaquetan cada fila de la base de datos para imprimirla con formato
         for id_turno, nombre, tel, trat_nombre, trat_precio, fecha, hora, senia in turnos:
             print(f"[{fecha} | {hora} hs] {nombre} - {trat_nombre} (Tel: {tel}) - (Seña: ${senia}) - (Resta abonar: ${trat_precio - senia})")
             
-    print("="*40 + "\n")
+    print("="*130 + "\n")
     conexion.close()
 
-# 2. SQLITE: Extraemos los datos de los objetos y los guardamos
+# INTERACCIÓN CON BASE DE DATOS: Inserción de nuevos registros
 def guardar_turno_en_db(turno):
-    """Recibe un objeto Turno y lo inserta en la base de datos SQLite"""
+# Recibe un objeto Turno y lo inserta en la base de datos SQLite
     conexion = sqlite3.connect(ruta_db)
     cursor = conexion.cursor()
     
@@ -87,7 +88,7 @@ def guardar_turno_en_db(turno):
         "VALUES (?, ?, ?, ?, ?, ?, ?)"
     )
     
-    # Usamos los atributos del objeto directamente en los parámetros
+    # Se usan los atributos del objeto directamente en los parámetros
     cursor.execute(query_insertar, (
         turno.cliente.nombre, 
         turno.cliente.telefono, 
@@ -100,8 +101,6 @@ def guardar_turno_en_db(turno):
     
     conexion.commit()
     conexion.close()
-    
-    print("\nTurno guardado exitosamente en la base de datos.")
 
 def crear_turno_interactivo():
     print("\n--- CARGAR NUEVO TURNO ---")
@@ -132,7 +131,7 @@ def crear_turno_interactivo():
     hora = input("Hora (Ej: 16:30): ")
     monto_senia = int(input("Monto de la seña abonada $: "))
     
-    # Ensamblamos los objetos
+    # Se ensamblan los objetos
     cliente_nuevo = Cliente(nombre, tel)
     tratamiento_nuevo = Tratamiento(trat_nombre, trat_precio)
     pago_nuevo = Pago(monto_senia, "Efectivo", "Seña")
@@ -141,10 +140,10 @@ def crear_turno_interactivo():
     
     guardar_turno_en_db(turno_nuevo)
     
-    print("\nTurno guardado exitosamente en la base de datos.")
+    print("\nTurno guardado exitosamente en la base de datos.\n")
 
 def iniciar_sistema():
-    # Nos aseguramos de que la base y la tabla existan antes de mostrar el menú
+    # Se asegura de que la base y la tabla existan antes de mostrar el menú
     inicializar_db()
     
     while True:
