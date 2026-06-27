@@ -643,7 +643,7 @@
             if (horaActual >= 6 && horaActual < 13) saludo = "¡Buenos días!";
             else if (horaActual >= 13 && horaActual < 20) saludo = "¡Buenas tardes!";
 
-            const direccion = "En Dirección 123 (https://maps.app.goo.gl/maps) 📍";
+            const direccion = "En Av. Cabildo 2040 \"7°E\" (https://maps.app.goo.gl/doTUhLNu84y3QeWT6) 📍";
             const fechaFormateada = formatearFechaAR(turno.fecha);
             const nombreProfesional = turno.profesional?.nombre || 'Aditi';
             
@@ -666,7 +666,7 @@
                 if (isMobile) {
                     url = `whatsapp://send?phone=${telLimpio}&text=${mensajeFinal}`;
                 } else {
-                    url = `https://web.whatsapp.com/send?phone=${telLimpio}&text=${mensajeFinal}`;
+                    url = `https://api.whatsapp.com/send?phone=${telLimpio}&text=${mensajeFinal}`;
                 }
                 window.open(url, '_blank');
             } else if (turno.canalContacto === 'instagram') {
