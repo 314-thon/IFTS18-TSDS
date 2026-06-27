@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aditi Estética - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://lh3.googleusercontent.com/aida-public/AB6AXuCcGxS2gaK7wnban2dOmOQpE_BFCNhf7isTXQusR1DJNEwSalx01jGh0GXkOiiz4TusneVwBFyN1SEAmcSMPXnqZ8YnHJS991f8CaX2rQ3aWIGd2NuTTkiVxLSjygV-4Mh5g5FlfPeI9g6zOMI678FCiTYPeCMmJH6sFs9GtWMDnfv24a39rirJG5zP_QE-jkr7lEph5SPa9GT3fgoF0tK1QzG3TohDyuD6IvbGFb0vvIJKPgbhtEsESiVdw6Yrs7LNIlvrG7l3OIyc" rel="icon" type="image/png"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6f5092', // Lilac from theme
+                        'on-primary': '#ffffff',
+                        surface: '#f8f9ff',
+                        'surface-container': '#e5eeff',
+                        outline: '#cdc3d0',
+                        'brand-lilac': '#efdbff',
+                        'brand-pink': '#ffd8ed',
+                        'brand-soft-lavender': '#e9ddff'
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .perspective { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-gray-800 font-sans min-h-screen">
+<!-- Login Screen -->
+<div class="min-h-screen flex items-center justify-center p-6 bg-[url('https://www.transparenttextures.com/patterns/clean-gray-paper.png')]" id="login-screen">
+<div class="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl border border-outline/50">
+<div class="text-center mb-8 flex flex-col items-center">
+<img alt="Aditi Logo" class="w-20 h-20 mb-4 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcGxS2gaK7wnban2dOmOQpE_BFCNhf7isTXQusR1DJNEwSalx01jGh0GXkOiiz4TusneVwBFyN1SEAmcSMPXnqZ8YnHJS991f8CaX2rQ3aWIGd2NuTTkiVxLSjygV-4Mh5g5FlfPeI9g6zOMI678FCiTYPeCMmJH6sFs9GtWMDnfv24a39rirJG5zP_QE-jkr7lEph5SPa9GT3fgoF0tK1QzG3TohDyuD6IvbGFb0vvIJKPgbhtEsESiVdw6Yrs7LNIlvrG7l3OIyc"/>
+<h2 class="text-3xl font-bold text-primary mb-2">Aditi Estética</h2>
+<p class="text-gray-500 text-sm">Acceso Privado al Dashboard</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Email</label>
+<input class="w-full border-outline border p-3 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" id="email" placeholder="nombre@ejemplo.com" type="email"/>
+</div>
+<div>
+<label class="text-xs font-semibold text-gray-400 uppercase tracking-wider ml-1">Contraseña</label>
+<input class="w-full border-outline border p-3 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<p class="text-red-500 text-xs mt-3 hidden text-center" id="login-error">Credenciales incorrectas. Por favor intente nuevamente.</p>
+<button class="w-full bg-primary text-white font-bold py-3 mt-6 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-primary/20 active:scale-[0.98]" id="btn-login">Entrar con Mail</button>
+<div class="flex items-center justify-between my-6">
+<hr class="w-full border-outline"/>
+<span class="px-4 text-gray-400 text-xs font-medium">O</span>
+<hr class="w-full border-outline"/>
+</div>
+<button class="w-full bg-white border border-outline text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 flex items-center justify-center gap-3 transition-all" id="btn-google">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcMuS-VDyMpyzMuQh1ODlVtJ-Py5veGb0qXosF4gaRDOJa5SMGmCq1GIEC2T7HmO6FAWxSvXnTAmQxZW9CNjZWHi1AWXz2Je-ZqWD9jVjssNszDgxdeL1JoxpVtR5raSrRMgpQLRcB1hdIGpYbdkxg-exltd7T-mVLPW1YYhM4t596TLKQpr3xQMYk_Vp_VM0BxK5W4rI9oBRbwZxvzg52BbWHndLODPl75gXdwFjP0czU3_9VgZDQo2H2Pq0a8_Ryn23d79tBY6yU"/>
+<span>Continuar con Google</span>
+</button>
+</div>
+</div>
+<!-- App Screen -->
+<div class="hidden" id="app-screen">
+<!-- TopNavBar -->
+<header class="bg-white/80 backdrop-blur-xl border-b border-outline/30 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<img alt="Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcGxS2gaK7wnban2dOmOQpE_BFCNhf7isTXQusR1DJNEwSalx01jGh0GXkOiiz4TusneVwBFyN1SEAmcSMPXnqZ8YnHJS991f8CaX2rQ3aWIGd2NuTTkiVxLSjygV-4Mh5g5FlfPeI9g6zOMI678FCiTYPeCMmJH6sFs9GtWMDnfv24a39rirJG5zP_QE-jkr7lEph5SPa9GT3fgoF0tK1QzG3TohDyuD6IvbGFb0vvIJKPgbhtEsESiVdw6Yrs7LNIlvrG7l3OIyc"/>
+<span class="text-2xl font-bold text-primary tracking-tight">Aditi Estética</span>
+<span class="hidden md:inline px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase tracking-widest">Dashboard</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary border-b-2 border-primary font-semibold pb-1" href="#">Agenda</a>
+<a class="text-gray-400 hover:text-primary transition-colors font-medium" href="#">Clientes</a>
+<a class="text-gray-400 hover:text-primary transition-colors font-medium" href="#">Tratamientos</a>
+<a class="text-gray-400 hover:text-primary transition-colors font-medium" href="#">Finanzas</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-sm font-bold text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 border border-outline px-3 py-1.5 rounded-lg" id="btn-logout">
+<span class="material-symbols-outlined text-sm">logout</span>
+                        Salir
+                    </button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto p-6 md:p-8 space-y-8">
+<!-- Calendar Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<div>
+<h2 class="text-2xl font-bold text-gray-800">Planificador Semanal</h2>
+<p class="text-gray-500 text-sm">Gestioná tus turnos y disponibilidad en tiempo real.</p>
+</div>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border border-outline/50 overflow-hidden">
+<div class="overflow-x-auto scrollbar-hide">
+<div class="grid grid-cols-7 min-w-[900px] border-collapse" id="calendar-grid">
+<!-- JS will inject content here -->
+</div>
+</div>
+</div>
+</section>
+<!-- Appointments List -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-2xl font-bold text-gray-800">Próximos Turnos</h2>
+<div class="flex gap-2">
+<button class="bg-surface-container text-gray-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-outline/30 transition-colors">Hoy</button>
+<button class="bg-surface-container text-gray-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-outline/30 transition-colors">Esta Semana</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="lista-turnos-html">
+<p class="col-span-full py-12 text-center text-gray-400 italic">Sincronizando con la nube...</p>
+</div>
+</section>
+</main>
+</div>
+<!-- Modal Turno -->
+<div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 perspective px-4" id="modal-turno">
+<div class="w-full max-w-md relative preserve-3d h-[500px]" id="modal-inner">
+<!-- Front -->
+<div class="bg-white p-8 rounded-2xl shadow-2xl backface-hidden w-full h-full absolute flex flex-col border border-outline/30" id="modal-front">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-2xl font-bold text-gray-800">Agendar Cita</h3>
+<p class="text-gray-500 text-sm">Completá los datos del cliente</p>
+</div>
+<button class="text-gray-400 hover:text-gray-600" id="btn-cerrar-modal">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mb-6 bg-brand-soft-lavender/50 border border-primary/20 text-primary py-3 rounded-xl text-center font-bold flex items-center justify-center gap-2" id="selected-datetime">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span>Cargando...</span>
+</div>
+<div class="space-y-4 flex-1">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-gray-400 text-xl">person</span>
+<input class="w-full border-outline border p-3 pl-11 rounded-xl focus:ring-2 focus:ring-primary/10 outline-none" id="cli-nombre" placeholder="Nombre Completo" type="text"/>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-gray-400 text-xl">phone</span>
+<input class="w-full border-outline border p-3 pl-11 rounded-xl focus:ring-2 focus:ring-primary/10 outline-none" id="cli-tel" placeholder="WhatsApp (Ej: 11223344)" type="text"/>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-gray-400 text-xl">content_cut</span>
+<select class="w-full border-outline border p-3 pl-11 rounded-xl bg-white focus:ring-2 focus:ring-primary/10 outline-none appearance-none" id="tratamiento-select">
+<option value="Limpieza Facial|15000">Limpieza Facial ($15.000)</option>
+<option value="Lifting de Pestañas|12000">Lifting de Pestañas ($12.000)</option>
+<option value="Masaje Descontracturante|18000">Masaje Descontracturante ($18.000)</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-gray-400 text-xl">payments</span>
+<input class="w-full border-outline border p-3 pl-11 rounded-xl focus:ring-2 focus:ring-primary/10 outline-none" id="monto-senia" placeholder="Seña $" type="number"/>
+</div>
+<select class="border-outline border p-3 rounded-xl bg-white focus:ring-2 focus:ring-primary/10 outline-none" id="metodo-pago">
+<option value="Transferencia">Transferencia</option>
+<option value="Efectivo">Efectivo</option>
+<option value="Mercado Pago">Mercado Pago</option>
+</select>
+</div>
+</div>
+<div class="pt-6">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:opacity-90 shadow-lg shadow-primary/20 active:scale-[0.98] transition-all" id="btn-guardar-turno">Confirmar Turno</button>
+</div>
+</div>
+<!-- Back (Success Animation) -->
+<div class="bg-white p-8 rounded-2xl shadow-2xl backface-hidden w-full h-full absolute inset-0 flex flex-col items-center justify-center rotate-y-180 border border-primary/20" id="modal-back">
+<div class="w-24 h-24 bg-brand-soft-lavender text-primary rounded-full flex items-center justify-center mb-6 animate-bounce">
+<span class="material-symbols-outlined text-6xl">check_circle</span>
+</div>
+<h3 class="text-3xl font-bold text-gray-800 mb-2 text-center">¡Listo!</h3>
+<p class="text-gray-500 text-center px-4">El turno ha sido guardado correctamente en tu agenda.</p>
+</div>
+</div>
+</div>
+<script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxbTt6Y5f931NqQHClkgwS2EBMNLsxmKM",
+            authDomain: "agenditi-d0aa0.firebaseapp.com",
+            projectId: "agenditi-d0aa0",
+            storageBucket: "agenditi-d0aa0.firebasestorage.app",
+            messagingSenderId: "1096149766612",
+            appId: "1:1096149766612:web:2a70d018991192f2a08641"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let turnosGlobales = [];
+        let fechaSeleccionada = "";
+        let horaSeleccionada = "";
+        const loginScreen = document.getElementById('login-screen');
+        const appScreen = document.getElementById('app-screen');
+
+        class Cliente {
+            constructor(nombre, telefono) {
+                this.nombre = nombre;
+                this.telefono = telefono;
+            }
+        }
+        class Tratamiento {
+            constructor(nombre, precioBase) {
+                this.nombre = nombre;
+                this.precioBase = precioBase;
+            }
+        }
+        class Pago {
+            constructor(monto, metodoPago, tipo) {
+                this.monto = monto;
+                this.metodoPago = metodoPago; 
+                this.tipo = tipo;
+            }
+        }
+        class Turno {
+            constructor(cliente, tratamiento, fecha, hora, pagoInicial) {
+                this.cliente = cliente;
+                this.tratamiento = tratamiento;
+                this.fecha = fecha;
+                this.hora = hora;
+                this.pagos = [pagoInicial];
+            }
+            toPlainObject() {
+                return {
+                    cliente: { nombre: this.cliente.nombre, telefono: this.cliente.telefono },
+                    tratamiento: { nombre: this.tratamiento.nombre, precioBase: this.tratamiento.precioBase },
+                    fecha: this.fecha,
+                    hora: this.hora,
+                    pagos: this.pagos.map(p => ({ monto: p.monto, metodo: p.metodoPago, tipo: p.tipo })),
+                    creadoEn: new Date()
+                };
+            }
+        }
+
+        function renderizarCalendario() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = ''; 
+
+            const horas = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
+            
+            let diasVisibles = [];
+            let fechaIterador = new Date();
+            while(diasVisibles.length < 6) {
+                if(fechaIterador.getDay() !== 0) { 
+                    diasVisibles.push({
+                        iso: fechaIterador.toISOString().split('T')[0],
+                        diaSemana: fechaIterador.toLocaleDateString('es-AR', { weekday: 'short' }),
+                        diaNum: fechaIterador.toLocaleDateString('es-AR', { day: 'numeric' })
+                    });
+                }
+                fechaIterador.setDate(fechaIterador.getDate() + 1);
+            }
+
+            // Header Corner
+            let corner = document.createElement('div');
+            corner.className = "bg-white border-b border-r border-outline/30";
+            grid.appendChild(corner);
+
+            // Day Headers
+            diasVisibles.forEach(dia => {
+                let div = document.createElement('div');
+                div.className = "text-center py-4 bg-white border-b border-r border-outline/30 flex flex-col items-center justify-center";
+                div.innerHTML = `
+                    <span class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">${dia.diaSemana}</span>
+                    <span class="text-xl font-bold text-gray-800">${dia.diaNum}</span>
+                `;
+                grid.appendChild(div);
+            });
+
+            horas.forEach(hora => {
+                // Time Label
+                let divHora = document.createElement('div');
+                divHora.className = "text-right pr-4 text-[11px] text-gray-400 font-bold flex items-center justify-end border-b border-r border-outline/30 bg-surface-container/20";
+                divHora.innerText = hora;
+                grid.appendChild(divHora);
+
+                diasVisibles.forEach(dia => {
+                    let ocupados = turnosGlobales.filter(t => t.fecha === dia.iso && t.hora === hora).length;
+                    let slot = document.createElement('div');
+                    slot.className = "border-b border-r border-outline/30 p-1 flex flex-col items-center justify-center transition-all h-14 group";
+
+                    if (ocupados === 0) {
+                        slot.classList.add('bg-white', 'cursor-pointer', 'hover:bg-brand-soft-lavender/40');
+                        slot.innerHTML = `<span class="text-[10px] font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">Reservar</span>`;
+                        slot.onclick = () => abrirModal(dia.iso, hora);
+                    } else if (ocupados === 1) {
+                        slot.classList.add('bg-brand-lilac/40', 'cursor-pointer', 'hover:bg-brand-lilac/60');
+                        slot.innerHTML = `<div class="flex flex-col items-center"><span class="text-[10px] font-bold text-primary">Ocupado (1/2)</span><span class="text-[9px] text-primary/70">Cupo disponible</span></div>`;
+                        slot.onclick = () => abrirModal(dia.iso, hora);
+                    } else {
+                        slot.classList.add('bg-brand-pink/40', 'opacity-70');
+                        slot.innerHTML = `<span class="text-[10px] font-bold text-[#b00020]">Lleno (2/2)</span>`;
+                    }
+                    grid.appendChild(slot);
+                });
+            });
+        }
+
+        window.abrirWhatsApp = function(telefono, nombre, fecha, hora) {
+            const horaActual = new Date().getHours();
+            let saludo = "¡Buenas noches!";
+            if (horaActual >= 6 && horaActual < 13) saludo = "¡Buenos días!";
+            else if (horaActual >= 13 && horaActual < 20) saludo = "¡Buenas tardes!";
+
+            const textoBase = encodeURIComponent(`${saludo} ${nombre} `);
+            const emojiMano = "%F0%9F%91%8B";
+            const textoMedio = encodeURIComponent(`\n\nTu turno fue confirmado para el día *${fecha}* a las *${hora} hs* `);
+            const emojiReloj = "%E2%8F%B0";
+            const textoFin = encodeURIComponent(`.\n\n¡Te esperamos! `);
+            const emojisAditi = "%E2%9C%A8%F0%9F%92%85%0AAditi Est%C3%A9tica %F0%9F%8C%B8"; 
+
+            const mensajeFinal = textoBase + emojiMano + textoMedio + emojiReloj + textoFin + emojisAditi;
+            let telLimpio = telefono.replace(/\D/g, ''); 
+            if (telLimpio.length === 10) telLimpio = "549" + telLimpio; 
+
+            window.open(`https://api.whatsapp.com/send?phone=${telLimpio}&text=${mensajeFinal}`, '_blank');
+        };
+
+        window.borrarTurno = async function(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este turno?")) {
+                try {
+                    await deleteDoc(doc(db, "turnos", id));
+                } catch (error) {
+                    console.error("Error al borrar turno:", error);
+                }
+            }
+        };
+
+        function cargarTurnosEnTiempoReal() {
+            const q = query(collection(db, "turnos")); 
+            onSnapshot(q, (querySnapshot) => {
+                turnosGlobales = [];
+        
+                querySnapshot.forEach((documento) => {
+                    const data = documento.data();
+                    data.id = documento.id;
+                    turnosGlobales.push(data);
+                });
+
+                turnosGlobales.sort((a, b) => {
+                    const fechaA = new Date(`${a.fecha}T${a.hora}`);
+                    const fechaB = new Date(`${b.fecha}T${b.hora}`);
+                    return fechaA - fechaB;
+                });
+
+                const listaUI = document.getElementById('lista-turnos-html');
+                listaUI.innerHTML = ""; 
+        
+                turnosGlobales.forEach((data) => {
+                    const senia = data.pagos && data.pagos.length > 0 ? data.pagos[0].monto : 0;
+                    const precioTotal = data.tratamiento ? data.tratamiento.precioBase : 0;
+                    const saldoPendiente = precioTotal - senia;
+
+                    const card = document.createElement("div");
+                    card.className = "bg-white p-6 rounded-2xl shadow-sm border border-outline/40 hover:shadow-md transition-all flex flex-col justify-between group";
+                    
+                    card.innerHTML = `
+                        <div class="mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-lg font-bold text-gray-800 leading-tight">${data.cliente.nombre}</h4>
+                                    <p class="text-sm text-gray-400 font-medium">${data.tratamiento.nombre}</p>
+                                </div>
+                                <button onclick="window.borrarTurno('${data.id}')" class="text-gray-300 hover:text-red-500 p-1 transition-colors">
+                                    <span class="material-symbols-outlined text-xl">delete</span>
+                                </button>
+                            </div>
+                            
+                            <div class="flex flex-col gap-2 mt-4">
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
+                                    <span>${data.fecha}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+                                    <span>${data.hora} hs</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-outline/30">
+                            <div class="flex justify-between items-end">
+                                <div class="space-y-1">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Resumen Financiero</p>
+                                    <div class="flex gap-2">
+                                        <span class="bg-brand-soft-lavender text-primary text-[10px] font-bold px-2 py-0.5 rounded">Seña: $${senia}</span>
+                                        <span class="bg-brand-pink text-red-700 text-[10px] font-bold px-2 py-0.5 rounded">Saldo: $${saldoPendiente}</span>
+                                    </div>
+                                </div>
+                                <button onclick="window.abrirWhatsApp('${data.cliente.telefono}', '${data.cliente.nombre}', '${data.fecha}', '${data.hora}')" class="bg-[#25D366] text-white p-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all flex items-center justify-center">
+                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.069-.543c.95.539 2.013.824 3.218.825h.001c3.181 0 5.767-2.586 5.768-5.766a5.756 5.756 0 00-5.769-5.785zm3.101 8.24c-.127.355-.733.649-1.013.69-.281.042-1.077.205-1.785-.084a7.126 7.126 0 01-3.08-2.124c-.217-.281-1.129-1.5-.129-2.614.331-.365.342-.424.464-.67.122-.246.06-.464-.031-.649-.091-.184-.799-1.921-1.096-2.637-.291-.7-.585-.606-.799-.617-.206-.011-.444-.012-.683-.012-.239 0-.626.09-.954.444-.328.355-1.253 1.226-1.253 2.986s1.264 3.461 1.442 3.704c.178.243 2.485 3.794 6.021 5.32.841.364 1.498.581 2.011.744.843.268 1.611.23 2.218.14.677-.099 2.083-.852 2.378-1.674.295-.823.295-1.528.207-1.674-.088-.146-.328-.231-.669-.399z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    listaUI.appendChild(card);
+                });
+        
+                renderizarCalendario(); 
+            });
+        }
+
+        function abrirModal(fecha, hora) {
+            fechaSeleccionada = fecha;
+            horaSeleccionada = hora;
+            document.getElementById('selected-datetime').innerHTML = `
+                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                <span>${fecha} — ${hora} hs</span>
+            `;
+            document.getElementById('modal-turno').classList.remove('hidden');
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                cargarTurnosEnTiempoReal(); 
+            } else {
+                loginScreen.classList.remove('hidden');
+                appScreen.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('cli-tel').addEventListener('input', function(e) {
+            let numero = e.target.value.replace(/\D/g, ''); 
+            if (numero.startsWith('549')) numero = numero.substring(3);
+            else if (numero.startsWith('54')) numero = numero.substring(2);
+            if (numero.length > 10) numero = numero.substring(numero.length - 10);
+            e.target.value = numero;
+        });
+
+        document.getElementById('btn-google').addEventListener('click', (e) => {
+            e.preventDefault();
+            signInWithPopup(auth, provider).catch((error) => console.error("Error con Google:", error));
+        });
+
+        document.getElementById('btn-login').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            document.getElementById('login-error').classList.add('hidden');
+            
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+                document.getElementById('login-error').classList.remove('hidden');
+                console.error("Error de login:", error);
+            });
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
+            document.getElementById('modal-turno').classList.add('hidden');
+        });
+
+        document.getElementById('btn-guardar-turno').addEventListener('click', async () => {
+            const nombre = document.getElementById('cli-nombre').value;
+            const tel = document.getElementById('cli-tel').value;
+            const montoSenia = parseFloat(document.getElementById('monto-senia').value);
+            
+            if(!nombre || !montoSenia) {
+                alert("Por favor completá el nombre y el monto de la seña.");
+                return;
+            }
+
+            const tratData = document.getElementById('tratamiento-select').value.split('|');
+            const nuevoCliente = new Cliente(nombre, tel);
+            const nuevoTratamiento = new Tratamiento(tratData[0], parseFloat(tratData[1]));
+            const nuevaSenia = new Pago(montoSenia, document.getElementById('metodo-pago').value, "Seña");
+            
+            const nuevoTurno = new Turno(nuevoCliente, nuevoTratamiento, fechaSeleccionada, horaSeleccionada, nuevaSenia);
+
+            try {
+                await addDoc(collection(db, "turnos"), nuevoTurno.toPlainObject());
+                
+                document.getElementById('modal-inner').classList.add('rotate-y-180');
+                
+                setTimeout(() => {
+                    document.getElementById('modal-turno').classList.add('hidden');
+                    document.getElementById('modal-inner').classList.remove('rotate-y-180');
+                    
+                    document.getElementById('cli-nombre').value = '';
+                    document.getElementById('cli-tel').value = '';
+                    document.getElementById('monto-senia').value = '';
+                }, 2000);
+                
+            } catch (e) {
+                console.error("Error guardando turno: ", e);
+            }
+        });
+    </script>
+</body></html>
