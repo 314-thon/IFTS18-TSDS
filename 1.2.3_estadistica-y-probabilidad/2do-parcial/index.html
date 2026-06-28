@@ -219,7 +219,7 @@
                     </div>
                 </section>
 
-                <section class="space-y-6">
+                <section class="space-y-6" id="practice-section">
                     <h2 class="text-xl font-bold text-blue-900 flex items-center gap-2">
                         <span>📝</span> Práctica Guiada
                     </h2>
@@ -313,6 +313,7 @@
                     </div>
 
                     <div id="quiz-feedback" class="hidden w-full p-4 rounded-xl mb-6 font-medium text-center text-lg"></div>
+
                     <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">Siguiente Pregunta →</button>
                 </div>
 
@@ -375,7 +376,6 @@
     <div id="formulas-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0">
         <div class="a4-container rounded-xl overflow-hidden relative">
             
-            <!-- Botones Superiores (No se imprimen) -->
             <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print-hidden">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🧮</span>
@@ -391,7 +391,6 @@
                 </div>
             </div>
 
-            <!-- Área Imprimible A4 -->
             <div id="formulas-print-area" class="text-slate-900">
                 
                 <div class="text-center mb-8">
@@ -401,7 +400,6 @@
 
                 <div class="grid grid-cols-2 gap-x-8 gap-y-6 text-sm">
                     
-                    <!-- UNIDAD 3 -->
                     <div class="col-span-2 md:col-span-1 space-y-4">
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                             <h3 class="font-bold text-blue-900 text-base uppercase tracking-wide mb-3 border-b border-blue-200 pb-1">Unidad 3: Probabilidad</h3>
@@ -409,27 +407,27 @@
                             <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700">Complemento:</span>
-                                    <div class="mt-1 format-formulas">$$ P(A') = 1 - P(A) $$</div>
+                                    <div class="mt-1 format-formulas">$$P(A') = 1 - P(A)$$</div>
                                 </div>
                                 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Regla de Adición:</span>
-                                    <div class="mt-1 format-formulas">$$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$</div>
+                                    <div class="mt-1 format-formulas">$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Regla de Multiplicación:</span>
-                                    <div class="mt-1 format-formulas">$$ P(A \cap B) = P(A) \cdot P(B) $$</div>
+                                    <div class="mt-1 format-formulas">$$P(A \cap B) = P(A) \cdot P(B)$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Probabilidad Condicional:</span>
-                                    <div class="mt-1 format-formulas">$$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$</div>
+                                    <div class="mt-1 format-formulas">$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Teorema de Bayes:</span>
-                                    <div class="mt-1 format-formulas text-xs">$$ P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)} $$</div>
+                                    <div class="mt-1 format-formulas text-xs">$$P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)}$$</div>
                                 </div>
                             </div>
                         </div>
@@ -440,18 +438,17 @@
                             <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700">Permutaciones:</span>
-                                    <div class="mt-1 format-formulas">$$ P_n^N = \frac{N!}{(N-n)!} $$</div>
+                                    <div class="mt-1 format-formulas">$$P_n^N = \frac{N!}{(N-n)!}$$</div>
                                 </div>
                                 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Combinaciones:</span>
-                                    <div class="mt-1 format-formulas">$$ C_n^N = \binom{N}{n} = \frac{N!}{n!(N-n)!} $$</div>
+                                    <div class="mt-1 format-formulas">$$C_n^N = \binom{N}{n} = \frac{N!}{n!(N-n)!}$$</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- UNIDAD 4 & 5 -->
                     <div class="col-span-2 md:col-span-1 space-y-4">
                         <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
                             <h3 class="font-bold text-teal-900 text-base uppercase tracking-wide mb-3 border-b border-teal-200 pb-1">Unidad 4: Discretas</h3>
@@ -459,26 +456,26 @@
                             <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700">Valor Esperado:</span>
-                                    <div class="mt-1 format-formulas">$$ E(X) = \sum x \cdot P(x) $$</div>
+                                    <div class="mt-1 format-formulas">$$E(X) = \sum x \cdot P(x)$$</div>
                                 </div>
                                 <div>
                                     <span class="font-semibold block text-slate-700">Varianza:</span>
-                                    <div class="mt-1 format-formulas">$$ V(X) = E(X^2) - [E(X)]^2 $$</div>
+                                    <div class="mt-1 format-formulas">$$V(X) = E(X^2) - [E(X)]^2$$</div>
                                 </div>
 
                                 <div class="mt-2">
                                     <span class="font-semibold block text-slate-700">Distribución Binomial:</span>
-                                    <div class="mt-1 format-formulas">$$ P(x|n,p) = \frac{n!}{x!(n-x)!} p^x (1-p)^{n-x} $$</div>
+                                    <div class="mt-1 format-formulas">$$P(X|n,p) = \frac{n!}{X!(n-X)!} p^X q^{n-X}$$</div>
                                     <div class="flex justify-around mt-1">
-                                        <div class="format-formulas">$$ \mu = np $$</div>
-                                        <div class="format-formulas">$$ \sigma^2 = npq $$</div>
+                                        <div class="format-formulas">$$\mu = np$$</div>
+                                        <div class="format-formulas">$$\sigma^2 = npq$$</div>
                                     </div>
                                 </div>
 
                                 <div class="mt-2">
                                     <span class="font-semibold block text-slate-700">Distribución de Poisson:</span>
-                                    <div class="mt-1 format-formulas">$$ P(x) = \frac{\lambda^x e^{-\lambda}}{x!} $$</div>
-                                    <div class="format-formulas text-center mt-1">$$ \mu = \lambda \quad \text{y} \quad \sigma^2 = \lambda $$</div>
+                                    <div class="mt-1 format-formulas">$$P(x) = \frac{\lambda^x e^{-\lambda}}{x!}$$</div>
+                                    <div class="format-formulas text-center mt-1">$$\mu = \lambda \quad \text{y} \quad \sigma^2 = \lambda$$</div>
                                 </div>
                             </div>
                         </div>
@@ -490,19 +487,19 @@
                                 <div>
                                     <span class="font-semibold block text-slate-700">Distribución Uniforme:</span>
                                     <div class="flex justify-around items-center mt-1">
-                                        <div class="format-formulas">$$ f(x) = \frac{1}{b-a} $$</div>
-                                        <div class="format-formulas">$$ E(X) = \frac{a+b}{2} $$</div>
+                                        <div class="format-formulas">$$f(x) = \frac{1}{b-a}$$</div>
+                                        <div class="format-formulas">$$E(X) = \frac{a+b}{2}$$</div>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <span class="font-semibold block text-slate-700">Aproximación de normal a normal estándar:</span>
-                                    <div class="mt-1 format-formulas">$$ Z = \frac{x - \mu}{\sigma} $$</div>
+                                    <span class="font-semibold block text-slate-700">Aproximo una normal a una normal estándar:</span>
+                                    <div class="mt-1 format-formulas">$$Z = \frac{x - \mu}{\sigma}$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700">Aproximación de Normal a Binomial (n &ge; 30):</span>
-                                    <div class="format-formulas mt-1">$$ \mu = np \quad \sigma = \sqrt{npq} $$</div>
+                                    <div class="format-formulas mt-1">$$\mu = np \quad \sigma = \sqrt{npq}$$</div>
                                 </div>
                             </div>
                         </div>
@@ -547,6 +544,48 @@
             setTimeout(() => {
                 document.title = originalTitle;
             }, 1000);
+        }
+
+        // Sistema para chequear la selección de temas en los ejercicios del Parcial
+        window.checkTopic = function(baseId, correctValue, hintBtnId, solveBtnId, unitId, topicId, exIndex) {
+            const select = document.getElementById(baseId + '-select');
+            const status = document.getElementById(baseId + '-status');
+            
+            let topicHint = "Lee bien el enunciado y busca las palabras clave.";
+            let topicExplanation = "Puedes proceder a resolverlo.";
+            
+            // Buscar los textos de feedback específicos del ejercicio
+            if (unitId && topicId && exIndex !== undefined) {
+                const unit = appData.units.find(u => u.id === unitId);
+                if (unit) {
+                    const topic = unit.topics.find(t => t.id === topicId);
+                    if (topic && topic.exercises[exIndex]) {
+                        if (topic.exercises[exIndex].topicHint) topicHint = topic.exercises[exIndex].topicHint;
+                        if (topic.exercises[exIndex].topicExplanation) topicExplanation = topic.exercises[exIndex].topicExplanation;
+                    }
+                }
+            }
+
+            if(select.value === correctValue) {
+                status.innerHTML = `✅ <span class="text-green-700 text-sm font-bold">¡Correcto!</span> <span class="text-green-600 text-sm">${topicExplanation}</span>`;
+                select.classList.add('border-green-500', 'bg-green-50');
+                select.classList.remove('border-red-500', 'bg-red-50');
+                // Habilitar la visibilidad de los botones de ayuda
+                document.getElementById(hintBtnId)?.classList.remove('opacity-50', 'pointer-events-none');
+                document.getElementById(solveBtnId)?.classList.remove('opacity-50', 'pointer-events-none');
+            } else if(select.value !== "") {
+                status.innerHTML = `❌ <span class="text-red-700 text-sm font-bold">Casi...</span> <span class="text-red-600 text-sm">${topicHint}</span>`;
+                select.classList.add('border-red-500', 'bg-red-50');
+                select.classList.remove('border-green-500', 'bg-green-50');
+                // Ocultar o deshabilitar
+                document.getElementById(hintBtnId)?.classList.add('opacity-50', 'pointer-events-none');
+                document.getElementById(solveBtnId)?.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                status.innerHTML = '';
+                select.className = 'w-full md:flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500';
+                document.getElementById(hintBtnId)?.classList.add('opacity-50', 'pointer-events-none');
+                document.getElementById(solveBtnId)?.classList.add('opacity-50', 'pointer-events-none');
+            }
         }
 
         let userStats = { learnedTopics: [], quizGrades: {} };
@@ -877,146 +916,56 @@
                 {
                     id: "uparcial",
                     title: "PARCIAL",
-                    subtitle: "INTEGRADOR",
-                    desc: "¡Ponte a prueba con los ejercicios extraídos de tus PDF de práctica y exámenes reales! Todos incluyen guías estratégicas y resolución paso a paso.",
+                    subtitle: "SIMULADOR",
+                    desc: "¡Ponte a prueba con los ejercicios extraídos de tus TPs y exámenes reales! Aquí deberás identificar qué tema estás leyendo antes de poder ver la guía estratégica o la respuesta.",
                     topics: [
                         {
-                            id: "p1",
-                            title: "1. Probabilidad Básica, Conjuntos y Bayes",
-                            exp: "Ejercicios extraídos del PDF para aplicar reglas de asignación, diagramas de conjuntos, probabilidad condicional y el Teorema de Bayes.",
+                            id: "p_clase",
+                            title: "Ejercicios en clase",
+                            exp: "Ejercicios integradores vistos en clase donde aplicarás reglas de asignación, diagramas de conjuntos, probabilidad condicional, el Teorema de Bayes, combinatoria y distribuciones.",
                             videos: [],
                             exercises: [
                                 { 
                                     level: "Parcial", 
+                                    topicType: "Probabilidad Básica",
+                                    topicHint: "Fíjate que el problema te da elementos de un conjunto (E1, E2...) y te pide operaciones simples como unión e intersección.",
+                                    topicExplanation: "Trabajamos directamente con elementos de un espacio muestral y conjuntos.",
                                     q: "Suponga que tiene el espacio muestral S={E1, E2, E3, E4, E5, E6}. Las probabilidades son:\nP(E1)=0.21, P(E2)=0.14, P(E3)=0.18, P(E4)=0.19, P(E5)=0.12, P(E6)=0.16.\nSea:\nA={E1, E2, E3}\nB={E1, E2, E4, E6}\nC={E1, E5, E6}\n\nHallar P(A), P(B), P(C)\nHallar B ∪ C y P(B ∪ C)\nHallar A ∩ B ∩ C y P(A ∩ B ∩ C)\nHallar C' y P(C')", 
                                     hint: "Recuerda que la probabilidad de un conjunto es la suma de las probabilidades de sus elementos (puntos muestrales).\n- Unión (∪): Todos los elementos que están en un conjunto O en el otro (sin repetirlos).\n- Intersección (∩): Elementos comunes en todos los conjuntos a la vez.\n- Complemento ('): Lo que falta para llegar a 1, o los elementos de S que NO están en el conjunto.",
                                     a: "1) Probabilidades Individuales:\nP(A) = P(E1)+P(E2)+P(E3) = 0.21+0.14+0.18 = 0.53\nP(B) = P(E1)+P(E2)+P(E4)+P(E6) = 0.21+0.14+0.19+0.16 = 0.70\nP(C) = P(E1)+P(E5)+P(E6) = 0.21+0.12+0.16 = 0.49\n\n2) B ∪ C y P(B ∪ C):\nB ∪ C = {E1, E2, E4, E5, E6}\nP(B ∪ C) = 0.21+0.14+0.19+0.12+0.16 = 0.82\n\n3) A ∩ B ∩ C y P(A ∩ B ∩ C):\nEl único elemento en común entre A, B y C es E1.\nA ∩ B ∩ C = {E1}\nP(A ∩ B ∩ C) = P(E1) = 0.21\n\n4) C' y P(C'):\nC' = {E2, E3, E4}\nP(C') = 1 - P(C) = 1 - 0.49 = 0.51" 
                                 },
                                 { 
                                     level: "Parcial", 
+                                    topicType: "Probabilidad Básica",
+                                    topicHint: "Menciona eventos que ocurren y pide probabilidades como 'A pero no B'. Busca resolverlo uniendo o restando conjuntos.",
+                                    topicExplanation: "Se resuelve con la regla de adición y restando intersecciones entre conjuntos de eventos simples.",
                                     q: "Las enfermedades A y B son comunes en una región. Se sabe que:\n- 10% de la población contraerá la enfermedad A.\n- 5% contraerá la enfermedad B.\n- 2% contraerá ambas enfermedades.\n\nEncuentre la probabilidad que cualquier persona:\na) Contraiga al menos una enfermedad.\nb) Contraiga la enfermedad A pero no B.\nc) Contraiga la enfermedad A dado que ya contrajo B.\nd) Contraiga la enfermedad B dado que no contrajo A.", 
                                     hint: "a) 'Al menos una' es la UNIÓN: P(A ∪ B) = P(A) + P(B) - P(A ∩ B).\nb) 'A pero no B' es solo la porción exclusiva de A: P(A) - P(A ∩ B).\nc) Probabilidad condicional: P(A|B) = P(A ∩ B) / P(B).\nd) Condicional: P(B|A') = P(A' ∩ B) / P(A'). Recuerda que P(A' ∩ B) es 'B pero no A'.",
                                     a: "Datos: P(A)=0.10, P(B)=0.05, P(A ∩ B)=0.02\n\na) Contraer al menos una: P(A ∪ B)\nP(A ∪ B) = P(A) + P(B) - P(A ∩ B) = 0.10 + 0.05 - 0.02 = 0.13 (13%)\n\nb) Contraer A pero no B: P(A ∩ B')\nP(A ∩ B') = P(A) - P(A ∩ B) = 0.10 - 0.02 = 0.08 (8%)\n\nc) Contraer A dado que ya contrajo B: P(A|B)\nP(A|B) = P(A ∩ B) / P(B) = 0.02 / 0.05 = 0.40 (40%)\n\nd) Contraer B dado que no contrajo A: P(B|A')\nP(B|A') = P(A' ∩ B) / P(A')\n- P(A' ∩ B) es 'B pero no A': P(B) - P(A ∩ B) = 0.05 - 0.02 = 0.03\n- P(A') es 'No tener A': 1 - P(A) = 1 - 0.10 = 0.90\nP(B|A') = 0.03 / 0.90 ≈ 0.0333... (3.33%)" 
                                 },
                                 {
                                     level: "Parcial",
+                                    topicType: "Teorema de Bayes",
+                                    topicHint: "La pregunta 'viaja al pasado'. Sabemos el final (está defectuoso) y te pide calcular la probabilidad de su origen (qué plan se usó).",
+                                    topicExplanation: "Es Bayes clásico: partimos de un resultado (defecto) y buscamos la probabilidad de su causa original (el plan).",
                                     q: "Una empresa de manufactura emplea tres planes para el diseño de un producto. Los planes 1, 2 y 3 se utilizan para el 30%, 20% y 50% de los productos, respectivamente. \nLa 'tasa de defectuosos' (D) dado cada plan (E) es:\nP(D|E1) = 0.01\nP(D|E2) = 0.03\nP(D|E3) = 0.02\n\nSi se observa un producto al azar y se encuentra que está DEFECTUOSO, ¿cuál fue el plan que se usó con mayor probabilidad y fue el responsable?",
                                     hint: "Debes usar el Teorema de Bayes para hallar las probabilidades a posteriori: P(E1|D), P(E2|D) y P(E3|D). \nPrimero, calcula la probabilidad TOTAL de defecto P(D) sumando los 3 caminos: P(E1)*P(D|E1) + P(E2)*P(D|E2) + P(E3)*P(D|E3).",
                                     a: "Paso 1: Probabilidad Total de Defecto P(D)\nP(D) = (0.30 * 0.01) + (0.20 * 0.03) + (0.50 * 0.02)\nP(D) = 0.003 + 0.006 + 0.010 = 0.019\n\nPaso 2: Calcular Bayes para cada plan dado que es Defectuoso P(En|D)\nP(E1|D) = 0.003 / 0.019 = 0.1578 (15.78%)\nP(E2|D) = 0.006 / 0.019 = 0.3157 (31.57%)\nP(E3|D) = 0.010 / 0.019 = 0.5263 (52.63%)\n\nRespuesta: El plan con mayor probabilidad es el PLAN 3 (52.63%)."
                                 },
                                 {
                                     level: "Parcial",
+                                    topicType: "Probabilidad Condicional",
+                                    topicHint: "Te dan explícitamente los datos con la barra vertical (|) de condicionalidad. Tienes que usar su fórmula algebraica.",
+                                    topicExplanation: "El ejercicio trata puramente del uso algebraico de las propiedades de la probabilidad condicional.",
                                     q: "Sean A, B eventos de algún S. Se conoce que:\nP(B) = 0.4\nP(A|B) = 0.3\nP(A|B') = 0.8\n\nHalle lo valores para: P(A), P(B|A), P(B|A')",
                                     hint: "Paso a paso:\n1) Halla P(B') restando 1 - P(B).\n2) Para P(A), usa Probabilidad Total: P(A) = P(A|B)P(B) + P(A|B')P(B').\n3) Para P(B|A), usa la fórmula condicional despejando la intersección.\n4) Para P(B|A'), necesitas P(A' ∩ B) / P(A').",
                                     a: "1) P(B') = 1 - 0.4 = 0.6.\nP(A) = (0.3)(0.4) + (0.8)(0.6) = 0.12 + 0.48 = 0.60.\n\n2) P(B|A) = P(A ∩ B) / P(A).\nP(A ∩ B) = P(A|B)P(B) = 0.12.\nP(B|A) = 0.12 / 0.60 = 0.20.\n\n3) P(B|A') = P(A' ∩ B) / P(A').\nP(A') = 1 - 0.60 = 0.40.\nP(A' ∩ B) = P(B) - P(A ∩ B) = 0.4 - 0.12 = 0.28.\nP(B|A') = 0.28 / 0.40 = 0.70."
-                                }
-                            ]
-                        },
-                        {
-                            id: "p2",
-                            title: "2. Reglas de Conteo y Permutaciones",
-                            exp: "Ejercicios extraídos del PDF para aplicar reglas de conteo, factoriales, combinaciones y permutaciones.",
-                            videos: [],
-                            exercises: [
-                                { 
-                                    level: "Parcial", 
-                                    q: "En una bolsa hay 5 canicas rojas, 10 azules, 15 negras, 8 naranjas y 2 amarillas. Si se toma una canica al azar: \na) ¿Cuál es la probabilidad de que la canica elegida sea amarilla?\nb) ¿Cuál es la probabilidad de que NO salga una canica negra?", 
-                                    hint: "a) Suma primero todas las canicas para obtener el total. Luego divide las amarillas entre el total.\nb) El evento complemento de 'negra' es la suma de todas las demás canicas juntas.",
-                                    a: "Total de canicas = 5+10+15+8+2 = 40.\n\na) P(Amarilla) = 2/40 = 0.05 (o 5%).\nb) Canicas NO negras = 40 - 15 = 25. P(No negra) = 25/40 = 0.625 (o 62.5%)." 
-                                },
-                                { 
-                                    level: "Parcial", 
-                                    q: "Van a asignarse asientos contiguos en una mesa de banquete a las 5 personas de la administración.\na) Determine el número de arreglos distintos de asientos que son posibles para las cinco personas.\nb) Suponga que sólo tres de los cinco serán invitados. ¿Cuántos arreglos distintos son posibles en la mesa, considerando que pueden escogerse tres cualesquiera de las cinco personas?", 
-                                    hint: "a) Cuando organizas a TODOS los elementos, es un Factorial (!).\nb) Estás tomando un grupo pequeño (3) de un total (5) y los estás sentando (EL ORDEN IMPORTA porque es una mesa). Esto es una Permutación (nPr).",
-                                    a: "a) Arreglos de todos: Factorial de 5.\n5! = 5 * 4 * 3 * 2 * 1 = 120 arreglos posibles.\n\nb) Permutación de 5 tomados de a 3 (5P3):\nFórmula: n! / (n-r)! = 5! / (5-3)! = 5! / 2! = (120) / (2) = 60 arreglos posibles." 
                                 },
                                 {
                                     level: "Parcial",
-                                    q: "Responda las dos siguientes situaciones de conteo:\na) Tres miembros se han ofrecido a fungir como presidente, tesorero y secretario. ¿El número de formas en que los tres podrían asumir los puestos es...?\nb) Para formar un comité se va a elegir a 3 miembros de una organización que tiene 10. ¿El número de grupos diferentes sin importar el orden en que son elegidos es...?",
-                                    hint: "a) Son 3 personas para 3 puestos distintos (el orden importa). Factorial.\nb) Elegir un subgrupo donde NO importa el orden es una Combinación (nCr).",
-                                    a: "a) Formas de asignar 3 puestos a 3 personas: 3! = 3 * 2 * 1 = 6 formas.\n\nb) Combinación de 10 elementos tomados de a 3 (10C3):\nFórmula: n! / (r! * (n-r)!) = 10! / (3! * 7!) = (10*9*8) / (3*2*1) = 720 / 6 = 120 grupos diferentes."
-                                }
-                            ]
-                        },
-                        {
-                            id: "p3",
-                            title: "3. Distribuciones Discretas (Binomial y Poisson)",
-                            exp: "Cálculo de Valor Esperado, Varianza y reconocimiento de distribuciones en contexto de exámenes.",
-                            videos: [],
-                            exercises: [
-                                { 
-                                    level: "Parcial", 
-                                    q: "La llegada de clientes a un restaurante en intervalos de 10 min sigue esta distribución:\nX: 0 | 1 | 2 | 3 | 4 | 5\nP(X): 0.15 | 0.25 | 0.25 | 0.20 | 0.10 | 0.05\n\nCalcule el número esperado de llegadas (Valor Esperado) y la Varianza.", 
-                                    hint: "1) El Valor Esperado E(X) es la suma de cada X multiplicada por su P(X).\n2) La Varianza se calcula sacando primero E(X²) [cada X al cuadrado por su P(X)] y luego aplicando: Var = E(X²) - [E(X)]²",
-                                    a: "1) Número Esperado E(X):\n= 0(0.15) + 1(0.25) + 2(0.25) + 3(0.20) + 4(0.10) + 5(0.05)\n= 0 + 0.25 + 0.50 + 0.60 + 0.40 + 0.25 = 2.0 clientes.\n\n2) Varianza:\nPrimero E(X²):\n= 0²(0.15) + 1²(0.25) + 2²(0.25) + 3²(0.20) + 4²(0.10) + 5²(0.05)\n= 0 + 0.25 + 1.0 + 1.8 + 1.6 + 1.25 = 5.9\n\nVar = E(X²) - [E(X)]² = 5.9 - (2.0)² = 5.9 - 4.0 = 1.9." 
-                                },
-                                { 
-                                    level: "Parcial", 
-                                    q: "Una empresa reporta que el 30% de sus cuentas están vencidas. Si se toma una muestra de 5 cuentas, determine por probabilidad binomial:\na) Exactamente 2 cuentas están vencidas.\nb) La mayor parte de las cuentas están vencidas.", 
-                                    hint: "Binomial con n=5 y p=0.30.\na) Usa la fórmula para x=2.\nb) 'La mayor parte' de 5 significa tener 3, 4 o 5 cuentas vencidas. Suma P(3) + P(4) + P(5).",
-                                    a: "a) Exactamente 2:\nP(X=2) = 5C2 * (0.3)³ * (0.7)³ = 10 * 0.09 * 0.343 = 0.3087 (30.87%)\n\nb) La mayor parte (3, 4 o 5):\nP(X=3) = 5C3 * (0.3)³ * (0.7)² = 10 * 0.027 * 0.49 = 0.1323\nP(X=4) = 5C4 * (0.3)⁴ * (0.7)¹ = 5 * 0.0081 * 0.7 = 0.02835\nP(X=5) = 5C5 * (0.3)⁵ * (0.7)⁰ = 1 * 0.00243 * 1 = 0.00243\nSuma = 0.1323 + 0.02835 + 0.00243 = 0.16308 (16.31%)" 
-                                },
-                                { 
-                                    level: "Parcial", 
-                                    q: "Una fábrica elige al azar 20 artículos producidos. Si hay 2 o más defectuosos la fabricación se detiene. La probabilidad de que un artículo sea defectuoso es del 5%. Encuentre la probabilidad de que se detenga la fabricación.", 
-                                    hint: "Binomial con n=20 y p=0.05. Te piden P(X≥2). Como calcular desde el 2 hasta el 20 es larguísimo, usa la regla del complemento: 1 - [P(X=0) + P(X=1)].",
-                                    a: "Calculamos las probabilidades de no detenerse (X=0 y X=1):\nP(X=0) = 20C0 * (0.05)⁰ * (0.95)²⁰ = 1 * 1 * 0.3585 = 0.3585\nP(X=1) = 20C1 * (0.05)¹ * (0.95)¹⁹ = 20 * 0.05 * 0.3774 = 0.3774\n\nSuma (Prob de no detener) = 0.3585 + 0.3774 = 0.7359\n\nProbabilidad de detenerse (2 o más):\n1 - 0.7359 = 0.2641 (26.41%)" 
-                                },
-                                {
-                                    level: "Parcial",
-                                    q: "La cantidad de errores de transmisión de datos en una hora es de 5 en promedio. Determine la probabilidad de que:\na) En cualquier hora ocurra solamente 1 error.\nb) En cualquier hora ocurran al menos 3 errores.\nc) En DOS horas cualquiera ocurran no más de 2 errores.",
-                                    hint: "Es distribución de Poisson.\na) λ=5, x=1.\nb) 'Al menos 3' es X≥3. Hazlo por el complemento: 1 - [P(0)+P(1)+P(2)].\nc) ¡Trampa de tiempo! Si en 1h el promedio es 5, en 2h el nuevo λ es 10. 'No más de 2' es sumar P(0)+P(1)+P(2) con el nuevo λ.",
-                                    a: "a) λ=5, x=1\nP(1) = (e⁻⁵ * 5¹) / 1! = 0.0337 (3.37%)\n\nb) Al menos 3 (λ=5):\nCalculamos P(0,1,2):\nP(0) = (e⁻⁵ * 5⁰) / 0! = 0.0067\nP(1) = 0.0337\nP(2) = (e⁻⁵ * 5²) / 2! = 0.0842\nSuma = 0.1246.\nProb (≥3) = 1 - 0.1246 = 0.8754 (87.54%)\n\nc) 2 horas (Nuevo λ = 10), X ≤ 2:\nP(0) = (e⁻¹⁰ * 10⁰) / 0! = 0.000045\nP(1) = (e⁻¹⁰ * 10¹) / 1! = 0.000454\nP(2) = (e⁻¹⁰ * 10²) / 2! = 0.002270\nSuma total = 0.002769 (0.27%)"
-                                }
-                            ]
-                        },
-                        {
-                            id: "p4",
-                            title: "4. Distribuciones Continuas (La Curva Normal)",
-                            exp: "Estandarización de valores con Z y cálculos de área gráfica bajo la curva.",
-                            videos: [],
-                            exercises: [
-                                { 
-                                    level: "Parcial", 
-                                    q: "La duración de un evento tiene distribución NORMAL con Media=10 y Varianza=4. Encuentre la probabilidad de que el evento dure:\na) Menos de 9 horas.\nb) Entre 11 y 12 horas.", 
-                                    hint: "¡Atención! Te dan la VARIANZA. La fórmula de Z (Dato - Media)/Desviación usa la desviación estándar. Sacale la raíz cuadrada a la varianza. Para el punto b, busca el área Z del número mayor y réstale la del menor.",
-                                    a: "Desviación (σ) = √4 = 2.\n\na) Menos de 9 horas (X < 9):\nZ = (9 - 10) / 2 = -0.5\nBuscando Z=-0.5 en la tabla Normal, el área es 0.3085 (30.85%).\n\nb) Entre 11 y 12 (11 < X < 12):\nZ_11 = (11 - 10) / 2 = 0.5 (Área en tabla = 0.6915)\nZ_12 = (12 - 10) / 2 = 1.0 (Área en tabla = 0.8413)\nProbabilidad = 0.8413 - 0.6915 = 0.1498 (14.98%)" 
-                                },
-                                { 
-                                    level: "Parcial", 
-                                    q: "Dada una distribución normal estándar, encuentre:\na) El área bajo la curva que yace entre Z = -2.04 y Z = 0.\nb) El valor de k tal que P(Z > k) = 0.1867", 
-                                    hint: "a) Recuerda que el área de Z=0 marca exactamente la mitad (0.5000). Réstale el área de Z=-2.04.\nb) Te dan el área a la DERECHA. La tabla lee a la izquierda. Su área a la izquierda es 1 - 0.1867. Busca ese número adentro de la tabla para hallar la Z.",
-                                    a: "a) Área entre Z=-2.04 y Z=0:\nÁrea en Z=0 es 0.5000\nÁrea en Z=-2.04 es 0.0207\nProbabilidad = 0.5000 - 0.0207 = 0.4793 (47.93%)\n\nb) Encontrar k:\nSi P(Z > k) = 0.1867, entonces el área a su izquierda es P(Z < k) = 1 - 0.1867 = 0.8133.\nBuscando 0.8133 en el interior de la tabla Z, vemos que corresponde al valor k = 0.89." 
-                                },
-                                {
-                                    level: "Parcial",
-                                    q: "La renta mensual promedio es de $3,500 con una desviación de $540. Calcule el valor debajo del cual se encuentra el 10% que paga menos.",
-                                    hint: "Este es un problema inverso. Sabes que el área a la izquierda es 10% (0.1000). Busca ese valor adentro de la tabla Z negativa para descubrir qué Z le corresponde. Luego despeja X de la fórmula: Z = (X - Media) / Desv.",
-                                    a: "Paso 1: Buscar Z para un área de 0.1000.\nEl área más cercana en la tabla negativa de Z es para Z = -1.28.\n\nPaso 2: Despejar X.\n-1.28 = (X - 3500) / 540\n(-1.28 * 540) = X - 3500\n-691.2 = X - 3500\nX = 3500 - 691.2 = 2808.8\n\nRespuesta: El valor es de $2,808.8"
-                                },
-                                {
-                                    level: "Parcial",
-                                    q: "Suponga que las estaturas de 500 estudiantes están normalmente distribuidas con media de 1.68m y desviación estándar de 0.05m. Hallar el número (N) de estudiantes con estatura entre 1.56m y 1.72m.",
-                                    hint: "Convierte ambas estaturas a Z. Resta las áreas para hallar la probabilidad. ¡Ojo! El problema no pide probabilidad, pide NÚMERO de estudiantes. Multiplica la probabilidad final por el total de estudiantes (500).",
-                                    a: "Paso 1: Estandarizar.\nZ_1.56 = (1.56 - 1.68) / 0.05 = -2.4 (Área = 0.0082)\nZ_1.72 = (1.72 - 1.68) / 0.05 = 0.8 (Área = 0.7881)\n\nPaso 2: Probabilidad entre ambos.\nP = 0.7881 - 0.0082 = 0.7799 (77.99%)\n\nPaso 3: Calcular el número de estudiantes.\nN = 500 * 0.7799 = 389.95\n\nRespuesta: Aproximadamente 390 estudiantes."
-                                },
-                                {
-                                    level: "Parcial",
-                                    q: "A partir de la gráfica de una distribución normal, se sabe que el área a la derecha de Z1 es del 35% (área violeta) y el área central comprendida entre Z2 y Z1 es del 40% (área verde). Hallar los valores numéricos de Z1 y Z2.",
-                                    hasZChart: true,
-                                    hint: "Para Z1: Si a su derecha hay 35%, a su izquierda hay 65% (0.65). Busca el 0.6500 adentro de la tabla para hallar la Z.\nPara Z2: Al área total acumulada hasta Z1 (65%), réstale el bloque del medio (40%) para descubrir qué porcentaje queda a la izquierda de Z2 (25% o 0.25). Busca 0.2500 en la tabla negativa.",
-                                    a: "<strong>1) Para Z1:</strong>\nSabemos que el área total a su izquierda es 100% - 35% = 65% (0.6500).\nBuscando la probabilidad más cercana a 0.6500 en el interior de la tabla Normal Estándar, obtenemos que Z1 ≈ 0.385.\n\n<strong>2) Para Z2:</strong>\nEl área a la izquierda de Z2 es igual al área a la izquierda de Z1 menos la región central entre ambos.\nÁrea a la izquierda de Z2 = 65% - 40% = 25% (0.2500).\nBuscando el valor más cercano a 0.2500 en la tabla Z (en los valores negativos), obtenemos que Z2 ≈ -0.674.\n\nResultados Finales: Z1 = 0.385 y Z2 = -0.674."
-                                }
-                            ]
-                        },
-                        {
-                            id: "p5",
-                            title: "5. Análisis de Hábitos de Lectura (Prob. Condicional)",
-                            exp: "Ejercicio integrador avanzado de tablas conjuntas, uniones e intersecciones.",
-                            videos: [],
-                            exercises: [
-                                {
-                                    level: "Parcial",
+                                    topicType: "Probabilidad Condicional",
+                                    topicHint: "Busca la frase 'dado que'. Esto significa que nuestro universo de casos se reduce solo a los que cumplen esa condición.",
+                                    topicExplanation: "Se aplica la probabilidad condicional porque la pregunta restringe los casos usando la expresión 'dado que'.",
                                     q: `Una revista de noticias publica tres columnas tituladas “Arte” (A), “Libros” (B) y “Cine” (C). Los hábitos de lectura de un lector se resumen en esta tabla de probabilidades conjuntas:<br><br>
 <div class="overflow-x-auto my-4">
     <table class="math-table w-full text-sm md:text-base border-collapse border border-slate-300 text-center">
@@ -1066,6 +1015,9 @@ P(A | B ∪ C) = 0.12 / 0.47 ≈ 0.2553
                                 },
                                 {
                                     level: "Parcial",
+                                    topicType: "Probabilidad Condicional",
+                                    topicHint: "Otra vez la expresión 'dado que'. Analiza bien quién es el evento que condiciona y ponlo en el denominador.",
+                                    topicExplanation: "Nuevamente, el uso de 'dado que' nos indica una probabilidad condicional clásica a partir de intersecciones.",
                                     q: `Basándonos en la misma tabla de la revista del ejercicio anterior:<br><br>¿Cuál es la probabilidad de que el lector lea al menos una de las dos primeras columnas (“Arte” o “Libros”), dado que lee la columna de “Cine”?`,
                                     hint: "Traduce a notación: Nos piden P(A ∪ B | C). \nAplica la fórmula condicional: P((A ∪ B) ∩ C) / P(C).\nUsa la distributiva en el numerador.",
                                     a: `Notación: Probabilidad de "Arte" o "Libros" (A ∪ B) dado que "Cine" (C). P(A ∪ B | C).
@@ -1086,66 +1038,160 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
 <strong>Resultado Final:</strong> 45.94%`
                                 }
                             ]
+                        },
+                        {
+                            id: "p_tp4",
+                            title: "TPs pre-parcial: TP 4 Variable Discreta",
+                            exp: "Ejercicios extraídos directamente del Trabajo Práctico Nº 4 de la cursada, enfocados en variables discretas y combinatoria.",
+                            videos: [],
+                            exercises: [
+                                { 
+                                    level: "TP 4 - Discretas", 
+                                    topicType: "Distribución Binomial",
+                                    topicHint: "¿A qué variable nos referimos? Tienes un total de ensayos fijos (6 pacientes) y cada uno tiene solo dos posibles resultados: reacción adversa o ninguna.",
+                                    topicExplanation: "Se aplica Binomial porque los ensayos son independientes (n=6) con probabilidad constante de éxito (0.02).",
+                                    q: "Se aplica una vacuna a un paciente y se sabe que la probabilidad de que tenga una reacción adversa es del 0.02. Aplicamos esta vacuna en forma independiente a 6 pacientes. Calcular la probabilidad de:\na. Ningún paciente tenga reacción adversa.\nb. Exactamente 3 pacientes tengan reacción adversa.\nc. A lo sumo 4 pacientes tengan reacción adversa.", 
+                                    hint: "X ~ Binomial (n=6, p=0.02). El éxito aquí es 'reacción adversa'.\na) P(x=0)\nb) P(x=3)\nc) P(x≤4) que es P(0)+P(1)+P(2)+P(3)+P(4)",
+                                    a: "Parámetros: n=6, p=0.02\n\na) P(x=0) = 6C0 * (0.02)⁰ * (0.98)⁶ = 1 * 1 * 0.8858 = 0.8858\n\nb) P(x=3) = 6C3 * (0.02)³ * (0.98)³ = 20 * 0.000008 * 0.94119 = 0.00015 (o 1.5 x 10⁻⁴)\n\nc) P(x≤4) = P(0) + P(1) + P(2) + P(3) + P(4)\nP(1) = 6C1 * (0.02)¹ * (0.98)⁵ = 0.1085\nP(2) = 6C2 * (0.02)² * (0.98)⁴ = 0.0055\nP(3) = 0.00015\nP(4) = 6C4 * (0.02)⁴ * (0.98)² ≈ 0\nSuma total ≈ 0.9999 (prácticamente 1)." 
+                                },
+                                { 
+                                    level: "TP 4 - Discretas", 
+                                    topicType: "Distribución Binomial",
+                                    topicHint: "La carta o llega, o no llega. Además, tienes una cantidad contable de intentos (10 cartas o 7 cartas).",
+                                    topicExplanation: "Tenemos probabilidad de éxito o fracaso y una variable finita y contable 'n'.",
+                                    q: "Se sabe que la probabilidad de que una carta enviada por correo no llegue a su destino es 0.25.\na. Sea la variable X: 'Cantidad de cartas que no llegan a destino, de un total de 10'. Indicar qué distribución tiene X, y calcular P(X = E(X) + 1.5)\nb. Una persona envía 7 cartas. Hallar la probabilidad de que lleguen a destino por lo menos 5 cartas.", 
+                                    hint: "a) Binomial con n=10, p=0.25. Primero calcula E(x) = n*p. Luego súmale 1.5 y calcula la probabilidad de que la variable valga exactamente ese número.\nb) ¡Cuidado! Cambia n=7, y pide 'lleguen', así que el nuevo éxito p = 0.75. Te piden P(Y ≥ 5).",
+                                    a: "a) X ~ Bi(10; 0.25)\nE(x) = n*p = 10 * 0.25 = 2.5\nNos piden P(x = 2.5 + 1.5) = P(x = 4)\nP(x=4) = 10C4 * (0.25)⁴ * (0.75)⁶ = 210 * 0.003906 * 0.17797 = 0.1460 (14.6%)\n\nb) Y: 'Cartas que LLEGAN de un total de 7'\nY ~ Bi(7; 0.75)\nP(Y≥5) = P(Y=5) + P(Y=6) + P(Y=7)\nP(5) = 7C5 * (0.75)⁵ * (0.25)² = 0.31146\nP(6) = 7C6 * (0.75)⁶ * (0.25)¹ = 0.31146\nP(7) = 7C7 * (0.75)⁷ * (0.25)⁰ = 0.13348\nSuma: P(Y≥5) = 0.7564" 
+                                },
+                                { 
+                                    level: "TP 4 - Discretas", 
+                                    topicType: "Valor Esperado / Varianza",
+                                    topicHint: "La pregunta te da dos medidas de dispersión/tendencia y te pide hallar los parámetros partiendo de ellas.",
+                                    topicExplanation: "Se aplica el sistema de ecuaciones usando E(X)=np y V(X)=npq para despejar.",
+                                    q: "Si X es una variable aleatoria con distribución binomial, con E(X) = 4 y V(X) = 2.4, dar los parámetros de la distribución y calcular P(X ≥ 6).", 
+                                    hint: "Para hallar los parámetros (n y p), usa el sistema de ecuaciones:\n1) E(X) = n*p = 4\n2) V(X) = n*p*q = 2.4\nSustituye (n*p) por 4 en la segunda ecuación para hallar 'q'. Luego saca 'p', y por último 'n'.",
+                                    a: "Paso 1: Hallar parámetros\nSabemos que E(x) = np = 4 y V(x) = np(1-p) = 2.4\nReemplazamos np: 4 * (1-p) = 2.4\n1 - p = 2.4 / 4\n1 - p = 0.6   =>  p = 0.4\nSi np = 4 y p = 0.4  =>  n * 0.4 = 4  =>  n = 10\nLos parámetros son n=10, p=0.4.\n\nPaso 2: Calcular P(X ≥ 6) con X ~ Bi(10, 0.4)\nP(X≥6) = P(6) + P(7) + P(8) + P(9) + P(10)\nP(6) = 10C6 * (0.4)⁶ * (0.6)⁴ = 0.1114\nP(7) = 10C7 * (0.4)⁷ * (0.6)³ = 0.0424\nP(8) = 10C8 * (0.4)⁸ * (0.6)² = 0.0106\nP(9) = 10C9 * (0.4)⁹ * (0.6)¹ = 0.0015\nP(10)= 10C10 * (0.4)¹⁰ * (0.6)⁰ = 0.0001\nP(X≥6) = 0.166" 
+                                },
+                                { 
+                                    level: "TP 4 - Discretas", 
+                                    topicType: "Distribución Binomial",
+                                    topicHint: "Tienes un número de motores finitos (4 motores o 2 por ala) y una probabilidad de que fallen o no (0.04).",
+                                    topicExplanation: "Se usa la Binomial al tener un número discreto y fijo de ensayos (motores) con probabilidades de éxito contables.",
+                                    q: "Los cuatro motores de un avión cuatrimotor (dos en cada ala) fallan, cada uno con probabilidad 0.04, en forma independiente, durante un trayecto de 20.000 km. El avión no entra en emergencia mientras funcionen sin fallar por lo menos dos motores:\na. ¿Cuál es la probabilidad de que el avión no entre en emergencia?\nb. ¿Cuál será esa probabilidad si se agrega la restricción de que al menos debe funcionar un motor en CADA ala?", 
+                                    hint: "a) X: 'Motores que fallan'. Para NO entrar en emergencia, pueden fallar como máximo 2 motores (0, 1 o 2). P(X ≤ 2) en una Binomial(n=4, p=0.04).\nb) Si debe funcionar 1 en cada ala, significa que NO pueden fallar los 2 de un ala. \nAnaliza el Ala Izquierda ~ Bi(2, 0.04) para P(fallas ≤ 1) y multiplícalo por la probabilidad del Ala Derecha P(fallas ≤ 1).",
+                                    a: "a) General: X ~ Bi(4; 0.04). No entra en emergencia si fallan ≤ 2.\nP(X≤2) = P(0) + P(1) + P(2)\nP(0) = 4C0 * (0.04)⁰ * (0.96)⁴ = 0.8493\nP(1) = 4C1 * (0.04)¹ * (0.96)³ = 0.1415\nP(2) = 4C2 * (0.04)² * (0.96)² = 0.0088\nP(X≤2) = 0.9996\n\nb) Por ala: X_ala ~ Bi(2; 0.04). Debe fallar ≤ 1 en cada ala.\nP(X_ala ≤ 1) = P(0) + P(1) = (0.96)² + 2*(0.04)*(0.96) = 0.9216 + 0.0768 = 0.9984\n\nComo deben cumplirse ambas (Ala Izquierda Y Ala Derecha):\nP(Global) = 0.9984 * 0.9984 = 0.9968" 
+                                }
+                            ]
+                        },
+                        {
+                            id: "p_tp5",
+                            title: "TPs pre-parcial: TP 5 Variable Continua",
+                            exp: "Ejercicios extraídos directamente del Trabajo Práctico Nº 5, enfocados en el uso de la campana de Gauss, tabla Z y aproximación normal a la binomial.",
+                            videos: [],
+                            exercises: [
+                                { 
+                                    level: "TP 5 - Continuas", 
+                                    topicType: "Distribución Normal",
+                                    topicHint: "El texto es muy explícito: te da el símbolo μ (media) y el símbolo σ (desviación) en una aleatoria continua.",
+                                    topicExplanation: "Se resuelve transformando la variable a Z al estar explícitamente definida como Normal.",
+                                    q: "Sea X una variable aleatoria normal con μ=5 y σ=10. Hallar:\na. P(X < 0)\nb. P(X > 10)\nc. P(X ≥ 15)", 
+                                    hint: "Aplica la fórmula de estandarización Z = (X - μ) / σ para cada inciso.\nRecuerda: si el enunciado pide 'Menor que' (a), miras directo en la tabla. Si pide 'Mayor que' (b, c), haces 1 menos el valor de la tabla.",
+                                    a: "a) P(X < 0):\nZ = (0 - 5) / 10 = -0.5\nPor tabla Z, Área para -0.5 = 0.3085 (30.85%)\n\nb) P(X > 10):\nZ = (10 - 5) / 10 = 0.5\nPor tabla, Área izquierda = 0.6915\nÁrea derecha ('Mayor') = 1 - 0.6915 = 0.3085 (30.85%)\n\nc) P(X ≥ 15):\nZ = (15 - 5) / 10 = 1.0\nPor tabla, Área izquierda = 0.8413\nÁrea derecha = 1 - 0.8413 = 0.1587 (15.87%)" 
+                                },
+                                { 
+                                    level: "TP 5 - Continuas", 
+                                    topicType: "Distribución Normal",
+                                    topicHint: "El peso es una medida continua que forma una 'campana'. Te dicen la media y desviación.",
+                                    topicExplanation: "Es un problema inverso y directo de tipificación con Z usando valores continuos en una campana de Gauss.",
+                                    q: "La distribución de los pesos de los alumnos varones de una tecnicatura es aproximadamente normal, con media = 75kg y desviación típica = 7kg.\na. Hallar la probabilidad de que un alumno, elegido al azar, pese más de 95kg.\nb. Calcular el peso no superado por el 10.03% de los alumnos.", 
+                                    hint: "a) Z = (95 - 75) / 7. Recuerda usar complemento (1 - área) porque dice 'más de'.\nb) Es un problema inverso. El 10.03% (0.1003 de área) está a la izquierda. Búscalo adentro de la tabla Z para encontrar a qué valor Z corresponde, y luego despeja X de la fórmula Z = (X - μ) / σ.",
+                                    a: "a) P(X > 95)\nZ = (95 - 75) / 7 = 20 / 7 ≈ 2.85\nPor tabla para Z=2.85 el área izquierda es 0.9978.\nComo es 'más de', P = 1 - 0.9978 = 0.0022 (0.22%)\n\nb) Peso no superado por 10.03% (área = 0.1003 a la izquierda).\nBuscamos 0.1003 en el interior de la tabla Z. Corresponde a Z = -1.28.\nDespejamos X:\n-1.28 = (X - 75) / 7\n-1.28 * 7 = X - 75\n-8.96 = X - 75\nX = 75 - 8.96 = 66.04 kg." 
+                                },
+                                { 
+                                    level: "TP 5 - Continuas", 
+                                    topicType: "Distribución Normal",
+                                    topicHint: "Habla del 'tiempo', que es una variable continua. ¡Cuidado con el dato que te entregan! Es la varianza.",
+                                    topicExplanation: "Requiere cálculo bajo la curva normal estándar, asegurándote de convertir primero la varianza a desviación estándar (σ).",
+                                    q: "El tiempo necesario para llenar un frasco es una variable aleatoria X con distribución normal con una media de 10 segundos, y una varianza de 4 seg².\na. Calcular la probabilidad de que el tiempo exceda los 11.5 segundos.\nb. Hallar el tiempo de llenado tal que la probabilidad de excederlo sea 0.03.", 
+                                    hint: "¡Cuidado con la varianza! La fórmula Z exige la desviación estándar (σ), que es la raíz cuadrada de la varianza (√4 = 2).\nb) 'Probabilidad de EXCEDERLO (estar a su derecha) sea 0.03'. Esto significa que el área a su izquierda es 1 - 0.03 = 0.9700. Busca 0.9700 en la tabla Z positiva y despeja X.",
+                                    a: "Media (μ) = 10. Desviación (σ) = √4 = 2.\n\na) P(X > 11.5)\nZ = (11.5 - 10) / 2 = 0.75\nTabla Z para 0.75 = 0.7734\nP('exceda') = 1 - 0.7734 = 0.2266 (22.66%)\n\nb) Área a la derecha es 0.03, por tanto área a la izquierda es 0.9700.\nBuscando 0.9700 en la tabla Z obtenemos Z = 1.88.\nDespejamos X:\n1.88 = (X - 10) / 2\n1.88 * 2 = X - 10\n3.76 = X - 10\nX = 13.76 segundos." 
+                                },
+                                { 
+                                    level: "TP 5 - Continuas", 
+                                    topicType: "Aproximación Normal a Binomial",
+                                    topicHint: "Tienes probabilidades contables (defectuoso o no) pero el 'n' (1000 microchips) es absurdamente grande para calcularlo de forma regular.",
+                                    topicExplanation: "Se debe usar la media (np) y la desviación para convertir la extensa prueba binomial a un intervalo liso con curva Normal.",
+                                    q: "En una línea de producción el 35% de los productos es defectuoso. ¿Cuál es la probabilidad aproximada de que, entre los siguientes 1000 microchips manufacturados en esa línea, menos de 354 sean defectuosos?", 
+                                    hint: "Muestra enorme (n=1000). Es inviable usar Binomial. Usa la Aproximación Normal: μ = n*p y σ = √(npq).\nImportante: 'Menos de 354' (P < 354) significa que el máximo aceptado es 353. Aplica corrección por continuidad usando X = 353.5 para abarcar todo el escalón 353.",
+                                    a: "Paso 1: Parámetros Binomiales a Normales\nn = 1000, p = 0.35, q = 0.65\nμ = n*p = 1000 * 0.35 = 350\nσ = √(npq) = √(1000 * 0.35 * 0.65) = √227.5 ≈ 15.08\n\nPaso 2: Corrección y Estandarización\nPiden P(X < 354), lo que en variable discreta equivale a 353 o menos.\nCon la corrección por continuidad sumamos 0.5 al límite: X = 353.5.\nZ = (353.5 - 350) / 15.08 = 3.5 / 15.08 ≈ 0.23\n\nPaso 3: Tabla Z\nPara Z = 0.23, el área a la izquierda es 0.5910.\nLa probabilidad aproximada es 59.10%." 
+                                }
+                            ]
+                        },
+                        {
+                            id: "p_tips",
+                            title: "Tips Parcial",
+                            exp: `<div class="space-y-4">
+                                <p class="text-gray-700 mb-6 font-medium">Recopilación de todos los "Tips de Examen" vistos durante el curso para una lectura rápida antes del parcial. ¡Identificar de qué habla el problema es la mitad de la nota!</p>
+                                
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Básica y Asignación <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa". <br><br><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Reglas de Conteo <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <ul class="text-sm text-amber-900 mt-2 list-disc list-inside space-y-1">
+                                        <li><b>Permutación:</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
+                                        <li><b>Combinación:</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
+                                        <li><b>Factorial simple (N!):</b> Si vas a ordenar a TODOS los elementos en su totalidad (ej. 5 personas en 5 sillas).</li>
+                                    </ul>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Condicional <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".<br>La fórmula es $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador (abajo).</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Teorema de Bayes <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de que sea de la Máquina 1?". Usa la fórmula de fracción gigante (Ruta pedida / Total de Rutas posibles).</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Valor Esperado E(X) y Varianza <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar la media o Valor Esperado, simplemente multiplica cada columna (X por P) y suma todos los resultados.</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Binomial <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> Te dan intentos fijos "$n$" (ej. "muestra de 5") y una probabilidad de éxito "$p$" (ej. "30%"). Si te piden probabilidad de "al menos 2", debes calcular la de 2, 3, 4, 5... y sumarlas (o usar el complemento).</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución de Poisson <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).<br><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Uniforme Continua <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Gráfica:</b> Es un rectángulo plano. La probabilidad se calcula sacando el Área del rectángulo (Base x Altura).<br><b>Fórmula:</b> La altura es SIEMPRE constante y vale: $\\frac{1}{b-a}$.</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Curva Normal y Valor Z <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Trampa Asesina:</b> A veces te dan la "Varianza" en el enunciado. ¡Sácale la raíz cuadrada primero! (Si Varianza = 4, usa Desviación $\\sigma = 2$).<br><br><b>Uso de Tabla Z:</b> La tabla SIEMPRE lee el área a la IZQUIERDA ("menor que"). Si te piden "mayor que" o "a la DERECHA", haz $1 - (valor\\ de\\ la\\ tabla)$.</p>
+                                </div>
+
+                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Aproximación Normal a Binomial <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 mt-2"><b>Regla estricta:</b> Solo se puede hacer el truco si $n > 30$ y $n \\cdot p > 5$.<br><b>Corrección por Continuidad:</b> Como pasamos de "escalones" a algo "liso", debes sumar y restar $0.5$ a la $X$ discreta para transformarla en intervalo continuo.</p>
+                                </div>
+                            </div>`,
+                            videos: [],
+                            exercises: []
                         }
                     ]
                 }
-            ]
-        };
-
-        const testData = {
-            quizPool: [
-                { unit: "u3", q: "¿Cuál es la principal diferencia entre una Combinación y una Permutación?", options: ["En la combinación el orden importa, en la permutación no.", "En la permutación el orden importa, en la combinación no.", "Las permutaciones solo se usan para números enteros.", "No hay diferencia, son sinónimos estadísticos."], ans: 1 },
-                { unit: "u3", q: "Si la probabilidad de que llueva es 0.35, ¿cuál es la probabilidad del evento complemento?", options: ["0.35", "1.35", "0.65", "-0.35"], ans: 2 },
-                { unit: "u3", q: "Al lanzar una moneda al aire, el resultado del primer lanzamiento no afecta al segundo. Estos eventos se consideran:", options: ["Mutuamente excluyentes", "Eventos Complementarios", "Eventos Dependientes", "Eventos Independientes"], ans: 3 },
-                { unit: "u3", q: "¿Para qué sirve principalmente el Teorema de Bayes?", options: ["Para calcular combinaciones grandes.", "Para actualizar una probabilidad inicial tras recibir nueva información.", "Para sumar probabilidades excluyentes.", "Para graficar la curva normal."], ans: 1 },
-
-                { unit: "u4", q: "La distribución Binomial exige que los experimentos tengan:", options: ["Múltiples resultados posibles (más de 3).", "Resultados infinitos.", "Únicamente dos resultados posibles (Éxito o Fracaso).", "Una medida de tiempo o área."], ans: 2 },
-                { unit: "u4", q: "Si quieres calcular la probabilidad de que lleguen 5 clientes al banco en una hora (un evento en un intervalo de tiempo), ¿qué distribución usarías?", options: ["Distribución Uniforme", "Distribución Binomial", "Distribución de Poisson", "Curva Normal"], ans: 2 },
-                { unit: "u4", q: "¿Cuál de las siguientes es un ejemplo claro de una variable aleatoria discreta?", options: ["El tiempo de vuelo de un avión.", "Litros de leche en una jarra.", "El número de quejas recibidas en un call center.", "La temperatura ambiente de una oficina."], ans: 2 },
-
-                { unit: "u5", q: "¿Cuál es el valor del área TOTAL debajo de una curva de distribución normal perfecta?", options: ["100", "50", "0", "1 (o 100%)"], ans: 3 },
-                { unit: "u5", q: "El valor 'Z' en la Normal Estándar nos indica:", options: ["Cuántas desviaciones estándar estamos alejados de la media.", "El tamaño de la muestra elegida.", "La probabilidad directa en porcentaje.", "El margen de error del instrumento."], ans: 0 },
-                { unit: "u5", q: "El centro exacto de la curva normal estándar tiene un valor Z igual a:", options: ["1", "-1", "0.5", "0"], ans: 3 }
-            ],
-            flashcardPool: [
-                { unit: "u3", topic: "Conteo", f: "¿Cómo reconocer si usar Combinación o Permutación en el examen?", b: "Permutación (N!/(N-n)!): EL ORDEN IMPORTA (ej. cargos jerárquicos). Combinación (N!/(n!(N-n)!)): EL ORDEN NO IMPORTA (ej. comités generales)." },
-                { unit: "u3", topic: "Reglas Operativas", f: "En probabilidad, ¿qué significan las palabras 'O' y la palabra 'Y'?", b: "'O' (Unión) significa SUMAR probabilidades. 'Y' (Intersección) significa MULTIPLICAR probabilidades." },
-                { unit: "u4", topic: "Variables", f: "¿Ejemplo clásico de variable discreta vs continua?", b: "Discreta (se cuenta a saltos): Número de errores en un texto. Continua (se mide con decimales): Temperatura de una oficina." },
-                { unit: "u4", topic: "Poisson", f: "¿Cuál es la palabra clave en un examen para saber que es distribución de Poisson?", b: "Cuando mencionan un PROMEDIO (μ o λ) que ocurre en un intervalo fijo de TIEMPO o ESPACIO (ej. 5 baches por milla)." },
-                { unit: "u5", topic: "Cálculo Z", f: "La tabla Normal de tu examen te da el área a la IZQUIERDA. ¿Qué haces si el problema te pide la probabilidad 'Mayor que' o a la DERECHA?", b: "Debes hacer la resta: 1 - (el número que encontraste en la tabla)." },
-                { unit: "u5", topic: "Cálculo Z", f: "El problema te pide usar la fórmula Z = (X - μ) / σ, pero te dan el dato de la 'Varianza'. ¿Qué debes hacer?", b: "Debes sacar la raíz cuadrada de la Varianza para obtener la Desviación Estándar (σ) ANTES de ponerla en la fórmula." }
-            ],
-            identifyPool: [
-                { q: "Una fábrica tiene 3 líneas de ensamblaje. La línea A produce el 50%, B el 30% y C el 20%. Las tasas de defectos son 1%, 2% y 3%. Si se elige un artículo defectuoso al azar, ¿cuál es la probabilidad de que provenga de la línea B?", options: ["Distribución Binomial", "Probabilidad Condicional Simple", "Teorema de Bayes", "Regla de Adición"], ans: 2, exp: "<strong>Por qué:</strong> Te dan la probabilidad de defectos por máquina, pero la pregunta 'viaja al pasado': sabiendo el final (es defectuoso), te pide la probabilidad del origen (línea B).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{P(A_1)P(B | A_1) + \\dots + P(A_n)P(B | A_n)} $$</span></div>" },
-                { q: "En una central de atención al cliente entran en promedio 12 llamadas por minuto. ¿Cuál es la probabilidad de recibir exactamente 5 llamadas en los próximos 30 segundos?", options: ["Distribución Normal", "Distribución de Poisson", "Valor Esperado", "Distribución Binomial"], ans: 1, exp: "<strong>Por qué:</strong> Menciona un 'promedio' de ocurrencias dentro de un intervalo específico de tiempo continuo (minutos/segundos). ¡Ojo con ajustar la media a 30 segundos!<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x) = \\frac{\\lambda^x e^{-\\lambda}}{x!} $$ y $$ E(X) = \\lambda $$</span></div>" },
-                { q: "Un examen de opción múltiple tiene 15 preguntas, cada una con 4 opciones. Si un estudiante responde todas al azar, ¿cuál es la probabilidad de que acierte a exactamente 8 preguntas?", options: ["Distribución Binomial", "Permutación", "Aproximación Normal", "Probabilidad Uniforme"], ans: 0, exp: "<strong>Por qué:</strong> Hay un número fijo de intentos (n=15), una probabilidad de éxito constante (1/4 o 0.25) y solo hay dos resultados (acertar o fallar).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ P(x|n,p) = \\frac{n!}{x!(n-x)!} p^x (1-p)^{n-x} $$ y $$ E(X) = n p $$</span></div>" },
-                { q: "El peso de los paquetes de harina empacados por una máquina se distribuye con una media de 500g y una varianza de 25g. ¿Cuál es la probabilidad de que un paquete elegido al azar pese más de 510g?", options: ["Teorema de Bayes", "Distribución Uniforme", "Valor Esperado", "Distribución Normal"], ans: 3, exp: "<strong>Por qué:</strong> Trata con una variable continua (peso) y te proporciona la media y la varianza para estandarizar los datos.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Normal Estándar (Z)</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$</span></div>" },
-                { q: "Un gerente debe seleccionar a 4 empleados de un equipo de 12 para asistir a una conferencia en otra ciudad. ¿De cuántas formas distintas puede armar el grupo?", options: ["Permutación", "Combinación", "Valor Esperado", "Ley de Multiplicación"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo de un total, pero el ORDEN en que son elegidos NO importa (el grupo de 4 personas es el mismo sin importar quién fue nombrado primero).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Combinaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ C_n^N = \\binom{N}{n} = \\frac{N!}{n!(N-n)!} $$</span></div>" },
-                { q: "En una carrera ecuestre compiten 8 caballos. ¿De cuántas formas diferentes pueden quedar asignados los 3 primeros lugares (oro, plata y bronce)?", options: ["Combinación", "Permutación", "Probabilidad Condicional", "Ley de Adición"], ans: 1, exp: "<strong>Por qué:</strong> Se elige un subgrupo, pero el ORDEN SÍ IMPORTA debido a que los premios son diferentes para cada posición.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Regla de Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" },
-                { q: "Un juego de feria cuesta $5. Tienes 10% de probabilidad de ganar $20, 30% de ganar $5 y 60% de no ganar nada. ¿Cuál es el beneficio promedio por jugada a largo plazo?", options: ["Valor Esperado E(X)", "Teorema de Bayes", "Distribución de Poisson", "Probabilidad Clásica"], ans: 0, exp: "<strong>Por qué:</strong> Tienes una variable discreta con resultados monetarios y te piden el promedio o ganancia media a largo plazo.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Valor Esperado Discreto</span><br><span class='text-lg font-serif text-gray-900'>$$ E(x) = \\mu = \\Sigma x f(x) $$</span></div>" },
-                { q: "El tiempo de espera de un autobús varía entre 5 y 15 minutos, con igual probabilidad para cualquier instante en ese lapso. ¿Cuál es la probabilidad de esperar menos de 8 minutos?", options: ["Distribución Binomial", "Distribución Poisson", "Distribución Uniforme Continua", "Distribución Normal"], ans: 2, exp: "<strong>Por qué:</strong> Todos los valores dentro de un rango específico continuo tienen exactamente la misma probabilidad de ocurrir (área plana).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Uniforme</span><br><span class='text-lg font-serif text-gray-900'>$$ f(x) = \\frac{1}{b - a} $$ y $$ E(x) = \\frac{a+b}{2} $$</span></div>" },
-                { q: "En una ciudad el 40% tiene perro, el 30% tiene gato y el 15% tiene ambos. Si sabemos que una persona tiene perro, ¿cuál es la probabilidad de que también tenga gato?", options: ["Teorema de Bayes", "Probabilidad Condicional", "Ley de la Adición", "Eventos Mutuamente Excluyentes"], ans: 1, exp: "<strong>Por qué:</strong> Pide la probabilidad de un evento SABIENDO que otro ya es un hecho (restringe el universo solo a los que tienen perro).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Probabilidad Condicional</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A | B) = \\frac{P(A \\cap B)}{P(B)} $$</span></div>" },
-                { q: "Al extraer una sola carta de un mazo francés estándar de 52 cartas, ¿cuál es la probabilidad de sacar un corazón o un rey?", options: ["Ley de la Multiplicación", "Combinatoria", "Probabilidad Condicional", "Ley de la Adición"], ans: 3, exp: "<strong>Por qué:</strong> La palabra clave es 'O'. Ocurre un evento o el otro. Se suman sus probabilidades individuales y se resta la intersección (el Rey de corazones).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Ley de la Adición</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) - P(A \\cap B) $$</span></div>" },
-                { q: "Una aerolínea sabe que el 5% de los pasajeros con boleto no se presentan al vuelo. Si venden 400 boletos, ¿cuál es la probabilidad de que más de 25 personas no se presenten? (utilizando una curva continua).", options: ["Teorema de Bayes", "Aproximación de Poisson a Binomial", "Aproximación de Normal a Binomial", "Valor Esperado"], ans: 2, exp: "<strong>Por qué:</strong> Tienes un tamaño de muestra muy grande (400) y probabilidad constante. Para no hacer la fórmula binomial, estandarizamos a la curva Z.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Conversión a Variable Z</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$ (donde $ \\mu = np $)</span></div>" },
-                { q: "Lanzas un dado normal y sacas una carta de una baraja. ¿Cuál es la probabilidad de sacar un número 6 en el dado y un As en la baraja?", options: ["Ley de Adición", "Ley de Multiplicación (Independientes)", "Probabilidad Condicional", "Teorema de Bayes"], ans: 1, exp: "<strong>Por qué:</strong> Pide la ocurrencia de ambos eventos a la vez (palabra 'Y'). Además, lo que saca el dado no afecta a la carta, son independientes.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Multiplicación (Independientes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cap B) = P(A)P(B) $$</span></div>" },
-                { q: "En un bolillero hay bolas numeradas del 1 al 20. ¿Cuál es la probabilidad de sacar un número que sea múltiplo de 3?", options: ["Valor Esperado", "Regla de Bayes", "Probabilidad Clásica", "Combinación"], ans: 2, exp: "<strong>Por qué:</strong> Solo debes contar cuántos casos favorables hay y dividirlo entre el total de bolas (20). Todos los resultados son equiprobables.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Requerimientos Básicos</span><br><span class='text-lg font-serif text-gray-900'>$$ 0 \\le P(E_i) \\le 1 \\quad \\text{y} \\quad \\Sigma P(E_i) = 1 $$</span></div>" },
-                { q: "Una tela producida en un telar tiene en promedio 0.5 defectos por cada metro cuadrado. ¿Cuál es la probabilidad de encontrar 2 defectos en un corte de 3 metros cuadrados?", options: ["Distribución Uniforme", "Distribución Normal", "Distribución Binomial", "Distribución de Poisson"], ans: 3, exp: "<strong>Por qué:</strong> Se menciona una tasa promedio de ocurrencias en un intervalo espacial (área). ¡Asegúrate de escalar el promedio a 3 metros!<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución de Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = \\lambda \\quad \\text{y} \\quad V(X) = \\lambda $$</span></div>" },
-                { q: "La efectividad de una vacuna es del 90%. Si se aplica a un grupo de 20 voluntarios, ¿cuál es la probabilidad de que al menos 18 desarrollen inmunidad?", options: ["Aproximación Normal", "Distribución de Poisson", "Distribución Binomial", "Valor Esperado"], ans: 2, exp: "<strong>Por qué:</strong> Son intentos contables y limitados (n=20), con un éxito (inmunidad) de probabilidad constante (p=0.9).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Binomial</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = n p \\quad \\text{y} \\quad V(X) = n p q $$</span></div>" },
-                { q: "Las notas de un examen tienen media 75 y desvío 8. El 15% superior de los alumnos recibirá una beca. ¿Cuál es la nota mínima para obtener la beca?", options: ["Regla de Bayes", "Probabilidad de Poisson", "Z Inverso (Curva Normal)", "Variable Discreta"], ans: 2, exp: "<strong>Por qué:</strong> Te dan el porcentaje (área bajo la curva normal) y te piden encontrar el valor de la variable original, despejando la fórmula de Z.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Variable Normal Estándar</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} \\implies x = z\\sigma + \\mu $$</span></div>" },
-                { q: "Un test acierta el 95% si estás enfermo, y da 10% de falsos positivos si estás sano. Si el 2% de la población está enferma y tu test dio positivo, ¿qué probabilidad hay de que realmente estés enfermo?", options: ["Teorema de Bayes", "Ley de la Multiplicación", "Aproximación Binomial", "Probabilidad Clásica"], ans: 0, exp: "<strong>Por qué:</strong> Tienes múltiples caminos (sano/enfermo) que llevan a un mismo resultado (test positivo). Sabiendo el final (positivo), te preguntan por la probabilidad del inicio.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{\\Sigma P(A_j)P(B | A_j)} $$</span></div>" },
-                { q: "En una caja hay 5 bolas rojas y 3 azules. Extraes dos bolas una tras otra sin devolver la primera. ¿Probabilidad de que ambas sean rojas?", options: ["Permutación", "Ley de Multiplicación (Dependientes)", "Ley de la Adición", "Probabilidad Binomial"], ans: 1, exp: "<strong>Por qué:</strong> Eventos conjuntos (palabra 'Y') pero la primera extracción cambia las probabilidades de la segunda (porque es sin reemplazo).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Multiplicación (Dependientes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cap B) = P(A)P(B | A) $$</span></div>" },
-                { q: "Una empresa vende pólizas a $500. El riesgo de accidente es 1% pagando $10,000, y 5% pagando $2,000. ¿Cuál es la ganancia esperada por póliza para la empresa?", options: ["Valor Esperado E(X)", "Distribución Normal", "Combinatoria", "Poisson"], ans: 0, exp: "<strong>Por qué:</strong> Involucra resultados monetarios, decesos y sus probabilidades asociadas para hallar el beneficio medio a largo plazo.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Valor Esperado</span><br><span class='text-lg font-serif text-gray-900'>$$ E(x) = \\mu = \\Sigma x f(x) $$</span></div>" },
-                { q: "Un restaurante ofrece 10 ingredientes para armar una ensalada. Si puedes elegir exactamente 5, ¿cuántas ensaladas distintas hay?", options: ["Combinación", "Permutación", "Regla de Bayes", "Probabilidad Condicional"], ans: 0, exp: "<strong>Por qué:</strong> El orden en que le pongas el tomate o la lechuga a la ensalada no importa, sigue siendo el mismo plato.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Combinaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ C_n^N = \\binom{N}{n} = \\frac{N!}{n!(N-n)!} $$</span></div>" },
-                { q: "Un club tiene 15 miembros y deben elegir un presidente, un vicepresidente y un secretario. ¿De cuántas formas se puede conformar la directiva?", options: ["Valor Esperado", "Probabilidad Condicional", "Combinación", "Permutación"], ans: 3, exp: "<strong>Por qué:</strong> Puestos jerárquicos o específicos significan que elegir al grupo (Ana, Juan, Pedro) cambia dependiendo de quién sea el presidente.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" },
-                { q: "El número de baches en un camino sigue una tasa constante de 1.5 cada 10 km. ¿Cuál es la probabilidad de que en los próximos 20 km no haya ninguno?", options: ["Distribución Binomial", "Distribución Normal", "Distribución de Poisson", "Uniforme Continua"], ans: 2, exp: "<strong>Por qué:</strong> Tasa promedio de ocurrencia de eventos abstractos en un intervalo fijo de distancia (espacio).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Distribución Poisson</span><br><span class='text-lg font-serif text-gray-900'>$$ E(X) = \\lambda \\quad \\text{y} \\quad V(X) = \\lambda $$</span></div>" },
-                { q: "Si la probabilidad de lluvia es 0.40, ¿qué fórmula uso para calcular la probabilidad de que no llueva hoy?", options: ["Complemento de un evento", "Teorema de Bayes", "Ley de la Multiplicación", "Valor Esperado"], ans: 0, exp: "<strong>Por qué:</strong> Para calcular la probabilidad de que NO ocurra un evento, se usa la fórmula del complemento porque ambos escenarios suman 1 (o 100%).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Cálculo usando Complemento</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A) = 1 - P(A^c) $$</span></div>" },
-                { q: "La vida útil de una lámpara es de 2000 horas con una desviación estándar de 150. ¿Cuál es la probabilidad de que una lámpara dure entre 1900 y 2100 horas?", options: ["Distribución de Poisson", "Ley de Adición Excluyente", "Distribución Uniforme", "Distribución Normal Z"], ans: 3, exp: "<strong>Por qué:</strong> Se da la Media, la Desviación y la variable de medición (tiempo de vida) es continua, por lo tanto genera una curva en campana.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Normal Estándar (Z)</span><br><span class='text-lg font-serif text-gray-900'>$$ z = \\frac{x - \\mu}{\\sigma} $$</span></div>" },
-                { q: "En un grupo, P(A)=0.6 y P(B)=0.5, mientras que P(A y B)=0.2. Se sabe que el evento B ya ocurrió, ¿cuál es la probabilidad de que A ocurra?", options: ["Ley de Adición", "Teorema de Bayes", "Probabilidad Condicional", "Eventos Independientes"], ans: 2, exp: "<strong>Por qué:</strong> La ocurrencia confirmada de B reduce el universo de posibilidades totales y es el nuevo denominador.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Probabilidad Condicional</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A | B) = \\frac{P(A \\cap B)}{P(B)} $$</span></div>" },
-                { q: "La probabilidad de que un cliente compre leche es 0.5, pan 0.4 y ambas 0.1. ¿Cuál es la probabilidad de que compre leche O pan?", options: ["Ley de Multiplicación", "Teorema de Bayes", "Distribución Uniforme", "Ley de la Adición"], ans: 3, exp: "<strong>Por qué:</strong> La conjunción 'O' indica la unión de conjuntos. Debes sumar las probabilidades de cada evento y restarle los que compraron ambos para no contarlos doble.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Ley de la Adición</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) - P(A \\cap B) $$</span></div>" },
-                { q: "Dos proveedores entregan piezas. P1 entrega el 70% y P2 el 30%. El 3% de P1 es defectuoso y el 5% de P2 es defectuoso. Si la pieza extraída es BUENA, ¿probabilidad de venir de P1?", options: ["Teorema de Bayes", "Valor Esperado", "Probabilidad Binomial", "Permutación"], ans: 0, exp: "<strong>Por qué:</strong> Problema clásico de rutas inversas. Pide la causa (Proveedor 1) partiendo del análisis del final (la pieza resultó Buena).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Teorema de Bayes</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A_i | B) = \\frac{P(A_i)P(B | A_i)}{\\Sigma P(A_j)P(B | A_j)} $$</span></div>" },
-                { q: "Tienes una distribución de ventas que da como Valor Esperado (Media) 500 y Valor Esperado del cuadrado E(X²) igual a 260000. Te piden calcular la dispersión de las ventas diarias.", options: ["Aproximación Normal", "Varianza de Variable Discreta", "Valor Esperado", "Regla de Bayes"], ans: 1, exp: "<strong>Por qué:</strong> Te piden medir la dispersión y te proporcionan el insumo clave para sacar la Varianza (el E(X²) ).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Varianza Discreta</span><br><span class='text-lg font-serif text-gray-900'>$$ V(x) = E(X^2) - [E(X)]^2 $$</span></div>" },
-                { q: "¿Probabilidad de sacar un rey de corazones (hay 1) O el as de espadas (hay 1) de una baraja, sabiendo que no puedes sacar ambos a la vez en un tiro?", options: ["Probabilidad Condicional", "Valor Esperado", "Ley de la Adición (Eventos Mutuamente Excluyentes)", "Regla de la Multiplicación"], ans: 2, exp: "<strong>Por qué:</strong> Se conectan con la letra 'O' y al no poder ocurrir al mismo tiempo su intersección P(A ∩ B) es cero. Por lo tanto, no hay nada que restar.<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Adición (Mutuamente Excluyentes)</span><br><span class='text-lg font-serif text-gray-900'>$$ P(A \\cup B) = P(A) + P(B) $$</span></div>" },
-                { q: "Para acceder a un sistema de un solo uso, se debe generar una clave de 4 dígitos usando los números del 0 al 9 sin repetir ninguno. ¿De cuántas formas posibles se puede crear dicha clave?", options: ["Permutación", "Combinación", "Valor Esperado", "Poisson"], ans: 0, exp: "<strong>Por qué:</strong> Extraes un subgrupo específico (4) del total disponible (10), y el ORDEN de los dígitos cambia completamente la clave (1234 no es la misma que 4321).<br><div class='mt-4 p-4 bg-amber-50 rounded-xl border border-amber-200 text-center shadow-inner'><span class='text-xs font-bold text-amber-800 uppercase tracking-wider'>Permutaciones</span><br><span class='text-lg font-serif text-gray-900'>$$ P_n^N = \\frac{N!}{(N-n)!} $$</span></div>" }
             ]
         };
 
@@ -1185,13 +1231,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     const isLearned = userStats.learnedTopics.includes(topicId);
                     btn.innerHTML = `<span>${topicTitle}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
                 }
-            }
-        }
-
-        function saveQuizGrade(unitId, score) {
-            if (!userStats.quizGrades[unitId] || score > userStats.quizGrades[unitId]) {
-                userStats.quizGrades[unitId] = score;
-                saveUserData();
             }
         }
 
@@ -1364,66 +1403,108 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             }
 
             const exContainer = document.getElementById('exercises-container');
+            const practiceSection = document.getElementById('practice-section');
             exContainer.innerHTML = '';
             
-            if(unit.id === 'uparcial') {
-                document.getElementById('exercise-intro-text').innerText = "Estos son ejercicios de nivel parcial. Usa el botón de 'Ver Guía' para una pista estratégica antes de ver la resolución.";
-            } else {
-                document.getElementById('exercise-intro-text').innerText = "Intenta resolver el ejercicio de práctica antes de ver la respuesta paso a paso.";
-            }
-
-            topic.exercises.forEach((ex, index) => {
-                const exId = `topic-ex-${index}`;
-                let chartHtml = '';
-                if (ex.hasZChart) {
-                    chartHtml = `<div class="w-full flex justify-center my-6"><canvas id="topic-z-canvas-${index}" class="w-full max-w-md"></canvas></div>`;
+            if (topic.exercises && topic.exercises.length > 0) {
+                practiceSection.classList.remove('hidden');
+                
+                if(unit.id === 'uparcial') {
+                    document.getElementById('exercise-intro-text').innerText = "Debes clasificar el ejercicio correctamente eligiendo el tema o distribución en el menú desplegable. Solo al acertar, se habilitarán los botones de ayuda.";
+                } else {
+                    document.getElementById('exercise-intro-text').innerText = "Intenta resolver el ejercicio de práctica antes de ver la respuesta paso a paso.";
                 }
 
-                let html = `
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
-                        <div class="w-full">
-                            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider rounded">Ejercicio ${index + 1} • ${ex.level}</span>
-                            <div class="mt-4 text-gray-800 font-medium whitespace-pre-line">${ex.q}</div>
-                            ${chartHtml}
+                topic.exercises.forEach((ex, index) => {
+                    const exId = `topic-ex-${index}`;
+                    let chartHtml = '';
+                    if (ex.hasZChart) {
+                        chartHtml = `<div class="w-full flex justify-center my-6"><canvas id="topic-z-canvas-${index}" class="w-full max-w-md"></canvas></div>`;
+                    }
+                    
+                    let selectHtml = '';
+                    let opacityClass = '';
+                    if(ex.topicType) {
+                        opacityClass = 'opacity-50 pointer-events-none'; // Inician bloqueados hasta acertar
+                        selectHtml = `
+                            <div class="mb-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100 shadow-inner">
+                                <label class="block text-sm font-bold text-indigo-900 mb-2">🕵️‍♂️ Selecciona el tema o fórmula a aplicar antes de resolver:</label>
+                                <div class="flex flex-col md:flex-row items-center gap-3">
+                                    <select id="${exId}-select" class="w-full md:flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="checkTopic('${exId}', '${ex.topicType}', '${exId}-hint-btn', '${exId}-a-btn', '${unit.id}', '${topic.id}', ${index})">
+                                        <option value="">Selecciona una opción...</option>
+                                        <option value="Probabilidad Básica">Probabilidad Básica / Conjuntos</option>
+                                        <option value="Reglas de Conteo">Reglas de Conteo</option>
+                                        <option value="Probabilidad Condicional">Probabilidad Condicional</option>
+                                        <option value="Teorema de Bayes">Teorema de Bayes</option>
+                                        <option value="Valor Esperado / Varianza">Valor Esperado / Varianza</option>
+                                        <option value="Distribución Binomial">Distribución Binomial</option>
+                                        <option value="Distribución de Poisson">Distribución de Poisson</option>
+                                        <option value="Distribución Uniforme">Distribución Uniforme Continua</option>
+                                        <option value="Distribución Normal">Distribución Normal Estándar (Z)</option>
+                                        <option value="Aproximación Normal a Binomial">Aproximación Normal a Binomial</option>
+                                    </select>
+                                    <div id="${exId}-status" class="w-full md:w-auto text-sm text-center md:text-left min-h-[1.5rem] mt-2 md:mt-0"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    let html = `
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
+                            <div class="w-full">
+                                <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider rounded">Ejercicio ${index + 1} • ${ex.level}</span>
+                                <div class="mt-4 text-gray-800 font-medium whitespace-pre-line">${ex.q}</div>
+                                ${chartHtml}
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-4 bg-gray-50 flex flex-wrap gap-3 justify-center">
-                `;
+                        <div class="p-4 bg-gray-50 flex flex-col gap-3 justify-center">
+                            ${selectHtml}
+                            <div class="flex flex-wrap gap-3 justify-center">
+                    `;
 
-                if (ex.hint) {
-                    html += `<button onclick="toggleElement('${exId}-hint')" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>💡</span> Ver Guía</button>`;
-                }
+                    if (ex.hint) {
+                        html += `<button id="${exId}-hint-btn" onclick="toggleElement('${exId}-hint')" class="${opacityClass} bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>💡</span> Ver Guía</button>`;
+                    }
 
-                html += `<button onclick="toggleElement('${exId}-a')" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>✅</span> Ver Resolución</button>
+                    html += `<button id="${exId}-a-btn" onclick="toggleElement('${exId}-a')" class="${opacityClass} bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>✅</span> Ver Resolución</button>
+                        </div></div>`;
+
+                    if (ex.hint) {
+                        html += `<div id="${exId}-hint" class="hidden p-6 bg-amber-50 border-t border-amber-100 text-amber-900 border-l-4 border-l-amber-500">
+                            <span class="font-bold uppercase text-xs tracking-wider text-amber-600 block mb-2">Pista Estratégica:</span> 
+                            <div class="whitespace-pre-line format-math">${ex.hint}</div>
+                        </div>`;
+                    }
+
+                    html += `<div id="${exId}-a" class="hidden p-6 bg-blue-50 border-t border-blue-100 text-blue-900 border-l-4 border-l-blue-500">
+                            <span class="font-bold uppercase text-xs tracking-wider text-blue-600 block mb-2">Resolución Paso a Paso:</span> 
+                            <div class="whitespace-pre-line format-math">${ex.a}</div>
+                        </div>
                     </div>`;
 
-                if (ex.hint) {
-                    html += `<div id="${exId}-hint" class="hidden p-6 bg-amber-50 border-t border-amber-100 text-amber-900 border-l-4 border-l-amber-500">
-                        <span class="font-bold uppercase text-xs tracking-wider text-amber-600 block mb-2">Pista Estratégica:</span> 
-                        <div class="whitespace-pre-line format-math">${ex.hint}</div>
-                    </div>`;
-                }
-
-                html += `<div id="${exId}-a" class="hidden p-6 bg-blue-50 border-t border-blue-100 text-blue-900 border-l-4 border-l-blue-500">
-                        <span class="font-bold uppercase text-xs tracking-wider text-blue-600 block mb-2">Resolución Paso a Paso:</span> 
-                        <div class="whitespace-pre-line format-math">${ex.a}</div>
-                    </div>
-                </div>`;
-
-                exContainer.insertAdjacentHTML('beforeend', html);
-            });
-
-            if (window.renderMathInElement) {
-                document.querySelectorAll('.format-math').forEach(el => {
-                    renderMathInElement(el, {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '$', right: '$', display: false}
-                        ],
-                        throwOnError: false
-                    });
+                    exContainer.insertAdjacentHTML('beforeend', html);
                 });
+
+                if (window.renderMathInElement) {
+                    document.querySelectorAll('.format-math').forEach(el => {
+                        renderMathInElement(el, {
+                            delimiters: [
+                                {left: '$$', right: '$$', display: true},
+                                {left: '$', right: '$', display: false}
+                            ],
+                            throwOnError: false
+                        });
+                    });
+                }
+
+                topic.exercises.forEach((ex, index) => {
+                    if (ex.hasZChart) {
+                        drawZProblemCanvas(`topic-z-canvas-${index}`);
+                    }
+                });
+            } else {
+                practiceSection.classList.add('hidden');
             }
 
             renderVisualization(unit.id, topic.id);
@@ -1442,12 +1523,6 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 selectTopic(topicId); 
             };
             container.appendChild(checkBtn);
-
-            topic.exercises.forEach((ex, index) => {
-                if (ex.hasZChart) {
-                    drawZProblemCanvas(`topic-z-canvas-${index}`);
-                }
-            });
         }
 
         function toggleElement(id) {
@@ -1717,6 +1792,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             ctx.fillText('35%', getX((z1+2)/2), getY(0.08));
         }
 
+        // Ñeha'ã (Test Mode)
         function updateQuizScoresUI() {
             const select = document.getElementById('quiz-unit-select');
             Array.from(select.options).forEach(opt => {
