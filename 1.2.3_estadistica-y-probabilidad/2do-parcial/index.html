@@ -582,7 +582,7 @@
                 document.getElementById(solveBtnId)?.classList.add('opacity-50', 'pointer-events-none');
             } else {
                 status.innerHTML = '';
-                select.className = 'w-full md:flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500';
+                select.className = 'w-full md:w-2/3 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500';
                 document.getElementById(hintBtnId)?.classList.add('opacity-50', 'pointer-events-none');
                 document.getElementById(solveBtnId)?.classList.add('opacity-50', 'pointer-events-none');
             }
@@ -1429,8 +1429,8 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                         selectHtml = `
                             <div class="mb-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100 shadow-inner">
                                 <label class="block text-sm font-bold text-indigo-900 mb-2">🕵️‍♂️ Selecciona el tema o fórmula a aplicar antes de resolver:</label>
-                                <div class="flex flex-col md:flex-row items-center gap-3">
-                                    <select id="${exId}-select" class="w-full md:flex-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="checkTopic('${exId}', '${ex.topicType}', '${exId}-hint-btn', '${exId}-a-btn', '${unit.id}', '${topic.id}', ${index})">
+                                <div class="flex flex-col gap-3">
+                                    <select id="${exId}-select" class="w-full md:w-2/3 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="checkTopic('${exId}', '${ex.topicType}', '${exId}-hint-btn', '${exId}-a-btn', '${unit.id}', '${topic.id}', ${index})">
                                         <option value="">Selecciona una opción...</option>
                                         <option value="Probabilidad Básica">Probabilidad Básica / Conjuntos</option>
                                         <option value="Reglas de Conteo">Reglas de Conteo</option>
@@ -1443,7 +1443,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                                         <option value="Distribución Normal">Distribución Normal Estándar (Z)</option>
                                         <option value="Aproximación Normal a Binomial">Aproximación Normal a Binomial</option>
                                     </select>
-                                    <div id="${exId}-status" class="w-full md:w-auto text-sm text-center md:text-left min-h-[1.5rem] mt-2 md:mt-0"></div>
+                                    <div id="${exId}-status" class="w-full text-sm text-left min-h-[1.5rem] transition-all duration-300"></div>
                                 </div>
                             </div>
                         `;
@@ -1953,6 +1953,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             feedback.innerHTML = feedbackText;
             feedback.classList.add(...colorClasses);
 
+            // Renderizar KaTeX en el feedback (Render Math)
             if (window.renderMathInElement) {
                 renderMathInElement(feedback, {
                     delimiters: [
