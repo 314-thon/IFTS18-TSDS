@@ -1,0 +1,98 @@
+.chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 30vh;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            background-color: #faf9f6;
+            color: #334155;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .card-flipper { 
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); 
+            transform-style: preserve-3d; 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+        }
+        .card-flip-container.flipped .card-flipper { transform: rotateY(180deg); }
+        .card-front, .card-back { 
+            backface-visibility: hidden; 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+        .card-back { 
+            transform: rotateY(180deg); 
+            background-color: #f0fdfa;
+            border: 2px solid #14b8a6;
+        }
+        .card-front {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+        }
+        .math-table th, .math-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .math-table th { background-color: #f1f5f9; font-weight: bold; }
+
+        /* Estilos específicos para la vista de impresión en A4 */
+        @media print {
+            @page { margin: 10mm; }
+            body { background-color: white; }
+            .print-hidden { display: none !important; }
+            #formulas-modal { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; top: 0; 
+                width: 100%; 
+                height: auto; 
+                background: white; 
+                overflow: visible;
+                padding: 0;
+                margin: 0;
+            }
+            .a4-container {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+            }
+            .page-break { page-break-before: always; }
+        }
+        .a4-container {
+            width: 100%;
+            max-width: 250mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 10mm;
+        }
