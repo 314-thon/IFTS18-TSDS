@@ -113,8 +113,8 @@ window.startExamMode = function() {
     const simuladorUnit = appData.units.find(u => u.id === 'usimulador');
     if (!simuladorUnit) return;
     
-    const isTema1 = Math.random() < 0.5;
-    const selectedTheme = simuladorUnit.topics.find(t => t.id === (isTema1 ? 'tema1' : 'tema2'));
+    const randomIndex = Math.floor(Math.random() * simuladorUnit.topics.length);
+    const selectedTheme = simuladorUnit.topics[randomIndex];
     examTheme = selectedTheme.title;
     
     examQuestions = [...selectedTheme.exercises];
