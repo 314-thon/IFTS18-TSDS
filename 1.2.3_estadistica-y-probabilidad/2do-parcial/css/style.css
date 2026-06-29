@@ -195,7 +195,7 @@ body {
 
 /* Estilos específicos para la vista de impresión en A4 */
 @media print {
-    @page { margin: 10mm; }
+    @page { margin: 5mm; }
     body { background-color: white; }
     .print-hidden { display: none !important; }
     #formulas-modal { 
@@ -220,7 +220,7 @@ body {
 }
 .a4-container {
     width: 100%;
-    max-width: 250mm;
+    max-width: 1100px;
     margin: 0 auto;
     background: white;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

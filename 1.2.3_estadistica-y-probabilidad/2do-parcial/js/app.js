@@ -61,14 +61,14 @@ function openFormulas() {
             }
 
             if(select.value === correctValue) {
-                status.innerHTML = `âœ… <span class="text-green-700 text-sm font-bold">Â¡Correcto!</span> <span class="text-green-600 text-sm">${topicExplanation}</span>`;
+                status.innerHTML = `✅ <span class="text-green-700 text-sm font-bold">¡Correcto!</span> <span class="text-green-600 text-sm">${topicExplanation}</span>`;
                 select.classList.add('border-green-500', 'bg-green-50');
                 select.classList.remove('border-red-500', 'bg-red-50');
                 // Habilitar la visibilidad de los botones de ayuda
                 document.getElementById(hintBtnId)?.classList.remove('opacity-50', 'pointer-events-none');
                 document.getElementById(solveBtnId)?.classList.remove('opacity-50', 'pointer-events-none');
             } else if(select.value !== "") {
-                status.innerHTML = `âŒ <span class="text-red-700 text-sm font-bold">Casi...</span> <span class="text-red-600 text-sm">${topicHint}</span>`;
+                status.innerHTML = `❌ <span class="text-red-700 text-sm font-bold">Casi...</span> <span class="text-red-600 text-sm">${topicHint}</span>`;
                 select.classList.add('border-red-500', 'bg-red-50');
                 select.classList.remove('border-green-500', 'bg-green-50');
                 // Ocultar o deshabilitar
