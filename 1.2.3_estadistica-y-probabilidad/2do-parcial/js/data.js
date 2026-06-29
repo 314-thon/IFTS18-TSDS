@@ -10,9 +10,9 @@
                             id: "u3t1",
                             title: "1. Conceptos básicos y Asignación",
                             exp: `La probabilidad responde a la pregunta: <em>'¿Qué tan posible es que pase esto?'</em>. En el enfoque clásico, se calcula dividiendo los Casos Favorables entre el Total de opciones posibles.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-1 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-1 text-sm'>
                                     <li><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa".</li>
                                     <li><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</li>
                                 </ul>
@@ -30,9 +30,9 @@
                             id: "u3t2",
                             title: "2. Reglas de conteo, combinaciones y permutaciones",
                             exp: `Estas reglas te dicen de cuántas formas se pueden agrupar o elegir objetos.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: ¿Qué fórmula usar?</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: ¿Qué fórmula usar?</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Permutación:</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
                                     <li><b>Combinación:</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
                                     <li><b>Factorial simple (N!):</b> Si vas a ordenar a TODOS los elementos en su totalidad (ej. 5 personas en 5 sillas).</li>
@@ -50,9 +50,9 @@
                             id: "u3t3",
                             title: "3. Eventos y Complemento",
                             exp: `El 'complemento' de un evento es su opuesto, todo lo que falta para llegar al 100%. Si la probabilidad de llover es 30%, el complemento (no llover) es 70%.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-1 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-1 text-sm'>
                                     <li>Si te piden la probabilidad de que <b>"NO ocurra X"</b>, simplemente calcula la probabilidad de que SÍ ocurra y réstalo a 1. ¡Es mucho más rápido! $P(A') = 1 - P(A)$</li>
                                 </ul>
                             </div>`,
@@ -68,9 +68,9 @@
                             id: "u3t4",
                             title: "4. Reglas operativas: Adición y Multiplicación",
                             exp: `Son las reglas para unir dos o más eventos.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li>Si el texto dice <b>"o" / "al menos uno"</b> $\\rightarrow$ Ley de Adición. Suma $P(A) + P(B)$ y resta la intersección si la hay.</li>
                                     <li>Si el texto dice <b>"y" / "ambos" / "consecutivos"</b> $\\rightarrow$ Ley de Multiplicación. Multiplica $P(A) \\cdot P(B)$.</li>
                                     <li><b>Mutuamente Excluyentes:</b> Si el examen dice esto, significa que no pueden pasar a la vez: $P(A \\cap B) = 0$.</li>
@@ -88,9 +88,9 @@
                             id: "u3t5",
                             title: "5. Probabilidad Condicional",
                             exp: `Es la probabilidad de que ocurra un evento sabiendo que ya ocurrió otro. Nos reduce el "universo" de posibilidades.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".</li>
                                     <li><b>La fórmula:</b> $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador abajo.</li>
                                 </ul>
@@ -106,9 +106,9 @@
                             id: "u3t6",
                             title: "6. Teorema de Bayes",
                             exp: `Sirve para actualizar tu probabilidad cuando ya ocurrió otra cosa. Es "viajar al pasado" estadísticamente.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de Máquina 1?".</li>
                                     <li>Usa la fórmula de fracción gigante. <b>Numerador</b> = la ruta pedida (M1 * Def). <b>Denominador</b> = suma de todas las rutas defectuosas.</li>
                                 </ul>
@@ -132,9 +132,9 @@
                             id: "u4t1",
                             title: "7. Variables aleatorias discretas y continuas",
                             exp: `Una variable aleatoria es la respuesta numérica a un experimento.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Discreta:</b> Da "saltos" enteros y se cuenta (1, 2 personas, o 4 quejas). Nunca da decimales en la vida real.</li>
                                     <li><b>Continua:</b> Se "mide" y puede tener infinitos decimales (peso, estatura, tiempo, temperatura).</li>
                                 </ul>
@@ -148,9 +148,9 @@
                             id: "u4t2",
                             title: "8. Distribuciones de probabilidad discreta",
                             exp: `Es una tabla que lista todos los resultados posibles (X) con sus probabilidades (P).
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>La Regla de Oro:</b> Para que la tabla sea válida en el examen, la fila de abajo (las probabilidades) DEBEN sumar exactamente $1.0$ ($100\\%$). Ni 0.99 ni 1.01.</li>
                                 </ul>
                             </div>`,
@@ -163,9 +163,9 @@
                             id: "u4t3",
                             title: "9. Valor Esperado E(X) y Varianza",
                             exp: `El valor esperado es el 'promedio a largo plazo'. La varianza mide qué tan dispersos están los datos.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li>La fórmula de la media es $E(x) = \\Sigma (x \\cdot f(x))$.</li>
                                     <li><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "f(X)". Para sacar el Valor Esperado, multiplica cada columna (X por P) y suma todos los resultados.</li>
                                 </ul>
@@ -179,9 +179,9 @@
                             id: "u4t4",
                             title: "10. Distribución Binomial",
                             exp: `Se usa cuando solo hay dos finales posibles (éxito/fracaso) y haces varios intentos con probabilidad constante.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Cómo reconocerla:</b> Te dan intentos fijos "n" (ej. "muestra de 5") y una probabilidad de éxito "p" (ej. "30%").</li>
                                     <li><b>Uso de TABLA:</b> Busca el bloque de tu "n". Busca la columna de tu "p". Baja hasta la fila de tu "x". ¡Ese es el resultado! Si piden "al menos 2", suma los resultados de 2 en adelante.</li>
                                 </ul>
@@ -195,9 +195,9 @@
                             id: "u4t5",
                             title: "11. Distribución de Poisson",
                             exp: `Cuenta cuántos eventos extraños ocurren en un periodo de tiempo, área o espacio.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).</li>
                                     <li><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</li>
                                 </ul>
@@ -211,9 +211,9 @@
                             id: "u4t6",
                             title: "12. Uso de Excel (Distribuciones)",
                             exp: `Las computadoras nos facilitan la vida al calcular probabilidades.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Binomial:</b> <code>=DISTR.BINOM.N(x, n, p, acumulado)</code>.</li>
                                     <li><b>Poisson:</b> <code>=POISSON.DIST(x, $\\lambda$, acumulado)</code>.</li>
                                     <li><b>Acumulado:</b> Usa FALSO si buscas un número exacto ("exactamente 3"). Usa VERDADERO si buscas acumulado ("3 o menos").</li>
@@ -236,9 +236,9 @@
                             id: "u5t1",
                             title: "13. Distribución uniforme continua",
                             exp: `Todos los valores dentro de un rango determinado tienen exactamente la misma probabilidad de ocurrir.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Gráfica:</b> Es un rectángulo plano. La probabilidad se calcula sacando el Área del rectángulo (Base x Altura).</li>
                                     <li><b>Fórmula:</b> La altura es SIEMPRE constante: $1 / (b - a)$.</li>
                                 </ul>
@@ -252,9 +252,9 @@
                             id: "u5t2",
                             title: "14. La Curva Normal",
                             exp: `La famosa campana de Gauss. Describe pesos, estaturas, resultados de pruebas, etc.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li>Es perfectamente <b>simétrica</b>. La Media, Mediana y Moda son exactamente iguales y caen en el centro.</li>
                                     <li>El área TOTAL bajo la curva es $1$ ($100\\%$).</li>
                                     <li><b>Regla empírica:</b> Aproximadamente el $68\\%$ de los datos están a $\\pm 1$ desviación estándar del centro.</li>
@@ -269,9 +269,9 @@
                             id: "u5t3",
                             title: "15. Normal Estándar y Variable Z",
                             exp: `Es una "moneda de cambio universal" para comparar cualquier campana de Gauss, centrándola en el 0.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Fórmula Z:</b> $Z = (x - \\mu) / \\sigma$. (Dato menos Media, sobre Desviación Estándar).</li>
                                     <li><b>Trampa Asesina:</b> A veces te dan la "Varianza" en el enunciado. ¡Sácale la raíz cuadrada primero! (Si Varianza = 4, usa $\\sigma = 2$).</li>
                                     <li>Un valor $Z$ negativo indica que estás por debajo del promedio.</li>
@@ -286,9 +286,9 @@
                             id: "u5t4",
                             title: "16. Cálculo de probabilidades con Tabla Z",
                             exp: `Una vez que tienes la variable Z, usas la tabla estadística para traducirlo a porcentaje (área poblacional).
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: Tabla Z</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN: Tabla Z</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li>La tabla SIEMPRE lee el área a la <b>IZQUIERDA</b> ("menor que").</li>
                                     <li>Si te piden "mayor que" o "a la DERECHA": haz $1 - (valor\\ de\\ la\\ tabla)$.</li>
                                     <li>Si te piden el área "ENTRE" dos valores: Busca los dos en la tabla y resta (Mayor menos Menor).</li>
@@ -303,9 +303,9 @@
                             id: "u5t5",
                             title: "17. Aproximación Normal a la Binomial",
                             exp: `Usamos la campana lisa para no hacer cálculos enormes con la fórmula binomial.
-                            <div class='mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
-                                <h4 class='font-bold text-amber-800 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
-                                <ul class='list-disc list-inside text-amber-900 space-y-2 text-sm'>
+                            <div class='mt-6 bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm'>
+                                <h4 class='font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 mb-2'><span>🚨</span> TIP DE EXAMEN</h4>
+                                <ul class='list-disc list-inside text-amber-900 dark:text-amber-100 space-y-2 text-sm'>
                                     <li><b>Regla estricta:</b> Solo se puede hacer el truco si $n \\cdot p > 5$.</li>
                                     <li><b>Corrección por Continuidad:</b> Como pasamos de "escalones" a algo "liso", debes sumar y restar $0.5$. Ej: Para aproximar el valor exacto $X=10$, buscas el área entre $9.5$ y $10.5$.</li>
                                 </ul>
@@ -535,60 +535,60 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                             id: "p_tips",
                             title: "Tips Parcial",
                             exp: `<div class="space-y-4">
-                                <p class="text-gray-700 mb-6 font-medium">Recopilación de todos los "Tips de Examen" vistos durante el curso para una lectura rápida antes del parcial. ¡Identificar de qué habla el problema es la mitad de la nota!</p>
+                                <p class="text-gray-700 dark:text-gray-300 mb-6 font-medium">Recopilación de todos los "Tips de Examen" vistos durante el curso para una lectura rápida antes del parcial. ¡Identificar de qué habla el problema es la mitad de la nota!</p>
                                 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Básica y Asignación <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa". <br><br><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Básica y Asignación <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa". <br><br><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Reglas de Conteo <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <ul class="text-sm text-amber-900 mt-2 list-disc list-inside space-y-1">
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Reglas de Conteo <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <ul class="text-sm text-amber-900 dark:text-amber-100 mt-2 list-disc list-inside space-y-1">
                                         <li><b>Permutación:</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
                                         <li><b>Combinación:</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
                                         <li><b>Factorial simple (N!):</b> Si vas a ordenar a TODOS los elementos en su totalidad (ej. 5 personas en 5 sillas).</li>
                                     </ul>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Condicional <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".<br>La fórmula es $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador (abajo).</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Condicional <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".<br>La fórmula es $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador (abajo).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Teorema de Bayes <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de que sea de la Máquina 1?". Usa la fórmula de fracción gigante (Ruta pedida / Total de Rutas posibles).</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Teorema de Bayes <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de que sea de la Máquina 1?". Usa la fórmula de fracción gigante (Ruta pedida / Total de Rutas posibles).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Valor Esperado E(X) y Varianza <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar la media o Valor Esperado, simplemente multiplica cada columna (X por P) y suma todos los resultados.</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Valor Esperado E(X) y Varianza <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar la media o Valor Esperado, simplemente multiplica cada columna (X por P) y suma todos los resultados.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Binomial <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> Te dan intentos fijos "$n$" (ej. "muestra de 5") y una probabilidad de éxito "$p$" (ej. "30%"). Si te piden probabilidad de "al menos 2", debes calcular la de 2, 3, 4, 5... y sumarlas (o usar el complemento).</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Binomial <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> Te dan intentos fijos "$n$" (ej. "muestra de 5") y una probabilidad de éxito "$p$" (ej. "30%"). Si te piden probabilidad de "al menos 2", debes calcular la de 2, 3, 4, 5... y sumarlas (o usar el complemento).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución de Poisson <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).<br><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución de Poisson <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).<br><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Uniforme Continua <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Gráfica:</b> Es un rectángulo plano. La probabilidad se calcula sacando el Área del rectángulo (Base x Altura).<br><b>Fórmula:</b> La altura es SIEMPRE constante y vale: $\\frac{1}{b-a}$.</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Uniforme Continua <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Gráfica:</b> Es un rectángulo plano. La probabilidad se calcula sacando el Área del rectángulo (Base x Altura).<br><b>Fórmula:</b> La altura es SIEMPRE constante y vale: $\\frac{1}{b-a}$.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Curva Normal y Valor Z <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Trampa Asesina:</b> A veces te dan la "Varianza" en el enunciado. ¡Sácale la raíz cuadrada primero! (Si Varianza = 4, usa Desviación $\\sigma = 2$).<br><br><b>Uso de Tabla Z:</b> La tabla SIEMPRE lee el área a la IZQUIERDA ("menor que"). Si te piden "mayor que" o "a la DERECHA", haz $1 - (valor\\ de\\ la\\ tabla)$.</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Curva Normal y Valor Z <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Trampa Asesina:</b> A veces te dan la "Varianza" en el enunciado. ¡Sácale la raíz cuadrada primero! (Si Varianza = 4, usa Desviación $\\sigma = 2$).<br><br><b>Uso de Tabla Z:</b> La tabla SIEMPRE lee el área a la IZQUIERDA ("menor que"). Si te piden "mayor que" o "a la DERECHA", haz $1 - (valor\\ de\\ la\\ tabla)$.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Aproximación Normal a Binomial <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
-                                    <p class="text-sm text-amber-900 mt-2"><b>Regla estricta:</b> Solo se puede hacer el truco si $n > 30$ y $n \\cdot p > 5$.<br><b>Corrección por Continuidad:</b> Como pasamos de "escalones" a algo "liso", debes sumar y restar $0.5$ a la $X$ discreta para transformarla en intervalo continuo.</p>
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
+                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Aproximación Normal a Binomial <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 5</span></h4>
+                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Regla estricta:</b> Solo se puede hacer el truco si $n > 30$ y $n \\cdot p > 5$.<br><b>Corrección por Continuidad:</b> Como pasamos de "escalones" a algo "liso", debes sumar y restar $0.5$ a la $X$ discreta para transformarla en intervalo continuo.</p>
                                 </div>
                             </div>`,
                             videos: [],
@@ -646,10 +646,10 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 const btn = document.createElement('button');
                 const baseClasses = "px-2 py-1 md:px-3 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ";
                 if (unit.id === 'uparcial') {
-                    btn.className = baseClasses + `text-blue-900 bg-amber-100 hover:bg-amber-200 ${currentUnitId === unit.id ? 'ring-2 ring-amber-400 font-bold' : ''}`;
+                    btn.className = baseClasses + `bg-tertiary text-on-tertiary hover:bg-tertiary-container hover:text-on-tertiary-container ${currentUnitId === unit.id ? 'ring-2 ring-outline font-bold' : ''}`;
                     btn.innerHTML = `📝 ${unit.title}`;
                 } else {
-                    btn.className = baseClasses + `hover:bg-blue-800 ${currentUnitId === unit.id ? 'bg-blue-800 ring-2 ring-white' : ''}`;
+                    btn.className = baseClasses + `text-on-surface hover:bg-primary/20 hover:text-primary ${currentUnitId === unit.id ? 'bg-primary text-on-primary shadow-md' : ''}`;
                     btn.innerText = `${unit.title}`;
                 }
                 
@@ -665,15 +665,17 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 
                 if (uId === 'uparcial') {
                     if (uId === currentUnitId) {
-                        btn.classList.add('ring-2', 'ring-amber-400', 'font-bold');
+                        btn.classList.add('ring-2', 'ring-outline', 'font-bold');
                     } else {
-                        btn.classList.remove('ring-2', 'ring-amber-400', 'font-bold');
+                        btn.classList.remove('ring-2', 'ring-outline', 'font-bold');
                     }
                 } else {
                     if(uId === currentUnitId) {
-                        btn.classList.add('bg-blue-800', 'ring-2', 'ring-white');
+                        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-md');
+                        btn.classList.remove('text-on-surface', 'hover:bg-primary/20', 'hover:text-primary');
                     } else {
-                        btn.classList.remove('bg-blue-800', 'ring-2', 'ring-white');
+                        btn.classList.remove('bg-primary', 'text-on-primary', 'shadow-md');
+                        btn.classList.add('text-on-surface', 'hover:bg-primary/20', 'hover:text-primary');
                     }
                 }
             });
@@ -685,14 +687,17 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             updateNavClasses();
             
             document.getElementById('sidebar').classList.add('hidden');
-            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
+            document.getElementById('sidebar').classList.remove('lg:flex');
             
             document.getElementById('welcome-screen').classList.remove('hidden');
             document.getElementById('content-screen').classList.add('hidden');
             document.getElementById('content-screen').classList.remove('flex');
             
-            document.getElementById('test-screen').classList.add('hidden');
-            document.getElementById('test-screen').classList.remove('flex');
+            const testScreen = document.getElementById('test-screen');
+            if(testScreen) {
+                testScreen.classList.add('hidden');
+                testScreen.classList.remove('flex');
+            }
         }
 
         function goToUnit(unitId) {
@@ -728,9 +733,9 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                 const btn = document.createElement('button');
                 const isLearned = userStats.learnedTopics.includes(topic.id);
                 
-                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors border flex justify-between items-center hover:bg-teal-50 hover:border-teal-200 text-gray-700`;
+                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors border border-transparent flex justify-between items-center hover:bg-surface-variant hover:border-outline-variant text-on-surface`;
                 btn.id = `btn-topic-${topic.id}`;
-                btn.innerHTML = `<span>${topic.title}</span> ${isLearned ? '<span class="text-green-600">✅</span>' : ''}`;
+                btn.innerHTML = `<span>${topic.title}</span> ${isLearned ? '<span class="text-tertiary">✅</span>' : ''}`;
                 btn.onclick = () => selectTopic(topic.id);
                 
                 topicsList.appendChild(btn);
@@ -748,11 +753,14 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             const topic = unit.topics.find(t => t.id === topicId);
 
             document.getElementById('sidebar').classList.remove('hidden');
-            document.getElementById('main-content').className = "w-2/3 md:w-3/4 flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
+            document.getElementById('sidebar').classList.add('lg:flex');
 
             document.getElementById('welcome-screen').classList.add('hidden');
-            document.getElementById('test-screen').classList.add('hidden');
-            document.getElementById('test-screen').classList.remove('flex');
+            const testScreen = document.getElementById('test-screen');
+            if(testScreen) {
+                testScreen.classList.add('hidden');
+                testScreen.classList.remove('flex');
+            }
             
             document.getElementById('content-screen').classList.remove('hidden');
             document.getElementById('content-screen').classList.add('flex');
@@ -761,11 +769,11 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
 
             const buttons = document.getElementById('topics-list').children;
             for(let b of buttons) {
-                b.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
+                b.classList.remove('bg-amber-500', 'border-amber-600', 'text-amber-950', 'font-bold');
             }
             const activeBtn = document.getElementById(`btn-topic-${topicId}`);
             if(activeBtn) {
-                activeBtn.classList.add('bg-teal-50', 'border-teal-500', 'text-teal-900', 'font-bold');
+                activeBtn.classList.add('bg-amber-500', 'border-amber-600', 'text-amber-950', 'font-bold');
             }
 
             document.getElementById('topic-badge').innerText = `${unit.title} - ${unit.subtitle}`;
@@ -793,12 +801,12 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     const a = document.createElement('a');
                     a.href = vid.url;
                     a.target = "_blank";
-                    a.className = "flex items-center gap-3 p-4 border border-gray-200 rounded-lg bg-white hover:bg-red-50 hover:border-red-200 transition-colors group";
+                    a.className = "flex items-center gap-3 p-4 border border-outline-variant/30 rounded-lg bg-surface-bright hover:bg-error-container hover:border-error transition-colors group";
                     a.innerHTML = `
-                        <div class="bg-red-100 text-red-600 p-2 rounded-full group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <div class="bg-error-container text-on-error-container p-2 rounded-full group-hover:bg-error group-hover:text-on-error transition-colors">
                             <span class="text-xl leading-none">▶</span>
                         </div>
-                        <span class="font-medium text-gray-800 group-hover:text-red-700">${vid.title}</span>
+                        <span class="font-medium text-on-surface group-hover:text-error">${vid.title}</span>
                     `;
                     videoContainer.appendChild(a);
                 });
@@ -831,10 +839,10 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     if(ex.topicType) {
                         opacityClass = 'opacity-50 pointer-events-none'; // Inician bloqueados hasta acertar
                         selectHtml = `
-                            <div class="mb-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100 shadow-inner">
-                                <label class="block text-sm font-bold text-indigo-900 mb-2">🕵️‍♂️ Selecciona el tema o fórmula a aplicar antes de resolver:</label>
+                            <div class="mb-4 p-4 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg border border-indigo-100 dark:border-indigo-800 shadow-inner">
+                                <label class="block text-sm font-bold text-indigo-900 dark:text-indigo-200 mb-2">🕵️‍♂️ Selecciona el tema o fórmula a aplicar antes de resolver:</label>
                                 <div class="flex flex-col gap-3">
-                                    <select id="${exId}-select" class="w-full md:w-2/3 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="checkTopic('${exId}', '${ex.topicType}', '${exId}-hint-btn', '${exId}-a-btn', '${unit.id}', '${topic.id}', ${index})">
+                                    <select id="${exId}-select" class="w-full md:w-2/3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm py-2 px-3 text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="checkTopic('${exId}', '${ex.topicType}', '${exId}-hint-btn', '${exId}-a-btn', '${unit.id}', '${topic.id}', ${index})">
                                         <option value="">Selecciona una opción...</option>
                                         <option value="Probabilidad Básica">Probabilidad Básica / Conjuntos</option>
                                         <option value="Reglas de Conteo">Reglas de Conteo</option>
@@ -854,36 +862,36 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                     }
 
                     let html = `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
+                    <div class="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+                        <div class="p-6 bg-surface-container-low border-b border-outline-variant/30 flex justify-between items-start">
                             <div class="w-full">
-                                <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider rounded">Ejercicio ${index + 1} • ${ex.level}</span>
-                                <div class="mt-4 text-gray-800 font-medium whitespace-pre-line">${ex.q}</div>
+                                <span class="inline-block px-2 py-1 bg-primary-container text-on-primary-container text-xs font-bold uppercase tracking-wider rounded">Ejercicio ${index + 1} • ${ex.level}</span>
+                                <div class="mt-4 text-on-surface font-medium whitespace-pre-line">${ex.q}</div>
                                 ${chartHtml}
                             </div>
                         </div>
-                        <div class="p-4 bg-gray-50 flex flex-col gap-3 justify-center">
+                        <div class="p-4 bg-surface-container flex flex-col gap-3 justify-center">
                             ${selectHtml}
                             <div class="flex flex-wrap gap-3 justify-center">
                     `;
 
                     if (ex.hint) {
-                        html += `<button id="${exId}-hint-btn" onclick="toggleElement('${exId}-hint')" class="${opacityClass} bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>💡</span> Ver Guía</button>`;
+                        html += `<button id="${exId}-hint-btn" onclick="toggleElement('${exId}-hint')" class="${opacityClass} bg-secondary text-on-secondary hover:brightness-110 font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>💡</span> Ver Guía</button>`;
                     }
 
-                    html += `<button id="${exId}-a-btn" onclick="toggleElement('${exId}-a')" class="${opacityClass} bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>✅</span> Ver Resolución</button>
+                    html += `<button id="${exId}-a-btn" onclick="toggleElement('${exId}-a')" class="${opacityClass} bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"><span>✅</span> Ver Resolución</button>
                         </div></div>`;
 
                     if (ex.hint) {
-                        html += `<div id="${exId}-hint" class="hidden p-6 bg-amber-50 border-t border-amber-100 text-amber-900 border-l-4 border-l-amber-500">
-                            <span class="font-bold uppercase text-xs tracking-wider text-amber-600 block mb-2">Pista Estratégica:</span> 
-                            <div class="whitespace-pre-line format-math">${ex.hint}</div>
+                        html += `<div id="${exId}-hint" class="hidden p-6 bg-secondary-container/20 border-t border-secondary-container text-on-surface border-l-4 border-l-secondary">
+                            <span class="font-bold uppercase text-xs tracking-wider text-secondary block mb-2">Pista Estratégica:</span> 
+                            <div class="whitespace-pre-line format-math text-on-surface">${ex.hint}</div>
                         </div>`;
                     }
 
-                    html += `<div id="${exId}-a" class="hidden p-6 bg-blue-50 border-t border-blue-100 text-blue-900 border-l-4 border-l-blue-500">
-                            <span class="font-bold uppercase text-xs tracking-wider text-blue-600 block mb-2">Resolución Paso a Paso:</span> 
-                            <div class="whitespace-pre-line format-math">${ex.a}</div>
+                    html += `<div id="${exId}-a" class="hidden p-6 bg-primary-container/20 border-t border-primary-container text-on-surface border-l-4 border-l-primary">
+                            <span class="font-bold uppercase text-xs tracking-wider text-primary block mb-2">Resolución Paso a Paso:</span> 
+                            <div class="whitespace-pre-line format-math text-on-surface">${ex.a}</div>
                         </div>
                     </div>`;
 
@@ -919,7 +927,7 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             
             const checkBtn = document.createElement('button');
             checkBtn.className = `w-full py-4 rounded-xl font-bold transition-all shadow-sm ${
-                isLearned ? 'bg-green-100 text-green-700 border-2 border-green-500' : 'bg-gray-200 text-gray-700 hover:bg-teal-600 hover:text-white'
+                isLearned ? 'bg-tertiary-container text-on-tertiary-container border-2 border-tertiary' : 'bg-surface-variant text-on-surface-variant hover:bg-tertiary hover:text-on-tertiary'
             }`;
             checkBtn.innerText = isLearned ? "✓ Tema Completado" : "Marcar tema como aprendido";
             checkBtn.onclick = () => {
@@ -1221,7 +1229,8 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
             updateNavClasses();
             
             document.getElementById('sidebar').classList.add('hidden');
-            document.getElementById('main-content').className = "w-full flex flex-col overflow-y-auto bg-[#faf9f6] p-6 lg:p-10 relative";
+            document.getElementById('sidebar').classList.remove('lg:flex');
+            document.getElementById('main-content').classList.remove('lg:pl-80');
 
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('content-screen').classList.add('hidden');

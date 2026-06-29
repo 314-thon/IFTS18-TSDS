@@ -21,7 +21,19 @@ function openFormulas() {
             const originalTitle = document.title;
             document.title = "Fórmulas Estadística";
             
+            // Forzar modo claro para impresión
+            const htmlElement = document.documentElement;
+            const wasDark = htmlElement.classList.contains('dark');
+            if (wasDark) {
+                htmlElement.classList.remove('dark');
+            }
+            
             window.print();
+            
+            // Restaurar modo oscuro si estaba activo
+            if (wasDark) {
+                htmlElement.classList.add('dark');
+            }
             
             setTimeout(() => {
                 document.title = originalTitle;
