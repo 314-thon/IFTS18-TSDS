@@ -537,43 +537,43 @@ P(A ∪ B | C) = 0.17 / 0.37 ≈ 0.4594
                             exp: `<div class="space-y-4">
                                 <p class="text-gray-700 dark:text-gray-300 mb-6 font-medium">Recopilación de todos los "Tips de Examen" vistos durante el curso para una lectura rápida antes del parcial. ¡Identificar de qué habla el problema es la mitad de la nota!</p>
                                 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Básica y Asignación <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa". <br><br><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</p>
+                                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                                    <h4 class="font-bold text-blue-900 dark:text-blue-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Básica y Asignación <span class="bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-blue-900 dark:text-blue-100 mt-2"><b>No tiene fórmula explícita.</b> Se reconoce porque los problemas hablan de dados, cartas, o "sacar canicas de una bolsa". <br><br><b>Empírico vs Clásico:</b> Si el texto dice "De las últimas 50 ventas...", es Empírico. Lanzar un dado es Clásico. Si es la opinión de un experto, es Subjetiva.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Reglas de Conteo <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <ul class="text-sm text-amber-900 dark:text-amber-100 mt-2 list-disc list-inside space-y-1">
+                                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                                    <h4 class="font-bold text-blue-900 dark:text-blue-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Reglas de Conteo <span class="bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <ul class="text-sm text-blue-900 dark:text-blue-100 mt-2 list-disc list-inside space-y-1">
                                         <li><b>Permutación:</b> Úsala si el problema dice "asignar cargos", "contraseñas" o <b>EL ORDEN IMPORTA</b>.</li>
                                         <li><b>Combinación:</b> Úsala si piden formar "comités" o <b>EL ORDEN NO IMPORTA</b>.</li>
                                         <li><b>Factorial simple (N!):</b> Si vas a ordenar a TODOS los elementos en su totalidad (ej. 5 personas en 5 sillas).</li>
                                     </ul>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Condicional <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".<br>La fórmula es $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador (abajo).</p>
+                                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                                    <h4 class="font-bold text-blue-900 dark:text-blue-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Probabilidad Condicional <span class="bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-blue-900 dark:text-blue-100 mt-2"><b>Cómo reconocerla:</b> El problema usa las frases "Sabiendo que...", "Dado que...", "Si se sabe que...".<br>La fórmula es $P(A|B) = P(A \\cap B) / P(B)$. Recuerda: lo que "ya sabemos que pasó" SIEMPRE va en el denominador (abajo).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Teorema de Bayes <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de que sea de la Máquina 1?". Usa la fórmula de fracción gigante (Ruta pedida / Total de Rutas posibles).</p>
+                                <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                                    <h4 class="font-bold text-blue-900 dark:text-blue-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Teorema de Bayes <span class="bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 3</span></h4>
+                                    <p class="text-sm text-blue-900 dark:text-blue-100 mt-2"><b>Cómo reconocerlo:</b> El problema te da "rutas" (Máquina 1, 2) y sus defectos. Te <b>invierte la historia:</b> "Sabiendo que salió Defectuoso, ¿probabilidad de que sea de la Máquina 1?". Usa la fórmula de fracción gigante (Ruta pedida / Total de Rutas posibles).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Valor Esperado E(X) y Varianza <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar la media o Valor Esperado, simplemente multiplica cada columna (X por P) y suma todos los resultados.</p>
+                                <div class="p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-l-4 border-teal-500 shadow-sm">
+                                    <h4 class="font-bold text-teal-900 dark:text-teal-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Valor Esperado E(X) y Varianza <span class="bg-teal-200 dark:bg-teal-800 text-teal-800 dark:text-teal-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-teal-900 dark:text-teal-100 mt-2"><b>Cómo reconocerla:</b> El problema te da una tabla con valores "X" y sus probabilidades "P(X)". Para sacar la media o Valor Esperado, simplemente multiplica cada columna (X por P) y suma todos los resultados.</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Binomial <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> Te dan intentos fijos "$n$" (ej. "muestra de 5") y una probabilidad de éxito "$p$" (ej. "30%"). Si te piden probabilidad de "al menos 2", debes calcular la de 2, 3, 4, 5... y sumarlas (o usar el complemento).</p>
+                                <div class="p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-l-4 border-teal-500 shadow-sm">
+                                    <h4 class="font-bold text-teal-900 dark:text-teal-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución Binomial <span class="bg-teal-200 dark:bg-teal-800 text-teal-800 dark:text-teal-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-teal-900 dark:text-teal-100 mt-2"><b>Cómo reconocerla:</b> Te dan intentos fijos "$n$" (ej. "muestra de 5") y una probabilidad de éxito "$p$" (ej. "30%"). Si te piden probabilidad de "al menos 2", debes calcular la de 2, 3, 4, 5... y sumarlas (o usar el complemento).</p>
                                 </div>
 
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
-                                    <h4 class="font-bold text-amber-900 dark:text-amber-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución de Poisson <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
-                                    <p class="text-sm text-amber-900 dark:text-amber-100 mt-2"><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).<br><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</p>
+                                <div class="p-4 bg-teal-50 dark:bg-teal-900/30 rounded-lg border-l-4 border-teal-500 shadow-sm">
+                                    <h4 class="font-bold text-teal-900 dark:text-teal-300 uppercase text-xs tracking-wider mb-1 flex items-center justify-between">Distribución de Poisson <span class="bg-teal-200 dark:bg-teal-800 text-teal-800 dark:text-teal-100 px-2 py-0.5 rounded text-[10px]">UNIDAD 4</span></h4>
+                                    <p class="text-sm text-teal-900 dark:text-teal-100 mt-2"><b>Cómo reconocerla:</b> Menciona un <b>promedio</b> ($\\mu$ o $\\lambda$) que ocurre en un <b>TIEMPO o ESPACIO fijo</b> (ej. 5 errores/hora).<br><b>Trampa Clásica:</b> Si el promedio es "5 por hora" y la pregunta pide la probabilidad en "DOS horas", el nuevo $\\lambda$ debe ser 10. ¡Escala el promedio siempre!</p>
                                 </div>
 
                                 <div class="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-lg border-l-4 border-amber-500 shadow-sm">
