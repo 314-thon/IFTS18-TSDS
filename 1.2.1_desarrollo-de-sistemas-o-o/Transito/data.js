@@ -308,4 +308,4 @@ const questionPool = [
   }
 ];
 
-export { studyData, questionPool };
+

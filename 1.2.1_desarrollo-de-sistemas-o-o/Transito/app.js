@@ -1,4 +1,4 @@
-import { studyData, questionPool } from './data.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- Elementos del DOM ---
