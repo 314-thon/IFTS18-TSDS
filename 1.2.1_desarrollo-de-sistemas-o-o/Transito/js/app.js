@@ -89,8 +89,7 @@ function openFormulas() {
         let testState = { mode: null, submode: null, activeItems: [], currentIndex: 0, score: 0, flashMistakes: [] };
 
 
-
-// --- EXAM SIMULATOR LOGIC (TRANSITO) ---
+// --- EXAM SIMULATOR LOGIC 2.0 ---
 let examTimerInterval = null;
 let examTimeRemaining = 5400; // 90 minutos
 let examQuestions = [];
@@ -110,7 +109,6 @@ window.startExamMode = function() {
     document.getElementById('exam-screen').classList.add('flex');
     window.scrollTo(0,0);
     
-    // Shuffle and pick up to 20 questions from testData.quizPool
     let pool = [...testData.quizPool];
     pool.sort(() => Math.random() - 0.5);
     examQuestions = pool.slice(0, Math.min(20, pool.length));
@@ -134,9 +132,11 @@ window.startExamMode = function() {
 }
 
 function updateExamTimerDisplay() {
+    const el = document.getElementById('exam-timer');
+    if (!el) return;
     const mins = Math.floor(examTimeRemaining / 60);
     const secs = examTimeRemaining % 60;
-    document.getElementById('exam-timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    el.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
 function renderExamQuestion() {
@@ -146,52 +146,55 @@ function renderExamQuestion() {
     }
     
     const ex = examQuestions[currentExamIndex];
-    document.getElementById('exam-question-counter').innerText = `Pregunta ${currentExamIndex + 1} de ${examQuestions.length}`;
     
-    const progress = ((currentExamIndex) / examQuestions.length) * 100;
-    document.getElementById('exam-progress-bar').style.width = `${progress}%`;
+    const counterEl = document.getElementById('exam-question-counter');
+    if (counterEl) counterEl.innerText = `Pregunta ${currentExamIndex + 1} de ${examQuestions.length}`;
     
-    document.getElementById('exam-question-text').innerHTML = ex.q;
+    const textEl = document.getElementById('exam-question-text');
+    if (textEl) textEl.innerHTML = ex.q;
     
     const prevAns = userAnswers[currentExamIndex];
     const container = document.getElementById('exam-options-container');
-    container.innerHTML = '';
-    
-    if (ex.options && ex.options.length > 0) {
-        ex.options.forEach((opt, idx) => {
-            const div = document.createElement('div');
-            div.className = "flex items-start gap-4 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-variant/30 cursor-pointer transition-colors relative overflow-hidden group exam-opt-card";
-            div.onclick = () => {
-                document.getElementById(`exam-opt-${idx}`).checked = true;
-                document.querySelectorAll('.exam-opt-card').forEach(c => {
-                    c.classList.remove('border-primary', 'bg-primary/5');
-                    c.querySelector('.radio-fill').classList.add('opacity-0', 'scale-0');
-                });
-                div.classList.add('border-primary', 'bg-primary/5');
-                div.querySelector('.radio-fill').classList.remove('opacity-0', 'scale-0');
-            };
-            
-            const isChecked = idx === prevAns;
-            if (isChecked) {
-                div.classList.add('border-primary', 'bg-primary/5');
-            }
-            
-            div.innerHTML = `
-                <div class="flex-shrink-0 mt-1 relative w-6 h-6">
-                    <input type="radio" name="exam-opt" id="exam-opt-${idx}" value="${idx}" class="opacity-0 absolute inset-0 z-10 cursor-pointer" ${isChecked ? 'checked' : ''}>
-                    <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center pointer-events-none group-hover:border-primary transition-colors">
-                        <div class="radio-fill w-3 h-3 rounded-full btn-primary-gradient ${isChecked ? '' : 'opacity-0 scale-0'} transition-all duration-200"></div>
+    if (container) {
+        container.innerHTML = '';
+        if (ex.options && ex.options.length > 0) {
+            ex.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-4 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-variant/30 cursor-pointer transition-colors relative overflow-hidden group exam-opt-card";
+                
+                const isChecked = (idx === prevAns);
+                if (isChecked) {
+                    div.classList.add('border-primary', 'bg-primary/5');
+                }
+                
+                div.onclick = () => {
+                    document.getElementById(`exam-opt-${idx}`).checked = true;
+                    document.querySelectorAll('.exam-opt-card').forEach(c => {
+                        c.classList.remove('border-primary', 'bg-primary/5');
+                        c.querySelector('.radio-fill').classList.add('opacity-0', 'scale-0');
+                    });
+                    div.classList.add('border-primary', 'bg-primary/5');
+                    div.querySelector('.radio-fill').classList.remove('opacity-0', 'scale-0');
+                };
+                
+                div.innerHTML = `
+                    <div class="flex-shrink-0 mt-1 relative w-6 h-6">
+                        <input type="radio" name="exam-opt" id="exam-opt-${idx}" value="${idx}" class="opacity-0 absolute inset-0 z-10 cursor-pointer" ${isChecked ? 'checked' : ''}>
+                        <div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center pointer-events-none group-hover:border-primary transition-colors">
+                            <div class="radio-fill w-3 h-3 rounded-full btn-primary-gradient ${isChecked ? '' : 'opacity-0 scale-0'} transition-all duration-200"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="flex-1">
-                    <label for="exam-opt-${idx}" class="font-body-md text-on-surface cursor-pointer w-full block">${opt}</label>
-                </div>
-            `;
-            container.appendChild(div);
-        });
+                    <div class="flex-1">
+                        <label for="exam-opt-${idx}" class="font-body-md text-on-surface cursor-pointer w-full block">${opt}</label>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
     }
     
-    document.getElementById('exam-prev-btn').style.visibility = currentExamIndex === 0 ? 'hidden' : 'visible';
+    const prevBtn = document.getElementById('exam-prev-btn');
+    if (prevBtn) prevBtn.style.visibility = currentExamIndex === 0 ? 'hidden' : 'visible';
 }
 
 window.prevExamQuestion = function() {
@@ -205,7 +208,9 @@ window.prevExamQuestion = function() {
 function saveCurrentAnswers() {
     const radios = document.getElementsByName('exam-opt');
     let ans = -1;
-    for (let r of radios) if (r.checked) ans = parseInt(r.value);
+    for (let r of radios) {
+        if (r.checked) ans = parseInt(r.value);
+    }
     userAnswers[currentExamIndex] = ans;
 }
 
@@ -242,7 +247,7 @@ window.endExam = function(abandoned) {
     }
     
     const maxScore = examQuestions.length;
-    const passScore = Math.ceil(maxScore * 0.6); // 60% para aprobar
+    const passScore = Math.ceil(maxScore * 0.6); 
     
     document.getElementById('exam-results-screen').classList.remove('hidden');
     document.getElementById('exam-results-screen').classList.add('flex');
@@ -266,11 +271,6 @@ window.endExam = function(abandoned) {
     const secs = timeTaken % 60;
     document.getElementById('exam-time-taken').innerText = `${mins} minutos y ${secs} segundos`;
     
-    let history = JSON.parse(localStorage.getItem('examHistory') || '[]');
-    history.push(examScore);
-    localStorage.setItem('examHistory', JSON.stringify(history));
-    
-    updateGlobalAverage(history);
     window.scrollTo(0,0);
 }
 
@@ -281,65 +281,26 @@ window.showExamReview = function() {
     document.getElementById('exam-review-screen').classList.add('flex');
     
     const container = document.getElementById('exam-review-container');
-    container.innerHTML = '';
-    
-    examQuestions.forEach((ex, idx) => {
-        const uA = userAnswers[idx];
-        const isOk = uA === ex.ans;
-        
-        const div = document.createElement('div');
-        div.className = "glass p-6 rounded-2xl border border-outline-variant/30";
-        div.innerHTML = `
-            <h3 class="font-bold text-xl text-primary mb-2">Pregunta ${idx + 1}</h3>
-            <div class="text-on-surface-variant mb-4 text-sm">${ex.q}</div>
+    if (container) {
+        container.innerHTML = '';
+        examQuestions.forEach((ex, idx) => {
+            const uA = userAnswers[idx];
+            const isOk = (uA === ex.ans);
             
-            <div class="p-4 rounded-xl ${isOk ? 'bg-green-500/10 border border-green-500/30' : 'bg-error/10 border border-error/30'} mb-4">
-                <div class="text-sm">Tu respuesta: <span class="font-mono">${uA !== -1 ? ex.options[uA] : 'No respondida'}</span></div>
-                <div class="text-sm font-bold mt-1 text-on-surface">Correcta: <span class="font-mono text-primary">${ex.options[ex.ans]}</span></div>
-            </div>
-            
-            <div class="bg-surface-variant/50 p-4 rounded-xl text-sm text-on-surface-variant border-l-4 border-primary">
-                <strong>Explicación:</strong> ${ex.exp}
-            </div>
-        `;
-        container.appendChild(div);
-    });
-}
-
-function updateGlobalAverage(historyArray) {
-    if (!historyArray || historyArray.length === 0) return;
-    const sum = historyArray.reduce((a, b) => a + b, 0);
-    const avg = (sum / historyArray.length).toFixed(1);
-    
-    const elText = document.getElementById('global-average-text');
-    const elBar = document.getElementById('global-average-bar');
-    const elCount = document.getElementById('global-average-desc');
-    if (elText) elText.innerText = `${avg}`;
-    if (elBar) elBar.style.width = `${(avg/10)*100}%`;
-    if (elCount) elCount.innerText = `Basado en los últimos ${historyArray.length} cuestionarios que hiciste.`;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const originalShowHome = window.showHome;
-    window.showHome = function() {
-        document.getElementById('exam-screen')?.classList.add('hidden');
-        document.getElementById('exam-screen')?.classList.remove('flex');
-        document.getElementById('exam-results-screen')?.classList.add('hidden');
-        document.getElementById('exam-results-screen')?.classList.remove('flex');
-        document.getElementById('exam-review-screen')?.classList.add('hidden');
-        document.getElementById('exam-review-screen')?.classList.remove('flex');
-        
-        let history = JSON.parse(localStorage.getItem('examHistory') || '[]');
-        if (history.length > 0) {
-            updateGlobalAverage(history);
-        }
-        if (typeof originalShowHome === 'function') {
-            originalShowHome();
-        }
+            const div = document.createElement('div');
+            div.className = "glass p-6 rounded-2xl border border-outline-variant/30";
+            div.innerHTML = `
+                <h3 class="font-bold text-xl text-primary mb-2">Pregunta ${idx + 1}</h3>
+                <div class="text-on-surface-variant mb-4 text-sm">${ex.q}</div>
+                <div class="p-4 rounded-xl ${isOk ? 'bg-green-500/10 border border-green-500/30' : 'bg-error/10 border border-error/30'} mb-4">
+                    <div class="text-sm">Tu respuesta: <span class="font-mono">${uA !== -1 ? ex.options[uA] : 'No respondida'}</span></div>
+                    <div class="text-sm font-bold mt-1 text-on-surface">Correcta: <span class="font-mono text-primary">${ex.options[ex.ans]}</span></div>
+                </div>
+                <div class="bg-surface-variant/50 p-4 rounded-xl text-sm text-on-surface-variant border-l-4 border-primary">
+                    <strong>Explicación:</strong> ${ex.exp}
+                </div>
+            `;
+            container.appendChild(div);
+        });
     }
-
-    let history = JSON.parse(localStorage.getItem('examHistory') || '[]');
-    if (history.length > 0) {
-        updateGlobalAverage(history);
-    }
-});
+}
