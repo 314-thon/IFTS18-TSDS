@@ -98,6 +98,22 @@ let examScore = 0;
 let userAnswers = []; 
 
 window.startExamMode = function() {
+    // Hide other screens
+    document.getElementById('welcome-screen').classList.add('hidden');
+    if (document.getElementById('content-screen')) document.getElementById('content-screen').classList.add('hidden');
+    document.getElementById('exam-results-screen').classList.add('hidden');
+    document.getElementById('exam-results-screen').classList.remove('flex');
+    document.getElementById('exam-review-screen').classList.add('hidden');
+    document.getElementById('exam-review-screen').classList.remove('flex');
+    
+    if(document.getElementById('flashcards-screen')) {
+        document.getElementById('flashcards-screen').classList.add('hidden');
+        document.getElementById('flashcards-screen').classList.remove('flex');
+    }
+    if(document.getElementById('flashcards-victory-screen')) {
+        document.getElementById('flashcards-victory-screen').classList.add('hidden');
+        document.getElementById('flashcards-victory-screen').classList.remove('flex');
+    }
     document.getElementById('welcome-screen').classList.add('hidden');
     document.getElementById('content-screen').classList.add('hidden');
     document.getElementById('exam-results-screen').classList.add('hidden');
