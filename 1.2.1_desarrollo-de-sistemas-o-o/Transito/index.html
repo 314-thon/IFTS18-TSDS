@@ -151,7 +151,7 @@
     <main id="main-content" class="print:hidden pt-20 flex-1 flex flex-col">
         <div id="welcome-screen">
             <!-- Hero Section -->
-            <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden px-margin-mobile">
+            <section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden px-margin-mobile">
                 <div class="absolute inset-0 z-0">
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
                 </div>
@@ -224,8 +224,8 @@
         </div>
 
         <!-- Pantalla de Examen (Simulador) -->
-<div id="exam-screen" class="hidden max-w-4xl mx-auto px-margin-mobile py-10 flex-col w-full min-h-[80vh]">
-    <div class="glass-heavy rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden border border-outline-variant/30">
+<div id="exam-screen" class="hidden max-w-4xl mx-auto px-margin-mobile py-4 flex-col w-full min-h-[60vh]">
+    <div class="glass-heavy rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden border border-outline-variant/30">
         <header class="flex justify-between items-center mb-8 border-b border-outline-variant/30 pb-4">
             <span class="bg-primary/20 text-primary px-4 py-1.5 rounded-full font-bold text-sm" id="exam-question-counter">Pregunta 1 de 20</span>
             <div class="flex items-center gap-4">
@@ -253,7 +253,7 @@
 </div>
 
 <!-- Pantalla de Resultados de Examen -->
-        <div id="exam-results-screen" class="hidden max-w-2xl mx-auto px-margin-mobile py-20 flex-col items-center text-center w-full min-h-[80vh] justify-center">
+        <div id="exam-results-screen" class="hidden max-w-2xl mx-auto px-margin-mobile py-10 flex-col items-center text-center w-full min-h-[60vh] justify-center">
             <div class="w-28 h-28 bg-primary/20 rounded-full flex items-center justify-center mb-6 text-primary shadow-inner">
                 <span class="material-symbols-outlined text-7xl">workspace_premium</span>
             </div>
@@ -280,7 +280,7 @@
         </div>
 
         <!-- Pantalla de Revisión de Examen -->
-        <div id="exam-review-screen" class="hidden max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col w-full min-h-[80vh]">
+        <div id="exam-review-screen" class="hidden max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-4 flex-col w-full min-h-[60vh]">
             <header class="flex justify-between items-center mb-8 border-b border-outline-variant/30 pb-4">
                 <h2 class="text-3xl font-extrabold text-on-surface">Revisión del Examen</h2>
                 <button onclick="showHome()" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-xl font-bold transition-colors flex items-center gap-2">
@@ -293,7 +293,7 @@
         </div>
 
         <!-- Wrapper for Sidebar and Content -->
-        <div id="content-screen" class="hidden max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col lg:flex-row gap-8 w-full">
+        <div id="content-screen" class="hidden max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4 flex-col lg:flex-row gap-8 w-full">
             
             <!-- Sidebar -->
             <aside id="sidebar" class="hidden w-full lg:w-72 glass-heavy rounded-3xl p-6 flex-col gap-base-unit z-40 h-fit sticky top-28 shadow-xl border border-outline-variant/30">
@@ -358,6 +358,53 @@
 
             </div>
         </div>
+    <!-- Pantalla de Flashcards -->
+<div id="flashcards-screen" class="hidden max-w-4xl mx-auto px-margin-mobile py-4 flex-col w-full min-h-[60vh]">
+    <div class="glass-heavy rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden border border-outline-variant/30 flex flex-col items-center">
+        <header class="flex justify-between items-center w-full mb-8 border-b border-outline-variant/30 pb-4">
+            <span class="bg-primary/20 text-primary px-4 py-1.5 rounded-full font-bold text-sm" id="flashcard-counter">Tarjeta 1 de X</span>
+            <button onclick="endFlashcards()" class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full"><span class="material-symbols-outlined">close</span></button>
+        </header>
+
+        <!-- Flashcard Contenedor 3D -->
+        <div class="relative w-full max-w-md h-64 md:h-80 perspective-1000 cursor-pointer" onclick="flipFlashcard()">
+            <div id="flashcard-inner" class="w-full h-full relative transition-transform duration-500 transform-style-3d">
+                <!-- Frente -->
+                <div class="absolute w-full h-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 rounded-2xl flex items-center justify-center p-8 backface-hidden shadow-lg">
+                    <h3 id="flashcard-front" class="text-2xl md:text-3xl font-bold text-primary text-center">Frente</h3>
+                </div>
+                <!-- Reverso -->
+                <div class="absolute w-full h-full bg-slate-200 dark:bg-slate-700 border-2 border-primary/50 rounded-2xl flex flex-col items-center justify-center p-8 backface-hidden transform-rotate-y-180 shadow-lg text-slate-900 dark:text-slate-100">
+                    <h3 id="flashcard-back" class="text-xl md:text-2xl font-semibold text-center">Reverso</h3>
+                </div>
+            </div>
+        </div>
+        <p class="text-on-surface-variant text-sm mt-4 mb-8">Haz clic en la tarjeta para voltearla</p>
+
+        <!-- Botones de Acción (Ocultos hasta que se voltea) -->
+        <div id="flashcard-actions" class="flex gap-4 opacity-0 pointer-events-none transition-opacity duration-300">
+            <button onclick="answerFlashcard(false)" class="px-6 py-3 rounded-xl font-bold text-error bg-error/10 border border-error/30 hover:bg-error/20 flex items-center gap-2">
+                <span class="material-symbols-outlined">close</span> Aún no lo sé
+            </button>
+            <button onclick="answerFlashcard(true)" class="px-6 py-3 rounded-xl font-bold text-green-500 bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 flex items-center gap-2">
+                <span class="material-symbols-outlined">check</span> Ya lo sé
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de Victoria Flashcards -->
+<div id="flashcards-victory-screen" class="hidden max-w-3xl mx-auto px-margin-mobile py-10 flex-col items-center justify-center text-center w-full min-h-[60vh]">
+    <div class="glass-heavy rounded-3xl p-10 md:p-14 shadow-2xl border border-primary/30 flex flex-col items-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent pointer-events-none"></div>
+        <span class="material-symbols-outlined text-7xl text-primary mb-6 drop-shadow-md">workspace_premium</span>
+        <h2 class="font-headline-lg text-4xl font-extrabold text-on-surface tracking-tight mb-4">¡Felicidades!</h2>
+        <p class="text-on-surface-variant font-body-lg text-xl max-w-md mb-8">Has dominado todas las tarjetas de este mazo.</p>
+        <button onclick="showHome()" class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined">home</span> Volver al Inicio
+        </button>
+    </div>
+</div>
     </main>
     
     <!-- Footer -->
@@ -542,53 +589,7 @@
     <!-- ========================================================================= -->
 
     
-<!-- Pantalla de Flashcards -->
-<div id="flashcards-screen" class="hidden max-w-4xl mx-auto px-margin-mobile py-10 flex-col w-full min-h-[80vh]">
-    <div class="glass-heavy rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden border border-outline-variant/30 flex flex-col items-center">
-        <header class="flex justify-between items-center w-full mb-8 border-b border-outline-variant/30 pb-4">
-            <span class="bg-primary/20 text-primary px-4 py-1.5 rounded-full font-bold text-sm" id="flashcard-counter">Tarjeta 1 de X</span>
-            <button onclick="endFlashcards()" class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full"><span class="material-symbols-outlined">close</span></button>
-        </header>
 
-        <!-- Flashcard Contenedor 3D -->
-        <div class="relative w-full max-w-md h-64 md:h-80 perspective-1000 cursor-pointer" onclick="flipFlashcard()">
-            <div id="flashcard-inner" class="w-full h-full relative transition-transform duration-500 transform-style-3d">
-                <!-- Frente -->
-                <div class="absolute w-full h-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 rounded-2xl flex items-center justify-center p-8 backface-hidden shadow-lg">
-                    <h3 id="flashcard-front" class="text-2xl md:text-3xl font-bold text-primary text-center">Frente</h3>
-                </div>
-                <!-- Reverso -->
-                <div class="absolute w-full h-full bg-slate-200 dark:bg-slate-700 border-2 border-primary/50 rounded-2xl flex flex-col items-center justify-center p-8 backface-hidden transform-rotate-y-180 shadow-lg text-slate-900 dark:text-slate-100">
-                    <h3 id="flashcard-back" class="text-xl md:text-2xl font-semibold text-center">Reverso</h3>
-                </div>
-            </div>
-        </div>
-        <p class="text-on-surface-variant text-sm mt-4 mb-8">Haz clic en la tarjeta para voltearla</p>
-
-        <!-- Botones de Acción (Ocultos hasta que se voltea) -->
-        <div id="flashcard-actions" class="flex gap-4 opacity-0 pointer-events-none transition-opacity duration-300">
-            <button onclick="answerFlashcard(false)" class="px-6 py-3 rounded-xl font-bold text-error bg-error/10 border border-error/30 hover:bg-error/20 flex items-center gap-2">
-                <span class="material-symbols-outlined">close</span> Aún no lo sé
-            </button>
-            <button onclick="answerFlashcard(true)" class="px-6 py-3 rounded-xl font-bold text-green-500 bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 flex items-center gap-2">
-                <span class="material-symbols-outlined">check</span> Ya lo sé
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Pantalla de Victoria Flashcards -->
-<div id="flashcards-victory-screen" class="hidden max-w-3xl mx-auto px-margin-mobile py-20 flex-col items-center justify-center text-center w-full min-h-[80vh]">
-    <div class="glass-heavy rounded-3xl p-10 md:p-14 shadow-2xl border border-primary/30 flex flex-col items-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent pointer-events-none"></div>
-        <span class="material-symbols-outlined text-7xl text-primary mb-6 drop-shadow-md">workspace_premium</span>
-        <h2 class="font-headline-lg text-4xl font-extrabold text-on-surface tracking-tight mb-4">¡Felicidades!</h2>
-        <p class="text-on-surface-variant font-body-lg text-xl max-w-md mb-8">Has dominado todas las tarjetas de este mazo.</p>
-        <button onclick="showHome()" class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
-            <span class="material-symbols-outlined">home</span> Volver al Inicio
-        </button>
-    </div>
-</div>
 
 <!-- Scripts (Lógica de la aplicación) -->
     <script src="js/data.js"></script>
