@@ -394,3 +394,33 @@ function showFlashcardsVictory() {
     document.getElementById('flashcards-victory-screen').classList.remove('hidden');
     document.getElementById('flashcards-victory-screen').classList.add('flex');
 }
+
+
+window.showHome = function() {
+    document.getElementById('welcome-screen').classList.remove('hidden');
+    if (document.getElementById('content-screen')) document.getElementById('content-screen').classList.add('hidden');
+    
+    if(document.getElementById('exam-screen')) {
+        document.getElementById('exam-screen').classList.add('hidden');
+        document.getElementById('exam-screen').classList.remove('flex');
+    }
+    if(document.getElementById('exam-results-screen')) {
+        document.getElementById('exam-results-screen').classList.add('hidden');
+        document.getElementById('exam-results-screen').classList.remove('flex');
+    }
+    if(document.getElementById('exam-review-screen')) {
+        document.getElementById('exam-review-screen').classList.add('hidden');
+        document.getElementById('exam-review-screen').classList.remove('flex');
+    }
+    
+    if(document.getElementById('flashcards-screen')) {
+        document.getElementById('flashcards-screen').classList.add('hidden');
+        document.getElementById('flashcards-screen').classList.remove('flex');
+    }
+    if(document.getElementById('flashcards-victory-screen')) {
+        document.getElementById('flashcards-victory-screen').classList.add('hidden');
+        document.getElementById('flashcards-victory-screen').classList.remove('flex');
+    }
+    
+    window.scrollTo(0,0);
+}

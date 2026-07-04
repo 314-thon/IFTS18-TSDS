@@ -132,7 +132,8 @@
             </div>
             
             <nav class="hidden md:flex gap-gutter font-body-md text-body-md items-center" id="unit-nav">
-                <!-- Generados por JS -->
+                <button onclick="startExamMode()" class="text-on-surface-variant hover:text-primary transition-colors font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-sm">quiz</span> Cuestionario</button>
+                <button onclick="startFlashcardsMode()" class="text-on-surface-variant hover:text-primary transition-colors font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-sm">style</span> Tarjetas</button>
             </nav>
             
             <div class="flex space-x-4 items-center">
@@ -553,11 +554,11 @@
         <div class="relative w-full max-w-md h-64 md:h-80 perspective-1000 cursor-pointer" onclick="flipFlashcard()">
             <div id="flashcard-inner" class="w-full h-full relative transition-transform duration-500 transform-style-3d">
                 <!-- Frente -->
-                <div class="absolute w-full h-full bg-surface-variant/80 border border-primary/20 rounded-2xl flex items-center justify-center p-8 backface-hidden shadow-lg">
+                <div class="absolute w-full h-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 rounded-2xl flex items-center justify-center p-8 backface-hidden shadow-lg">
                     <h3 id="flashcard-front" class="text-2xl md:text-3xl font-bold text-primary text-center">Frente</h3>
                 </div>
                 <!-- Reverso -->
-                <div class="absolute w-full h-full bg-primary border border-primary-container rounded-2xl flex flex-col items-center justify-center p-8 backface-hidden transform-rotate-y-180 shadow-lg text-on-primary">
+                <div class="absolute w-full h-full bg-slate-200 dark:bg-slate-700 border-2 border-primary/50 rounded-2xl flex flex-col items-center justify-center p-8 backface-hidden transform-rotate-y-180 shadow-lg text-slate-900 dark:text-slate-100">
                     <h3 id="flashcard-back" class="text-xl md:text-2xl font-semibold text-center">Reverso</h3>
                 </div>
             </div>
