@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-
-<html class="light" lang="es">
+﻿<!DOCTYPE html>
+<html lang="es" class="light">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Guía de Estadística | Guía Interactiva</title>
-<link href="314-logo.png?v=2" rel="icon" type="image/png"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- KaTeX CSS & JS para renderizar fórmulas matemáticas hermosas -->
-<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-<!-- Google Fonts para Stitch Design -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuÃ­a de EstadÃ­stica | GuÃ­a Interactiva</title>
+    <link rel="icon" type="image/png" href="314-logo.png?v=2">
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- KaTeX CSS & JS para renderizar fÃ³rmulas matemÃ¡ticas hermosas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Google Fonts para Stitch Design -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -88,7 +91,7 @@
         }
       }
     </script>
-<script>
+    <script>
       // Script para alternar modo oscuro
       function toggleTheme() {
           const htmlElement = document.documentElement;
@@ -107,399 +110,421 @@
           }
       };
     </script>
-<link href="css/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-background text-on-background font-body-md transition-colors duration-300 antialiased pt-20 print:pt-0">
-<!-- TopNavBar -->
-<header class="print:hidden fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-2xl transition-colors duration-300">
-<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
-<div class="flex items-center gap-4 cursor-pointer active:scale-95 transition-all" onclick="showHome()">
-<span class="font-headline-md text-headline-md font-bold text-primary hidden md:block">Código de Tránsito</span>
-</div>
-<nav class="hidden md:flex gap-gutter font-body-md text-body-md items-center" id="unit-nav">
-<!-- Generados por JS -->
-</nav>
-<div class="flex space-x-4 items-center">
-<button aria-label="Cambiar tema" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full flex items-center justify-center" onclick="toggleTheme()">
-<span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
-</button>
-<button class="md:hidden text-primary">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-</div>
-</header>
-<main class="print:hidden pt-20 flex-1 flex flex-col" id="main-content">
-<div id="welcome-screen">
-<!-- Hero Section -->
-<section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden px-margin-mobile">
-<div class="absolute inset-0 z-0">
-<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
-</div>
-<div class="relative z-10 text-center max-w-4xl mx-auto space-y-6">
-<div class="inline-block glass px-4 py-1 rounded-full mb-4 animate-float">
-<span class="text-label-sm font-label-sm text-primary uppercase tracking-widest">Ciclo Lectivo 2026</span>
-</div>
-<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
-                        Domina el <span class="text-gradient">Código de Tránsito</span>
-</h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-                        Explora los fundamentos del Régimen Contravencional y la Ley 2.148 con recursos interactivos de estudio.
-                    </p>
-<div class="pt-8 flex flex-col md:flex-row gap-4 justify-center">
-<button class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary text-body-md flex items-center justify-center gap-2" onclick="goToUnit('u1')">
-<span class="material-symbols-outlined">rocket_launch</span>
-                            Comenzar Aprendizaje
-                        </button>
-</div>
-</div>
-</section>
-<!-- Main Content: Unit Blocks -->
-<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10">
-<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
 
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-<!-- Unit 3 -->
-<div class="glass p-8 rounded-3xl cursor-pointer hover:translate-y-[-8px] transition-all duration-300 group" onclick="goToUnit('u1')">
-<div class="w-14 h-14 rounded-2xl bg-primary-container/20 flex items-center justify-center mb-6 text-primary">
-<span class="material-symbols-outlined text-4xl">bar_chart</span>
-</div>
-<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Módulo 01</span>
-<h3 class="font-headline-md text-headline-md text-on-surface mt-2 mb-4">Distribuciones</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Estudio de variables aleatorias discretas y continuas. Binomial, Poisson y Distribución Normal.</p>
-<button class="w-full py-3 rounded-xl border border-primary/30 text-primary font-bold group-hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
-                            Explorar Unidad <span class="material-symbols-outlined text-sm">open_in_new</span>
-</button>
-</div>
-<!-- Unit 4 -->
-<div class="glass p-8 rounded-3xl cursor-pointer hover:translate-y-[-8px] transition-all duration-300 group" onclick="goToUnit('u2')">
-<div class="w-14 h-14 rounded-2xl bg-secondary-container/20 flex items-center justify-center mb-6 text-secondary">
-<span class="material-symbols-outlined text-4xl">timeline</span>
-</div>
-<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Módulo 02</span>
-<h3 class="font-headline-md text-headline-md text-on-surface mt-2 mb-4">Inferencia</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Estimación por intervalos de confianza y pruebas de hipótesis para medias y proporciones.</p>
-<button class="w-full py-3 rounded-xl border border-secondary/30 text-secondary font-bold group-hover:bg-secondary/10 transition-all flex items-center justify-center gap-2">
-                            Explorar Unidad <span class="material-symbols-outlined text-sm">open_in_new</span>
-</button>
-</div>
-<!-- Unit 5 -->
-<div class="glass p-8 rounded-3xl cursor-pointer hover:translate-y-[-8px] transition-all duration-300 group" onclick="goToUnit('u3')">
-<div class="w-14 h-14 rounded-2xl bg-primary-container/20 flex items-center justify-center mb-6 text-primary">
-<span class="material-symbols-outlined text-4xl">functions</span>
-</div>
-<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Módulo 03</span>
-<h3 class="font-headline-md text-headline-md text-on-surface mt-2 mb-4">Leyes 1.472 y 12</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Régimen Contravencional, Alcoholemia, Identidad de Género.</p>
-<button class="w-full py-3 rounded-xl border border-primary/30 text-primary font-bold group-hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
-                            Explorar Unidad <span class="material-symbols-outlined text-sm">open_in_new</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Exam Simulator Section -->
-<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20">
-<div class="glass-heavy rounded-[40px] p-8 md:p-16 relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
-<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10"></div>
-<div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 blur-[100px] -z-10"></div>
-<div class="flex-1 space-y-6">
-<div class="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-1 rounded-full">
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
-<span class="font-label-sm text-label-sm">MODO EXAMEN DISPONIBLE</span>
-</div>
-<h2 class="font-display-lg-mobile md:font-headline-md md:text-4xl text-on-surface">Cuestionario de Tránsito</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">
-                            Pon a prueba tus conocimientos sobre normativas de tránsito, números de ley y alcoholemia.
+    <!-- TopNavBar -->
+    <header class="print:hidden fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-2xl transition-colors duration-300">
+        <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+            <div class="flex items-center gap-4 cursor-pointer active:scale-95 transition-all" onclick="showHome()">
+                
+                <span class="font-headline-md text-headline-md font-bold text-primary hidden md:block">EstadÃ­stica y Ley NÂ° 5.688</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-gutter font-body-md text-body-md items-center" id="unit-nav">
+                <!-- Generados por JS -->
+            </nav>
+            
+            <div class="flex space-x-4 items-center">
+                <button onclick="toggleTheme()" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full flex items-center justify-center" aria-label="Cambiar tema">
+                    <span id="theme-icon" class="material-symbols-outlined">dark_mode</span>
+                </button>
+                
+                <button class="md:hidden text-primary">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="print:hidden pt-20 flex-1 flex flex-col">
+        <div id="welcome-screen">
+            <!-- Hero Section -->
+            <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden px-margin-mobile">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
+                </div>
+                <div class="relative z-10 text-center max-w-4xl mx-auto space-y-6">
+                    
+                    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
+                        Domina el <span class="text-gradient">CÃ³digo de TrÃ¡nsito</span>
+                    </h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                        Explora los fundamentos del RÃ©gimen Contravencional y la Ley 2.148 con recursos interactivos de estudio.
+                    </p>
+                    <div class="pt-8 flex flex-col md:flex-row gap-4 justify-center">
+                        <button onclick="startExamMode()" class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary text-body-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">quiz</span>Realizar Cuestionario</button> <button onclick="goToUnit('u1')" class="px-8 py-4 rounded-xl font-bold text-primary border border-primary/30 hover:bg-primary/10 flex items-center justify-center gap-2">Leyes para Practicar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exam Simulator Section -->
+            <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20">
+                <div class="glass-heavy rounded-[40px] p-8 md:p-16 relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 blur-[100px] -z-10"></div>
+                    <div class="flex-1 space-y-6">
+                        <div class="inline-flex items-center gap-2 bg-primary/20 text-primary px-4 py-1 rounded-full">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
+                            <span class="font-label-sm text-label-sm">MODO EXAMEN DISPONIBLE</span>
+                        </div>
+                        <h2 class="font-display-lg-mobile md:font-headline-md md:text-4xl text-on-surface">Cuestionario de TrÃ¡nsito</h2>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">
+                            Pon a prueba tus conocimientos sobre normativas de trÃ¡nsito, nÃºmeros de ley y alcoholemia.
                         </p>
-<ul class="space-y-3 font-body-md text-body-md text-on-surface-variant">
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> Pool de preguntas dinámicas</li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> Evaluación rápida e interactiva</li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> Feedback detallado por cada respuesta</li>
-</ul>
-<button class="btn-primary-gradient px-12 py-5 rounded-2xl font-extrabold text-on-primary text-body-lg flex items-center justify-center gap-3 mt-4 w-full md:w-auto hover:scale-105 transition-transform" onclick="startExamMode()">
+                        <ul class="space-y-3 font-body-md text-body-md text-on-surface-variant">
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> Pool de preguntas dinÃ¡micas</li>
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> EvaluaciÃ³n rÃ¡pida e interactiva</li>
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">check_circle</span> Feedback detallado por cada respuesta</li>
+                        </ul>
+                        <button onclick="startExamMode()" class="btn-primary-gradient px-12 py-5 rounded-2xl font-extrabold text-on-primary text-body-lg flex items-center justify-center gap-3 mt-4 w-full md:w-auto hover:scale-105 transition-transform">
                             Realizar Cuestionario
                             <span class="material-symbols-outlined">quiz</span>
-</button>
-</div>
-<div class="flex-1 w-full max-w-sm aspect-square relative hidden md:block">
-<div class="absolute inset-0 glass rounded-3xl rotate-6 translate-x-4 translate-y-4 opacity-50"></div>
-<div class="absolute inset-0 glass-heavy rounded-3xl flex flex-col items-center justify-center p-8 text-center gap-4">
-<div class="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined text-5xl text-primary">fact_check</span>
-</div>
-<div class="space-y-1">
-<div class="text-4xl font-bold text-on-surface" id="global-average-text">85%</div>
-<div class="text-label-sm text-primary uppercase">Promedio General</div>
-</div>
-<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[85%] transition-all duration-1000" id="global-average-bar"></div>
-</div>
-<p class="text-label-sm text-on-surface-variant" id="global-average-desc">Basado en los últimos 0 simulacros que hiciste.</p>
-</div>
-</div>
-</div>
-</section>
-</div>
-<!-- Pantalla de Examen (Simulador) -->
-<div class="hidden max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col w-full min-h-[80vh]" id="exam-screen">
+                        </button>
+                    </div>
+                    <div class="flex-1 w-full max-w-sm aspect-square relative hidden md:block">
+                        <div class="absolute inset-0 glass rounded-3xl rotate-6 translate-x-4 translate-y-4 opacity-50"></div>
+                        <div class="absolute inset-0 glass-heavy rounded-3xl flex flex-col items-center justify-center p-8 text-center gap-4">
+                            <div class="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-5xl text-primary">fact_check</span>
+                            </div>
+                            <div class="space-y-1">
+                                <div id="global-average-text" class="text-4xl font-bold text-on-surface">85%</div>
+                                <div class="text-label-sm text-primary uppercase">Promedio General</div>
+                            </div>
+                            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+                                <div id="global-average-bar" class="bg-primary h-full w-[85%] transition-all duration-1000"></div>
+                            </div>
+                            <p id="global-average-desc" class="text-label-sm text-on-surface-variant">Basado en los Ãºltimos 0 simulacros que hiciste.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
 
+        <!-- Pantalla de Examen (Simulador) -->
+        <div id="exam-screen" class="hidden max-w-4xl mx-auto px-margin-mobile py-10 flex-col w-full min-h-[80vh]">
+    <div class="glass-heavy rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden border border-outline-variant/30">
+        <header class="flex justify-between items-center mb-8 border-b border-outline-variant/30 pb-4">
+            <span class="bg-primary/20 text-primary px-4 py-1.5 rounded-full font-bold text-sm" id="exam-question-counter">Pregunta 1 de 20</span>
+            <button onclick="endExam(true)" class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full"><span class="material-symbols-outlined">close</span></button>
+        </header>
+        
+        <div id="exam-question-text" class="text-on-surface font-body-lg text-xl md:text-2xl leading-relaxed mb-8">
+            <!-- Pregunta -->
+        </div>
 
+        <div id="exam-options-container" class="flex flex-col space-y-4 mb-10">
+            <!-- Opciones JS -->
+        </div>
 
-
+        <div class="flex justify-between items-center pt-6 border-t border-outline-variant/30">
+            <button id="exam-prev-btn" onclick="prevExamQuestion()" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-xl font-bold transition-colors flex items-center gap-2 invisible"><span class="material-symbols-outlined">arrow_back</span> Volver</button>
+            <button id="exam-next-btn" onclick="nextExamQuestion()" class="btn-primary-gradient px-8 py-3 rounded-xl font-bold text-on-primary shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">Siguiente <span class="material-symbols-outlined">arrow_forward</span></button>
+        </div>
+    </div>
 </div>
+
 <!-- Pantalla de Resultados de Examen -->
-<div class="hidden max-w-2xl mx-auto px-margin-mobile py-20 flex-col items-center text-center w-full min-h-[80vh] justify-center" id="exam-results-screen">
-<div class="w-28 h-28 bg-primary/20 rounded-full flex items-center justify-center mb-6 text-primary shadow-inner">
-<span class="material-symbols-outlined text-7xl">workspace_premium</span>
-</div>
-<h2 class="text-4xl md:text-5xl font-extrabold text-on-surface mb-2">¡Cuestionario Finalizado!</h2>
-<p class="text-on-surface-variant text-lg md:text-xl mb-10">Has completado el examen en <span class="font-bold text-on-surface" id="exam-time-taken"></span>.</p>
-<div class="glass-heavy w-full p-10 rounded-3xl mb-10 border border-outline-variant/30 shadow-xl relative overflow-hidden">
-<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
-<div class="relative z-10">
-<div class="text-on-surface font-bold text-xl md:text-2xl mb-2 opacity-90" id="exam-result-prefix">Tu nota es un</div>
-<div class="text-7xl font-black text-primary mb-2 tracking-tighter" id="exam-final-score">80%</div>
-<div class="text-on-surface font-bold text-lg mt-4 opacity-90 max-w-sm mx-auto" id="exam-result-message"></div>
-</div>
-</div>
-<div class="flex flex-col md:flex-row gap-4">
-<button class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary text-lg shadow-lg hover:scale-105 transition-transform flex items-center gap-2" onclick="showHome()">
-<span class="material-symbols-outlined">home</span> Volver al Inicio
+        <div id="exam-results-screen" class="hidden max-w-2xl mx-auto px-margin-mobile py-20 flex-col items-center text-center w-full min-h-[80vh] justify-center">
+            <div class="w-28 h-28 bg-primary/20 rounded-full flex items-center justify-center mb-6 text-primary shadow-inner">
+                <span class="material-symbols-outlined text-7xl">workspace_premium</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-on-surface mb-2">Â¡Cuestionario Finalizado!</h2>
+            <p class="text-on-surface-variant text-lg md:text-xl mb-10">Has completado el examen en <span id="exam-time-taken" class="font-bold text-on-surface"></span>.</p>
+            
+            <div class="glass-heavy w-full p-10 rounded-3xl mb-10 border border-outline-variant/30 shadow-xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+                <div class="relative z-10">
+                    <div class="text-on-surface font-bold text-xl md:text-2xl mb-2 opacity-90" id="exam-result-prefix">Tu nota es un</div>
+                    <div class="text-7xl font-black text-primary mb-2 tracking-tighter" id="exam-final-score">80%</div>
+                    <div class="text-on-surface font-bold text-lg mt-4 opacity-90 max-w-sm mx-auto" id="exam-result-message"></div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-4">
+                <button onclick="showHome()" class="btn-primary-gradient px-8 py-4 rounded-xl font-bold text-on-primary text-lg shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                    <span class="material-symbols-outlined">home</span> Volver al Inicio
                 </button>
-<button class="glass-heavy text-primary border border-primary/30 px-8 py-4 rounded-xl font-bold text-lg shadow-sm hover:bg-primary/10 transition-colors flex items-center justify-center gap-2" onclick="showExamReview()">
-<span class="material-symbols-outlined">fact_check</span> Ver Revisión
+                <button onclick="showExamReview()" class="glass-heavy text-primary border border-primary/30 px-8 py-4 rounded-xl font-bold text-lg shadow-sm hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">fact_check</span> Ver RevisiÃ³n
                 </button>
-</div>
-</div>
-<!-- Pantalla de Revisión de Examen -->
-<div class="hidden max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col w-full min-h-[80vh]" id="exam-review-screen">
-<header class="flex justify-between items-center mb-8 border-b border-outline-variant/30 pb-4">
-<h2 class="text-3xl font-extrabold text-on-surface">Revisión del Examen</h2>
-<button class="text-primary hover:bg-primary/10 px-4 py-2 rounded-xl font-bold transition-colors flex items-center gap-2" onclick="showHome()">
+            </div>
+        </div>
+
+        <!-- Pantalla de RevisiÃ³n de Examen -->
+        <div id="exam-review-screen" class="hidden max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col w-full min-h-[80vh]">
+            <header class="flex justify-between items-center mb-8 border-b border-outline-variant/30 pb-4">
+                <h2 class="text-3xl font-extrabold text-on-surface">RevisiÃ³n del Examen</h2>
+                <button onclick="showHome()" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-xl font-bold transition-colors flex items-center gap-2">
                     Cerrar <span class="material-symbols-outlined">close</span>
-</button>
-</header>
-<div class="space-y-8 format-math" id="exam-review-container">
-<!-- Inyectado por JS -->
-</div>
-</div>
-<!-- Wrapper for Sidebar and Content -->
-<div class="hidden max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col lg:flex-row gap-8 w-full" id="content-screen">
-<!-- Sidebar -->
-<aside class="hidden w-full lg:w-72 glass-heavy rounded-3xl p-6 flex-col gap-base-unit z-40 h-fit sticky top-28 shadow-xl border border-outline-variant/30" id="sidebar">
-<div class="mb-6">
-<h3 class="font-headline-md text-[18px] text-primary" id="sidebar-unit-title">Selecciona un Tema</h3>
-<p class="font-label-sm text-label-sm text-on-surface-variant" id="sidebar-unit-desc">Ciclo Lectivo 2026</p>
-</div>
-<div class="space-y-2" id="topics-list">
-<!-- Generado por JS -->
-</div>
-</aside>
-<!-- Pantalla de Contenido -->
-<div class="flex-1 flex flex-col max-w-4xl mx-auto w-full space-y-8 pb-20">
-<header class="border-b border-outline-variant/30 pb-4 mt-4">
-<span class="inline-block bg-primary-container/20 text-primary border border-primary/30 text-xs px-3 py-1 rounded-full font-bold tracking-widest uppercase mb-3" id="topic-badge"></span>
-<h1 class="text-3xl md:text-4xl font-extrabold text-on-surface leading-tight tracking-tight" id="topic-title"></h1>
-</header>
-<section class="glass rounded-3xl p-6 md:p-8 shadow-sm">
-<h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">lightbulb</span> Explicación Sencilla y Tips
+                </button>
+            </header>
+            <div id="exam-review-container" class="space-y-8 format-math">
+                <!-- Inyectado por JS -->
+            </div>
+        </div>
+
+        <!-- Wrapper for Sidebar and Content -->
+        <div id="content-screen" class="hidden max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-10 flex-col lg:flex-row gap-8 w-full">
+            
+            <!-- Sidebar -->
+            <aside id="sidebar" class="hidden w-full lg:w-72 glass-heavy rounded-3xl p-6 flex-col gap-base-unit z-40 h-fit sticky top-28 shadow-xl border border-outline-variant/30">
+                <div class="mb-6">
+                    <h3 id="sidebar-unit-title" class="font-headline-md text-[18px] text-primary">Selecciona un Tema</h3>
+                    <p id="sidebar-unit-desc" class="font-label-sm text-label-sm text-on-surface-variant">Ciclo Lectivo 2026</p>
+                </div>
+                <div id="topics-list" class="space-y-2">
+                    <!-- Generado por JS -->
+                </div>
+            </aside>
+
+            <!-- Pantalla de Contenido -->
+            <div class="flex-1 flex flex-col max-w-4xl mx-auto w-full space-y-8 pb-20">
+                
+                <header class="border-b border-outline-variant/30 pb-4 mt-4">
+                    <span id="topic-badge" class="inline-block bg-primary-container/20 text-primary border border-primary/30 text-xs px-3 py-1 rounded-full font-bold tracking-widest uppercase mb-3"></span>
+                    <h1 id="topic-title" class="text-3xl md:text-4xl font-extrabold text-on-surface leading-tight tracking-tight"></h1>
+                </header>
+
+                <section class="glass rounded-3xl p-6 md:p-8 shadow-sm">
+                    <h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">lightbulb</span> ExplicaciÃ³n Sencilla y Tips
                     </h2>
-<div class="text-on-surface-variant text-lg font-body-md leading-relaxed" id="topic-explanation"></div>
-</section>
-<section class="glass-heavy rounded-3xl p-6 md:p-8 shadow-sm hidden" id="viz-section">
-<h2 class="text-xl font-bold text-primary mb-2 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">analytics</span> Simulador Interactivo
+                    <div id="topic-explanation" class="text-on-surface-variant text-lg font-body-md leading-relaxed"></div>
+                </section>
+
+                <section id="viz-section" class="glass-heavy rounded-3xl p-6 md:p-8 shadow-sm hidden">
+                    <h2 class="text-xl font-bold text-primary mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">analytics</span> Simulador Interactivo
                     </h2>
-<p class="font-body-md text-sm text-on-surface-variant mb-6" id="viz-desc"></p>
-<div class="mb-6 glass p-4 rounded-xl shadow-inner flex flex-wrap gap-4 items-center justify-center text-on-surface" id="viz-controls">
-</div>
-<div class="chart-container glass p-4 rounded-xl shadow-sm">
-<canvas id="interactiveCanvas"></canvas>
-</div>
-</section>
-<section id="videos-section">
-<h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">video_library</span> Videos Recomendados
+                    <p id="viz-desc" class="font-body-md text-sm text-on-surface-variant mb-6"></p>
+                    
+                    <div id="viz-controls" class="mb-6 glass p-4 rounded-xl shadow-inner flex flex-wrap gap-4 items-center justify-center text-on-surface">
+                    </div>
+
+                    <div class="chart-container glass p-4 rounded-xl shadow-sm">
+                        <canvas id="interactiveCanvas"></canvas>
+                    </div>
+                </section>
+
+                <section id="videos-section">
+                    <h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">video_library</span> Videos Recomendados
                     </h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="topic-videos">
-</div>
-</section>
-<section class="space-y-6" id="practice-section">
-<h2 class="text-xl font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">edit_note</span> Práctica Guiada
+                    <div id="topic-videos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+                </section>
+
+                <section class="space-y-6" id="practice-section">
+                    <h2 class="text-xl font-bold text-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">edit_note</span> PrÃ¡ctica Guiada
                     </h2>
-<p class="font-body-md text-sm text-on-surface-variant mb-4" id="exercise-intro-text">Intenta resolver el ejercicio antes de ver la respuesta.</p>
-<div class="space-y-6" id="exercises-container">
-</div>
-</section>
-<div class="mt-8 border-t border-outline-variant/30 pt-6" id="completion-btn-container">
-</div>
-</div>
-</div>
-</main>
-<!-- Footer -->
-<footer class="print:hidden bg-surface-container-lowest w-full py-12 border-t border-outline-variant/20 mt-auto">
-<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
-<div class="flex flex-col items-center md:items-start gap-4">
-<div class="flex items-center gap-3">
-<span class="font-headline-md text-headline-md text-on-surface">Tránsito y Normativa</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant max-w-sm text-center md:text-left">
-                    Guía de Tránsito y Contravenciones - Preparación de Exámenes
+                    <p class="font-body-md text-sm text-on-surface-variant mb-4" id="exercise-intro-text">Intenta resolver el ejercicio antes de ver la respuesta.</p>
+                    
+                    <div id="exercises-container" class="space-y-6">
+                    </div>
+                </section>
+
+                <div id="completion-btn-container" class="mt-8 border-t border-outline-variant/30 pt-6">
+                </div>
+
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="print:hidden bg-surface-container-lowest w-full py-12 border-t border-outline-variant/20 mt-auto">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <div class="flex items-center gap-3">
+                    
+                    <span class="font-headline-md text-headline-md text-on-surface">TrÃ¡nsito y Normativa</span>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant max-w-sm text-center md:text-left">
+                    GuÃ­a de TrÃ¡nsito y Contravenciones - PreparaciÃ³n de ExÃ¡menes
                 </p>
-</div>
-<div class="flex flex-col items-center md:items-end gap-2 mt-6 md:mt-0">
-<p class="font-body-md text-body-md text-on-surface-variant">© 2026 Guía de Tránsito - Todos los derechos reservados</p>
-</div>
-</div>
-</footer>
-<!-- ========================================================================= -->
-<!-- INICIO DE LA HOJA DE FÓRMULAS (MODAL)                                     -->
-<!-- Atención: Si se requiere actualizar, editar con cuidado dentro de este    -->
-<!-- bloque para no alterar el resto de la página index.html.                  -->
-<!-- ========================================================================= -->
-<div class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0" id="formulas-modal">
-<div class="a4-container rounded-xl overflow-hidden relative dark:bg-surface dark:border dark:border-outline-variant/30">
-<div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print:hidden">
-<div class="flex items-center gap-3">
-<span class="text-3xl">🧮</span>
-<h2 class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Fórmulas Estadística</h2>
-</div>
-<div class="flex gap-3">
-<button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2" onclick="printPDF()">
-<span>🖨️</span> Guardar PDF / Imprimir
+            </div>
+            <div class="flex flex-col items-center md:items-end gap-2 mt-6 md:mt-0">
+                <p class="font-body-md text-body-md text-on-surface-variant">Â© 2026 GuÃ­a de TrÃ¡nsito - Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================================================= -->
+    <!-- INICIO DE LA HOJA DE FÃ“RMULAS (MODAL)                                     -->
+    <!-- AtenciÃ³n: Si se requiere actualizar, editar con cuidado dentro de este    -->
+    <!-- bloque para no alterar el resto de la pÃ¡gina index.html.                  -->
+    <!-- ========================================================================= -->
+    <div id="formulas-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0">
+        <div class="a4-container rounded-xl overflow-hidden relative dark:bg-surface dark:border dark:border-outline-variant/30">
+            
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print:hidden">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">ðŸ§®</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">FÃ³rmulas EstadÃ­stica</h2>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="printPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                        <span>ðŸ–¨ï¸</span> Guardar PDF / Imprimir
                     </button>
-<button class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-5 rounded-lg transition-colors" onclick="closeFormulas()">
+                    <button onclick="closeFormulas()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-5 rounded-lg transition-colors">
                         Cerrar
                     </button>
-</div>
-</div>
-<div class="text-slate-900 dark:text-slate-100" id="formulas-print-area">
-<div class="text-center mb-8 print:mb-4">
-<h1 class="text-3xl font-black uppercase tracking-widest text-indigo-900 dark:text-indigo-300 border-b-4 border-indigo-600 dark:border-indigo-400 inline-block pb-1">Fórmulas Estadística</h1>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-2 print:mt-1 font-medium">Unidad 3, 4 y 5 • Fórmulas clave para el parcial</p>
-</div>
-<div class="grid grid-cols-2 gap-x-8 gap-y-6 print:gap-y-3 text-sm">
-<div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
-<div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 print:p-3">
-<h3 class="font-bold text-blue-900 dark:text-blue-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-blue-200 dark:border-blue-800 pb-1">Unidad 3: Ley N° 5.688</h3>
-<div class="space-y-3 print:space-y-2">
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Complemento:</span>
-<div class="mt-1 format-formulas">$$P(A') = 1 - P(A)$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de Adición:</span>
-<div class="mt-1 format-formulas text-xs">General: $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$</div>
-<div class="mt-1 format-formulas text-xs">Mutuamente excluyentes: $$P(A \cup B) = P(A) + P(B)$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de Multiplicación:</span>
-<div class="mt-1 format-formulas text-xs">General: $$P(A \cap B) = P(A) \cdot P(B|A)$$</div>
-<div class="mt-1 format-formulas text-xs">Independientes: $$P(A \cap B) = P(A) \cdot P(B)$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Ley N° 5.688 Condicional:</span>
-<div class="mt-1 format-formulas">$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$</div>
-<div class="mt-1 format-formulas text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Independientes: $$P(A|B) = P(A)$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Bayes:</span>
-<div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1">$$P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)}$$</div>
-<div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">El denominador es la Ley N° 5.688 Total de $B$</div>
-</div>
-<div class="mt-2 border-t border-blue-200/50 dark:border-blue-800/50 pt-2">
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Ley N° 5.688 Total:</span>
-<div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1 scrollbar-thin">$$P(B) = P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n) = \sum P(A_i)P(B|A_i)$$</div>
-</div>
-</div>
-</div>
-<div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 print:p-3">
-<h3 class="font-bold text-indigo-900 dark:text-indigo-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-indigo-200 dark:border-indigo-800 pb-1">Reglas de Conteo</h3>
-<div class="space-y-3 print:space-y-2">
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Permutaciones:</span>
-<div class="mt-1 format-formulas">$$P_n^N = \frac{N!}{(N-n)!}$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Combinaciones:</span>
-<div class="mt-1 format-formulas">$$C_n^N = \binom{N}{n} = \frac{N!}{n!(N-n)!}$$</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
-<div class="bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800 rounded-lg p-4 print:p-3">
-<h3 class="font-bold text-teal-900 dark:teal-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-teal-200 dark:border-teal-800 pb-1">Unidad 4: Discretas</h3>
-<div class="space-y-3 print:space-y-2">
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Valor Esperado (Esperanza):</span>
-<div class="mt-1 format-formulas">$$E(X) = \mu = \sum x \cdot P(x)$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Varianza y Desvío Estándar:</span>
-<div class="mt-1 format-formulas">$$V(X) = \sigma^2 = E(X^2) - [E(X)]^2$$</div>
-<div class="mt-1 format-formulas">$$Desv\acute{\imath}o = \sigma = \sqrt{V(X)}$$</div>
-<div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">Donde: $E(X^2) = \sum x^2 \cdot P(x)$</div>
-</div>
-<div class="mt-2 w-full max-w-full">
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución Binomial:</span>
-<div class="mt-1 format-formulas text-xs md:text-sm">$$P(X|n,p) = \binom{n}{X} \cdot p^X \cdot q^{n-X} = \frac{n!}{X!(n-X)!} \cdot p^X \cdot (1-p)^{n-X}$$</div>
-<div class="flex justify-around mt-1">
-<div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = n \cdot p$$</div>
-<div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = n \cdot p \cdot (1-p)$$</div>
-</div>
-</div>
-<div class="mt-2">
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución de Poisson:</span>
-<div class="mt-1 format-formulas">$$P(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$$</div>
-<div class="format-formulas text-center mt-1 text-xs md:text-sm">$$E(X) = \mu = \lambda \quad \text{y} \quad V(X) = \sigma^2 = \lambda$$</div>
-</div>
-</div>
-</div>
-<div class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 print:p-3">
-<h3 class="font-bold text-amber-900 dark:text-amber-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-amber-200 dark:border-amber-800 pb-1">Unidad 5: Continuas</h3>
-<div class="space-y-3 print:space-y-2">
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución Uniforme:</span>
-<div class="flex flex-col gap-1 mt-1">
-<div class="format-formulas text-center">$$f(x) = \frac{1}{b-a}$$</div>
-<div class="flex justify-around items-center">
-<div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = \frac{a+b}{2}$$</div>
-<div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = \frac{(b-a)^2}{12}$$</div>
-</div>
-</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Aproximo una normal a una normal estándar:</span>
-<div class="mt-1 format-formulas">$$Z = \frac{x - \mu}{\sigma}$$</div>
-</div>
-<div>
-<span class="font-semibold block text-slate-700 dark:text-slate-300">Aproximación de Normal a Binomial (n ≥ 30):</span>
-<div class="format-formulas mt-1 text-xs md:text-sm">$$E(X) = \mu = n \cdot p \quad \text{y} \quad \sigma = \sqrt{n \cdot p \cdot (1-p)}$$</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-6 print:mt-1 text-center text-xs text-slate-400 dark:text-slate-500 font-mono pt-4 print:pt-1 border-t border-slate-200 dark:border-slate-800">
-                    Generado por Academia Interactiva de Estadística • Guarda este documento y úsalo para repasar o rendir.
                 </div>
-</div>
-</div>
-</div>
-<!-- ========================================================================= -->
-<!-- FIN DE LA HOJA DE FÓRMULAS                                                -->
-<!-- ========================================================================= -->
-<!-- Scripts (Lógica de la aplicación) -->
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-<a class="fixed bottom-4 right-4 flex items-center gap-2 text-xs text-text-muted dark:text-slate-400 hover:text-primary dark:hover:text-slate-200 transition-colors z-[100] bg-surface-white/80 dark:bg-slate-800/80 backdrop-blur px-3 py-2 rounded-full shadow-sm border border-outline dark:border-slate-700" href="https://github.com/314-thon" target="_blank">
-<span class="font-bold tracking-wide">WEB BY</span>
-<img alt="314" class="h-6 w-auto grayscale opacity-80 dark:hidden block" src="314-logo.png"/>
-<img alt="314" class="h-6 w-auto opacity-80 hidden dark:block" src="314-logo-blanco.png"/>
-</a>
+            </div>
+
+            <div id="formulas-print-area" class="text-slate-900 dark:text-slate-100">
+                
+                <div class="text-center mb-8 print:mb-4">
+                    <h1 class="text-3xl font-black uppercase tracking-widest text-indigo-900 dark:text-indigo-300 border-b-4 border-indigo-600 dark:border-indigo-400 inline-block pb-1">FÃ³rmulas EstadÃ­stica</h1>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 print:mt-1 font-medium">Unidad 3, 4 y 5 â€¢ FÃ³rmulas clave para el parcial</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-8 gap-y-6 print:gap-y-3 text-sm">
+                    
+                    <div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
+                        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 print:p-3">
+                            <h3 class="font-bold text-blue-900 dark:text-blue-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-blue-200 dark:border-blue-800 pb-1">Unidad 3: Ley NÂ° 5.688</h3>
+                            
+                            <div class="space-y-3 print:space-y-2">
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Complemento:</span>
+                                    <div class="mt-1 format-formulas">$$P(A') = 1 - P(A)$$</div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de AdiciÃ³n:</span>
+                                    <div class="mt-1 format-formulas text-xs">General: $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$</div>
+                                    <div class="mt-1 format-formulas text-xs">Mutuamente excluyentes: $$P(A \cup B) = P(A) + P(B)$$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de MultiplicaciÃ³n:</span>
+                                    <div class="mt-1 format-formulas text-xs">General: $$P(A \cap B) = P(A) \cdot P(B|A)$$</div>
+                                    <div class="mt-1 format-formulas text-xs">Independientes: $$P(A \cap B) = P(A) \cdot P(B)$$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Ley NÂ° 5.688 Condicional:</span>
+                                    <div class="mt-1 format-formulas">$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$</div>
+                                    <div class="mt-1 format-formulas text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Independientes: $$P(A|B) = P(A)$$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Bayes:</span>
+                                    <div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1">$$P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)}$$</div>
+                                    <div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">El denominador es la Ley NÂ° 5.688 Total de $B$</div>
+                                </div>
+
+                                <div class="mt-2 border-t border-blue-200/50 dark:border-blue-800/50 pt-2">
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Ley NÂ° 5.688 Total:</span>
+                                    <div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1 scrollbar-thin">$$P(B) = P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n) = \sum P(A_i)P(B|A_i)$$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 print:p-3">
+                            <h3 class="font-bold text-indigo-900 dark:text-indigo-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-indigo-200 dark:border-indigo-800 pb-1">Reglas de Conteo</h3>
+                            
+                            <div class="space-y-3 print:space-y-2">
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Permutaciones:</span>
+                                    <div class="mt-1 format-formulas">$$P_n^N = \frac{N!}{(N-n)!}$$</div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Combinaciones:</span>
+                                    <div class="mt-1 format-formulas">$$C_n^N = \binom{N}{n} = \frac{N!}{n!(N-n)!}$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
+                        <div class="bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800 rounded-lg p-4 print:p-3">
+                            <h3 class="font-bold text-teal-900 dark:teal-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-teal-200 dark:border-teal-800 pb-1">Unidad 4: Discretas</h3>
+                            
+                            <div class="space-y-3 print:space-y-2">
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Valor Esperado (Esperanza):</span>
+                                    <div class="mt-1 format-formulas">$$E(X) = \mu = \sum x \cdot P(x)$$</div>
+                                </div>
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Varianza y DesvÃ­o EstÃ¡ndar:</span>
+                                    <div class="mt-1 format-formulas">$$V(X) = \sigma^2 = E(X^2) - [E(X)]^2$$</div>
+                                    <div class="mt-1 format-formulas">$$Desv\acute{\imath}o = \sigma = \sqrt{V(X)}$$</div>
+                                    <div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">Donde: $E(X^2) = \sum x^2 \cdot P(x)$</div>
+                                </div>
+
+                                <div class="mt-2 w-full max-w-full">
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">DistribuciÃ³n Binomial:</span>
+                                    <div class="mt-1 format-formulas text-xs md:text-sm">$$P(X|n,p) = \binom{n}{X} \cdot p^X \cdot q^{n-X} = \frac{n!}{X!(n-X)!} \cdot p^X \cdot (1-p)^{n-X}$$</div>
+                                    <div class="flex justify-around mt-1">
+                                        <div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = n \cdot p$$</div>
+                                        <div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = n \cdot p \cdot (1-p)$$</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2">
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">DistribuciÃ³n de Poisson:</span>
+                                    <div class="mt-1 format-formulas">$$P(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$$</div>
+                                    <div class="format-formulas text-center mt-1 text-xs md:text-sm">$$E(X) = \mu = \lambda \quad \text{y} \quad V(X) = \sigma^2 = \lambda$$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 print:p-3">
+                            <h3 class="font-bold text-amber-900 dark:text-amber-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-amber-200 dark:border-amber-800 pb-1">Unidad 5: Continuas</h3>
+                            
+                            <div class="space-y-3 print:space-y-2">
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">DistribuciÃ³n Uniforme:</span>
+                                    <div class="flex flex-col gap-1 mt-1">
+                                        <div class="format-formulas text-center">$$f(x) = \frac{1}{b-a}$$</div>
+                                        <div class="flex justify-around items-center">
+                                            <div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = \frac{a+b}{2}$$</div>
+                                            <div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = \frac{(b-a)^2}{12}$$</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Aproximo una normal a una normal estÃ¡ndar:</span>
+                                    <div class="mt-1 format-formulas">$$Z = \frac{x - \mu}{\sigma}$$</div>
+                                </div>
+
+                                <div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">AproximaciÃ³n de Normal a Binomial (n &ge; 30):</span>
+                                    <div class="format-formulas mt-1 text-xs md:text-sm">$$E(X) = \mu = n \cdot p \quad \text{y} \quad \sigma = \sqrt{n \cdot p \cdot (1-p)}$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 print:mt-1 text-center text-xs text-slate-400 dark:text-slate-500 font-mono pt-4 print:pt-1 border-t border-slate-200 dark:border-slate-800">
+                    Generado por Academia Interactiva de EstadÃ­stica â€¢ Guarda este documento y Ãºsalo para repasar o rendir.
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- ========================================================================= -->
+    <!-- FIN DE LA HOJA DE FÃ“RMULAS                                                -->
+    <!-- ========================================================================= -->
+
+    <!-- Scripts (LÃ³gica de la aplicaciÃ³n) -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+
+    <a href="https://github.com/314-thon" target="_blank" class="fixed bottom-4 right-4 flex items-center gap-2 text-xs text-text-muted dark:text-slate-400 hover:text-primary dark:hover:text-slate-200 transition-colors z-[100] bg-surface-white/80 dark:bg-slate-800/80 backdrop-blur px-3 py-2 rounded-full shadow-sm border border-outline dark:border-slate-700">
+        <span class="font-bold tracking-wide">WEB BY</span>
+        <img src="314-logo.png" alt="314" class="h-6 w-auto grayscale opacity-80 dark:hidden block">
+        <img src="314-logo-blanco.png" alt="314" class="h-6 w-auto opacity-80 hidden dark:block">
+    </a>
 </body>
 </html>
+
