@@ -1,0 +1,85 @@
+/* Animaciones base */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Estilos adicionales para opciones del cuestionario */
+.quiz-option {
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+}
+
+.quiz-option:hover:not(:disabled) {
+  transform: translateX(4px);
+}
+
+.quiz-option.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.dark .quiz-option.selected {
+  border-color: #60a5fa;
+  background-color: #1e3a8a;
+}
+
+.quiz-option.correct {
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+  color: #166534;
+}
+
+.dark .quiz-option.correct {
+  border-color: #4ade80;
+  background-color: #14532d;
+  color: #dcfce7;
+}
+
+.quiz-option.incorrect {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.dark .quiz-option.incorrect {
+  border-color: #f87171;
+  background-color: #7f1d1d;
+  color: #fee2e2;
+}
