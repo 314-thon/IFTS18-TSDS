@@ -1,0 +1,319 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Guía de Estadística | IFTS18 - TSDS</title>
+<link rel="icon" type="image/png" href="314-logo.png?v=2">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "inverse-primary": "#b6c6f0",
+                    "surface": "#f8f9ff",
+                    "on-surface-variant": "#44474e",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed": "#ffddb8",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#213145",
+                    "surface-tint": "#4e5e82",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#d3e4fe",
+                    "tertiary-fixed": "#d8e2ff",
+                    "outline-variant": "#c5c6cf",
+                    "secondary": "#855300",
+                    "on-error": "#ffffff",
+                    "on-surface": "#0b1c30",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container": "#e5eeff",
+                    "on-tertiary-fixed": "#001a42",
+                    "primary-fixed-dim": "#b6c6f0",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "background": "#f8f9ff",
+                    "on-tertiary-container": "#5290ff",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-primary-fixed": "#071b3b",
+                    "tertiary-container": "#002960",
+                    "surface-dim": "#cbdbf5",
+                    "primary": "#031636",
+                    "outline": "#75777f",
+                    "primary-fixed": "#d8e2ff",
+                    "on-background": "#0b1c30",
+                    "tertiary": "#001639",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#684000",
+                    "secondary-container": "#fea619",
+                    "on-primary-container": "#8293ba",
+                    "on-primary-fixed-variant": "#364669",
+                    "on-secondary-fixed": "#2a1700",
+                    "surface-container-highest": "#d3e4fe",
+                    "primary-container": "#1a2b4c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max": "1200px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "stack-md": "24px",
+                    "stack-lg": "48px",
+                    "stack-sm": "12px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-link {
+            border-bottom: 2px solid #fea619; /* secondary-container color for logic */
+        }
+        .tonal-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-primary sticky top-0 z-50 w-full">
+<nav class="max-w-container-max mx-auto flex justify-between items-center px-gutter py-4">
+<div class="font-headline-md text-headline-md font-bold text-on-primary"><div class="flex items-center gap-2"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsyNB4c5uPhjA3msoOjXY-kRQPHopnPaiKSqWTVeJQ-98Xgc-sK7H_tL3FJWVthp0vNTYRgr4boXEEHFqFM0_e7dRODHrJSlz2-M5Mwf6mzypH9u6fkb3Z1JI4fqsuICmaFdoETVf0-Bl5W5tOwdYeFXDiAD0dCMqvSkorzLFhUO-CAVhOWwG2fTUJR5xWtKBOcqW1p_TB_c8DvdnCVCKxnpVZC1rSOrR5X-pt6o2Xl3TF77o1zY92_bpC42Q6-GGV9WfYHpUmMRG-" alt="Logo" class="h-10 w-auto rounded-lg"><span class="">Estadística y Probabilidad</span></div></div>
+<div class="hidden md:flex items-center gap-stack-md">
+<a class="font-label-md text-label-md text-secondary dark:text-secondary-fixed font-bold border-b-2 border-secondary hover:opacity-100 transition-all Active:scale-95 duration-150" href="#">Units</a>
+<a class="font-label-md text-label-md text-on-primary opacity-80 hover:opacity-100 hover:text-secondary-fixed transition-all Active:scale-95 duration-150" href="#">Exams</a>
+<a class="font-label-md text-label-md text-on-primary opacity-80 hover:opacity-100 hover:text-secondary-fixed transition-all Active:scale-95 duration-150" href="#">Formulas</a>
+<a class="font-label-md text-label-md text-on-primary opacity-80 hover:opacity-100 hover:text-secondary-fixed transition-all Active:scale-95 duration-150" href="#">Test Yourself</a>
+</div>
+<div class="flex items-center gap-4">
+
+<button class="bg-secondary-container text-on-secondary-container font-label-md text-label-md px-6 py-2 rounded-full hover:brightness-110 transition-all active:scale-95">Get Started</button>
+</div>
+</nav>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-primary py-stack-lg min-h-[400px] flex items-center">
+
+<div class="max-w-container-max mx-auto px-gutter relative z-10 text-center">
+<span class="bg-primary-container text-on-primary-container px-4 py-1 rounded-full font-label-md text-caption mb-4 inline-block uppercase tracking-widest">Estadística I &amp; II</span>
+<h1 class="font-display-lg text-display-lg md:text-display-lg text-on-primary mb-6 max-w-3xl mx-auto">
+                    Domina el mundo de los datos con claridad académica.
+                </h1>
+<p class="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto mb-stack-md opacity-90">
+                    Tu compañero digital para el éxito en Estadística. De la probabilidad básica a la inferencia compleja, simplificamos los conceptos para que tú te enfoques en aprender.
+                </p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-label-md text-label-md hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">school</span> Explorar Unidades
+                    </button>
+<button class="border border-outline-variant text-on-primary px-8 py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">description</span> Descargar Programa
+                    </button>
+</div>
+</div>
+</section>
+<!-- Units Grid Section -->
+<section class="max-w-container-max mx-auto px-gutter py-stack-lg">
+<div class="flex flex-col md:flex-row justify-between items-end mb-stack-md gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Unidades de Estudio</h2>
+<p class="text-on-surface-variant font-body-md max-w-xl">
+                        Estructura tu aprendizaje con nuestro contenido curado, diseñado para cubrir desde fundamentos hasta aplicaciones avanzadas.
+                    </p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full border border-outline hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 rounded-full border border-outline hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Bento-ish Grid for Units -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Unit 3: Dice/Probability -->
+<div class="md:col-span-4 bg-white p-stack-md rounded-xl shadow-sm tonal-card-hover transition-all flex flex-col items-center text-center group cursor-pointer border border-outline-variant/30">
+<div class="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-on-secondary-container">casino</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Unidad 3</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Probabilidad y Variables Aleatorias: Fundamentos del azar y modelos discretos.</p>
+<button class="mt-auto text-primary font-label-md flex items-center gap-1 hover:gap-3 transition-all">
+                        Ver Contenido <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Unit 4: Bar Chart/Distributions -->
+<div class="md:col-span-4 bg-white p-stack-md rounded-xl shadow-sm tonal-card-hover transition-all flex flex-col items-center text-center group cursor-pointer border border-outline-variant/30">
+<div class="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mb-6 group-hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-on-tertiary">bar_chart</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Unidad 4</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Modelos Continuos: Distribución Normal, Exponencial y Teorema del Límite Central.</p>
+<button class="mt-auto text-primary font-label-md flex items-center gap-1 hover:gap-3 transition-all">
+                        Ver Contenido <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Unit 5: Bell Curve/Inference -->
+<div class="md:col-span-4 bg-white p-stack-md rounded-xl shadow-sm tonal-card-hover transition-all flex flex-col items-center text-center group cursor-pointer border border-outline-variant/30">
+<div class="w-16 h-16 bg-surface-container rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-on-primary">show_chart</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Unidad 5</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Inferencia Estadística: Estimación por intervalos y pruebas de hipótesis.</p>
+<button class="mt-auto text-primary font-label-md flex items-center gap-1 hover:gap-3 transition-all">
+                        Ver Contenido <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Special 'Parcial' Card: Asymmetric focus -->
+<div class="md:col-span-12 bg-surface-container-low rounded-2xl p-stack-md flex flex-col md:flex-row items-center gap-stack-md border border-secondary-container/20 overflow-hidden relative">
+<div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-9xl">contract_edit</span>
+</div>
+<div class="md:w-1/3 flex justify-center">
+<div class="w-24 h-24 bg-secondary-container rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-5xl text-on-secondary-container">edit_document</span>
+</div>
+</div>
+<div class="md:w-2/3 text-center md:text-left">
+<span class="text-secondary font-label-md text-caption uppercase tracking-wider mb-2 block">Preparación Intensiva</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">Simulacro de Examen Parcial</h2>
+<p class="text-on-surface-variant font-body-md mb-6 max-w-xl">
+                            ¿Estás listo para el gran día? Accede a nuestro banco de preguntas reales de años anteriores corregidas y explicadas paso a paso.
+                        </p>
+<div class="flex flex-wrap justify-center md:justify-start gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md hover:bg-primary-container transition-all">Iniciar Simulacro</button>
+<button class="border border-outline text-primary px-8 py-3 rounded-lg font-label-md hover:bg-white transition-all">Ver Historial</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Academic Note Block -->
+<section class="bg-surface-bright py-stack-lg border-y border-outline-variant/30">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="bg-tertiary-container/5 border-l-4 border-tertiary-container p-stack-md rounded-r-xl">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-tertiary-container">info</span>
+<div>
+<h4 class="font-label-md text-primary mb-1">Nota Académica: Actualización de Contenido</h4>
+<p class="font-body-md text-on-surface-variant">Todas nuestras fórmulas y ejercicios han sido actualizados para el Año Académico 2024 siguiendo las últimas guías de la Facultad de Ciencias Exactas.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Links / Features -->
+<section class="max-w-container-max mx-auto px-gutter py-stack-lg grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="flex items-center gap-4 p-stack-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">functions</span>
+</div>
+<div>
+<h5 class="font-label-md text-primary">Fórmulas</h5>
+<p class="text-caption text-on-surface-variant">Acceso rápido a todo el formulario.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-stack-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<div>
+<h5 class="font-label-md text-primary">Ponte a Prueba</h5>
+<p class="text-caption text-on-surface-variant">Tests rápidos por cada unidad.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-stack-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">video_library</span>
+</div>
+<div>
+<h5 class="font-label-md text-primary">Video Clases</h5>
+<p class="text-caption text-on-surface-variant">Explicaciones visuales en 5 minutos.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary mt-auto">
+<div class="max-w-container-max mx-auto py-stack-md px-gutter flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex flex-col items-center md:items-start">
+<div class="font-headline-md text-headline-md text-on-primary font-bold mb-2">Estadística y Probabilidad</div>
+<p class="font-caption text-caption text-on-primary-container opacity-80 max-w-xs text-center md:text-left">
+                    © 2024 StatGuide University. Academic Excellence in Data Science.
+                </p>
+</div>
+<div class="flex flex-wrap justify-center gap-stack-md">
+<a class="font-caption text-caption text-on-primary-container hover:text-secondary transition-colors" href="#">About Us</a>
+<a class="font-caption text-caption text-on-primary-container hover:text-secondary transition-colors" href="#">Research Papers</a>
+<a class="font-caption text-caption text-on-primary-container hover:text-secondary transition-colors" href="#">Academic Integrity</a>
+<a class="font-caption text-caption text-on-primary-container hover:text-secondary transition-colors" href="#">Contact Support</a>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-on-primary/20 hover:border-secondary-container hover:text-secondary-container transition-all">
+<span class="material-symbols-outlined text-body-md">share</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-on-primary/20 hover:border-secondary-container hover:text-secondary-container transition-all">
+<span class="material-symbols-outlined text-body-md">mail</span>
+</button>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.tonal-card-hover').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'translateY(-4px) scale(1)';
+            });
+        });
+    </script>
+
+    <a href="https://github.com/314-thon" target="_blank" class="fixed bottom-4 right-4 flex items-center gap-2 text-xs text-text-muted dark:text-slate-400 hover:text-primary dark:hover:text-slate-200 transition-colors z-[100] bg-surface-white/80 dark:bg-slate-800/80 backdrop-blur px-3 py-2 rounded-full shadow-sm border border-outline dark:border-slate-700">
+        <span class="font-bold tracking-wide">WEB BY</span>
+        <img src="314-logo.png" alt="314" class="h-6 w-auto grayscale opacity-80 dark:hidden block">
+        <img src="314-logo-blanco.png" alt="314" class="h-6 w-auto opacity-80 hidden dark:block">
+    </a>
+</body></html>

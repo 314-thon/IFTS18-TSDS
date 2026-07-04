@@ -113,7 +113,7 @@
 
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-background text-on-background font-body-md transition-colors duration-300 antialiased pt-20 print:pt-0">
+<body class="bg-background text-on-background font-body-md transition-colors duration-300 antialiased pt-20">
 
     <!-- TopNavBar -->
     <header class="print:hidden fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-2xl transition-colors duration-300">
@@ -439,18 +439,14 @@
         </div>
     </footer>
 
-    <!-- ========================================================================= -->
-    <!-- INICIO DE LA HOJA DE FÓRMULAS (MODAL)                                     -->
-    <!-- Atención: Si se requiere actualizar, editar con cuidado dentro de este    -->
-    <!-- bloque para no alterar el resto de la página index.html.                  -->
-    <!-- ========================================================================= -->
+    <!-- MODAL Y HOJA DE FÃRMULAS PARA IMPRESIÃN (PDF) - RESTAURADO A SU VERSIÃN ORIGINAL INTACTA -->
     <div id="formulas-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm overflow-y-auto pt-10 pb-20 print:pt-0 print:pb-0">
         <div class="a4-container rounded-xl overflow-hidden relative dark:bg-surface dark:border dark:border-outline-variant/30">
             
-            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print:hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6 print-hidden">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">🧮</span>
-                    <h2 class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Fórmulas Estadística</h2>
+                    <h2 class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Formulario Completo</h2>
                 </div>
                 <div class="flex gap-3">
                     <button onclick="printPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center gap-2">
@@ -464,18 +460,18 @@
 
             <div id="formulas-print-area" class="text-slate-900 dark:text-slate-100">
                 
-                <div class="text-center mb-8 print:mb-4">
+                <div class="text-center mb-8">
                     <h1 class="text-3xl font-black uppercase tracking-widest text-indigo-900 dark:text-indigo-300 border-b-4 border-indigo-600 dark:border-indigo-400 inline-block pb-1">Fórmulas Estadística</h1>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 print:mt-1 font-medium">Unidad 3, 4 y 5 • Fórmulas clave para el parcial</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Unidad 3, 4 y 5 • Fórmulas clave para el parcial</p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-x-8 gap-y-6 print:gap-y-3 text-sm">
+                <div class="grid grid-cols-2 gap-x-8 gap-y-6 text-sm">
                     
-                    <div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
-                        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 print:p-3">
-                            <h3 class="font-bold text-blue-900 dark:text-blue-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-blue-200 dark:border-blue-800 pb-1">Unidad 3: Probabilidad</h3>
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                            <h3 class="font-bold text-blue-900 dark:text-blue-300 text-base uppercase tracking-wide mb-3 border-b border-blue-200 dark:border-blue-800 pb-1">Unidad 3: Probabilidad</h3>
                             
-                            <div class="space-y-3 print:space-y-2">
+                            <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Complemento:</span>
                                     <div class="mt-1 format-formulas">$$P(A') = 1 - P(A)$$</div>
@@ -483,39 +479,30 @@
                                 
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de Adición:</span>
-                                    <div class="mt-1 format-formulas text-xs">General: $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$</div>
-                                    <div class="mt-1 format-formulas text-xs">Mutuamente excluyentes: $$P(A \cup B) = P(A) + P(B)$$</div>
+                                    <div class="mt-1 format-formulas">$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Regla de Multiplicación:</span>
-                                    <div class="mt-1 format-formulas text-xs">General: $$P(A \cap B) = P(A) \cdot P(B|A)$$</div>
-                                    <div class="mt-1 format-formulas text-xs">Independientes: $$P(A \cap B) = P(A) \cdot P(B)$$</div>
+                                    <div class="mt-1 format-formulas">$$P(A \cap B) = P(A) \cdot P(B)$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Probabilidad Condicional:</span>
                                     <div class="mt-1 format-formulas">$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$</div>
-                                    <div class="mt-1 format-formulas text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Independientes: $$P(A|B) = P(A)$$</div>
                                 </div>
 
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Bayes:</span>
-                                    <div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1">$$P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)}$$</div>
-                                    <div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">El denominador es la Probabilidad Total de $B$</div>
-                                </div>
-
-                                <div class="mt-2 border-t border-blue-200/50 dark:border-blue-800/50 pt-2">
-                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Teorema de Probabilidad Total:</span>
-                                    <div class="mt-1 format-formulas text-[10px] md:text-xs overflow-x-auto pb-1 scrollbar-thin">$$P(B) = P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n) = \sum P(A_i)P(B|A_i)$$</div>
+                                    <div class="mt-1 format-formulas text-xs">$$P(A_i|B) = \frac{P(A_i) \cdot P(B|A_i)}{P(A_1)P(B|A_1) + \dots + P(A_n)P(B|A_n)}$$</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4 print:p-3">
-                            <h3 class="font-bold text-indigo-900 dark:text-indigo-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-indigo-200 dark:border-indigo-800 pb-1">Reglas de Conteo</h3>
+                        <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4">
+                            <h3 class="font-bold text-indigo-900 dark:text-indigo-300 text-base uppercase tracking-wide mb-3 border-b border-indigo-200 dark:border-indigo-800 pb-1">Reglas de Conteo</h3>
                             
-                            <div class="space-y-3 print:space-y-2">
+                            <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Permutaciones:</span>
                                     <div class="mt-1 format-formulas">$$P_n^N = \frac{N!}{(N-n)!}$$</div>
@@ -529,51 +516,46 @@
                         </div>
                     </div>
 
-                    <div class="col-span-2 md:col-span-1 space-y-4 print:space-y-3">
-                        <div class="bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800 rounded-lg p-4 print:p-3">
-                            <h3 class="font-bold text-teal-900 dark:teal-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-teal-200 dark:border-teal-800 pb-1">Unidad 4: Discretas</h3>
+                    <div class="col-span-2 md:col-span-1 space-y-4">
+                        <div class="bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800 rounded-lg p-4">
+                            <h3 class="font-bold text-teal-900 dark:text-teal-300 text-base uppercase tracking-wide mb-3 border-b border-teal-200 dark:border-teal-800 pb-1">Unidad 4: Discretas</h3>
                             
-                            <div class="space-y-3 print:space-y-2">
+                            <div class="space-y-3">
                                 <div>
-                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Valor Esperado (Esperanza):</span>
-                                    <div class="mt-1 format-formulas">$$E(X) = \mu = \sum x \cdot P(x)$$</div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Valor Esperado:</span>
+                                    <div class="mt-1 format-formulas">$$E(X) = \sum x \cdot P(x)$$</div>
                                 </div>
                                 <div>
-                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Varianza y Desvío Estándar:</span>
-                                    <div class="mt-1 format-formulas">$$V(X) = \sigma^2 = E(X^2) - [E(X)]^2$$</div>
-                                    <div class="mt-1 format-formulas">$$Desv\acute{\imath}o = \sigma = \sqrt{V(X)}$$</div>
-                                    <div class="mt-1 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 text-center format-formulas">Donde: $E(X^2) = \sum x^2 \cdot P(x)$</div>
+                                    <span class="font-semibold block text-slate-700 dark:text-slate-300">Varianza:</span>
+                                    <div class="mt-1 format-formulas">$$V(X) = E(X^2) - [E(X)]^2$$</div>
                                 </div>
 
-                                <div class="mt-2 w-full max-w-full">
+                                <div class="mt-2">
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución Binomial:</span>
-                                    <div class="mt-1 format-formulas text-xs md:text-sm">$$P(X|n,p) = \binom{n}{X} \cdot p^X \cdot q^{n-X} = \frac{n!}{X!(n-X)!} \cdot p^X \cdot (1-p)^{n-X}$$</div>
+                                    <div class="mt-1 format-formulas">$$P(X|n,p) = \frac{n!}{X!(n-X)!} p^X q^{n-X}$$</div>
                                     <div class="flex justify-around mt-1">
-                                        <div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = n \cdot p$$</div>
-                                        <div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = n \cdot p \cdot (1-p)$$</div>
+                                        <div class="format-formulas">$$\mu = np$$</div>
+                                        <div class="format-formulas">$$\sigma^2 = npq$$</div>
                                     </div>
                                 </div>
 
                                 <div class="mt-2">
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución de Poisson:</span>
-                                    <div class="mt-1 format-formulas">$$P(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$$</div>
-                                    <div class="format-formulas text-center mt-1 text-xs md:text-sm">$$E(X) = \mu = \lambda \quad \text{y} \quad V(X) = \sigma^2 = \lambda$$</div>
+                                    <div class="mt-1 format-formulas">$$P(x) = \frac{\lambda^x e^{-\lambda}}{x!}$$</div>
+                                    <div class="format-formulas text-center mt-1">$$\mu = \lambda \quad \text{y} \quad \sigma^2 = \lambda$$</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 print:p-3">
-                            <h3 class="font-bold text-amber-900 dark:text-amber-300 text-base uppercase tracking-wide mb-3 print:mb-2 border-b border-amber-200 dark:border-amber-800 pb-1">Unidad 5: Continuas</h3>
+                        <div class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                            <h3 class="font-bold text-amber-900 dark:text-amber-300 text-base uppercase tracking-wide mb-3 border-b border-amber-200 dark:border-amber-800 pb-1">Unidad 5: Continuas</h3>
                             
-                            <div class="space-y-3 print:space-y-2">
+                            <div class="space-y-3">
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Distribución Uniforme:</span>
-                                    <div class="flex flex-col gap-1 mt-1">
-                                        <div class="format-formulas text-center">$$f(x) = \frac{1}{b-a}$$</div>
-                                        <div class="flex justify-around items-center">
-                                            <div class="format-formulas text-xs md:text-sm">$$E(X) = \mu = \frac{a+b}{2}$$</div>
-                                            <div class="format-formulas text-xs md:text-sm">$$V(X) = \sigma^2 = \frac{(b-a)^2}{12}$$</div>
-                                        </div>
+                                    <div class="flex justify-around items-center mt-1">
+                                        <div class="format-formulas">$$f(x) = \frac{1}{b-a}$$</div>
+                                        <div class="format-formulas">$$E(X) = \frac{a+b}{2}$$</div>
                                     </div>
                                 </div>
                                 
@@ -584,23 +566,20 @@
 
                                 <div>
                                     <span class="font-semibold block text-slate-700 dark:text-slate-300">Aproximación de Normal a Binomial (n &ge; 30):</span>
-                                    <div class="format-formulas mt-1 text-xs md:text-sm">$$E(X) = \mu = n \cdot p \quad \text{y} \quad \sigma = \sqrt{n \cdot p \cdot (1-p)}$$</div>
+                                    <div class="format-formulas mt-1">$$\mu = np \quad \sigma = \sqrt{npq}$$</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-6 print:mt-1 text-center text-xs text-slate-400 dark:text-slate-500 font-mono pt-4 print:pt-1 border-t border-slate-200 dark:border-slate-800">
-                    Generado por Academia Interactiva de Estadística • Guarda este documento y úsalo para repasar o rendir.
+                <div class="mt-6 text-center text-xs text-slate-400 dark:text-slate-500 font-mono pt-4 border-t border-slate-200 dark:border-slate-800">
+                    Generado por Academia Interactiva de Estadística â¢ Guarda este documento y úsalo para repasar o rendir.
                 </div>
             </div>
 
         </div>
     </div>
-    <!-- ========================================================================= -->
-    <!-- FIN DE LA HOJA DE FÓRMULAS                                                -->
-    <!-- ========================================================================= -->
 
     <!-- Scripts (Lógica de la aplicación) -->
     <script src="js/data.js"></script>
