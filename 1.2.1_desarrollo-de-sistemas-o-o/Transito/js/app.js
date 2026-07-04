@@ -304,3 +304,93 @@ window.showExamReview = function() {
         });
     }
 }
+
+
+// --- FLASHCARDS LOGIC ---
+let activeFlashcards = [];
+let currentFlashcard = null;
+let isFlashcardFlipped = false;
+
+window.startFlashcardsMode = function() {
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('exam-screen').classList.add('hidden');
+    document.getElementById('exam-screen').classList.remove('flex');
+    document.getElementById('exam-results-screen').classList.add('hidden');
+    document.getElementById('exam-results-screen').classList.remove('flex');
+    document.getElementById('exam-review-screen').classList.add('hidden');
+    document.getElementById('exam-review-screen').classList.remove('flex');
+    document.getElementById('flashcards-victory-screen').classList.add('hidden');
+    document.getElementById('flashcards-victory-screen').classList.remove('flex');
+    
+    document.getElementById('flashcards-screen').classList.remove('hidden');
+    document.getElementById('flashcards-screen').classList.add('flex');
+    window.scrollTo(0,0);
+    
+    // Initialize pool
+    activeFlashcards = [...testData.flashcardsPool];
+    // Shuffle
+    activeFlashcards.sort(() => Math.random() - 0.5);
+    
+    nextFlashcard();
+}
+
+function nextFlashcard() {
+    if (activeFlashcards.length === 0) {
+        showFlashcardsVictory();
+        return;
+    }
+    
+    currentFlashcard = activeFlashcards[0]; // always take the first one
+    isFlashcardFlipped = false;
+    
+    document.getElementById('flashcard-counter').innerText = `Tarjetas restantes: ${activeFlashcards.length}`;
+    document.getElementById('flashcard-front').innerText = currentFlashcard.front;
+    document.getElementById('flashcard-back').innerText = currentFlashcard.back;
+    
+    // Reset flip state
+    document.getElementById('flashcard-inner').classList.remove('is-flipped');
+    
+    // Hide action buttons
+    const actions = document.getElementById('flashcard-actions');
+    actions.classList.add('opacity-0', 'pointer-events-none');
+    actions.classList.remove('opacity-100', 'pointer-events-auto');
+}
+
+window.flipFlashcard = function() {
+    if (isFlashcardFlipped) return; // already flipped
+    isFlashcardFlipped = true;
+    
+    document.getElementById('flashcard-inner').classList.add('is-flipped');
+    
+    // Show actions
+    const actions = document.getElementById('flashcard-actions');
+    actions.classList.remove('opacity-0', 'pointer-events-none');
+    actions.classList.add('opacity-100', 'pointer-events-auto');
+}
+
+window.answerFlashcard = function(knewIt) {
+    if (!isFlashcardFlipped) return;
+    
+    // Remove the current card from the front of the array
+    const card = activeFlashcards.shift();
+    
+    if (!knewIt) {
+        // Put it at the back of the deck to see it again
+        activeFlashcards.push(card);
+    }
+    
+    nextFlashcard();
+}
+
+window.endFlashcards = function() {
+    document.getElementById('flashcards-screen').classList.add('hidden');
+    document.getElementById('flashcards-screen').classList.remove('flex');
+    showHome();
+}
+
+function showFlashcardsVictory() {
+    document.getElementById('flashcards-screen').classList.add('hidden');
+    document.getElementById('flashcards-screen').classList.remove('flex');
+    document.getElementById('flashcards-victory-screen').classList.remove('hidden');
+    document.getElementById('flashcards-victory-screen').classList.add('flex');
+}
